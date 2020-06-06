@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -21,11 +21,14 @@ SOURCES += \
     src/main.cpp \
     src/ui/mainwindow.cpp \
     src/ui/tabs/maintab/maintab.cpp \
+    src/ui/tabs/maintab/mangaentry.cpp \
     src/ui/tabs/maintab/mangalist.cpp
 
 HEADERS += \
+   src/constants.h \
    src/ui/mainwindow.h \
    src/ui/tabs/maintab/maintab.h \
+   src/ui/tabs/maintab/mangaentry.h \
    src/ui/tabs/maintab/mangalist.h
 
 # Default rules for deployment.

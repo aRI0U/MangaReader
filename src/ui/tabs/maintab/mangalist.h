@@ -5,6 +5,7 @@
 #include <QRect>
 #include <QStyle>
 
+// strongly inspired by https://doc.qt.io/qt-5/qtwidgets-layouts-flowlayout-example.html
 class MangaList : public QLayout
 {
     Q_OBJECT
