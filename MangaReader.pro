@@ -21,6 +21,7 @@ SOURCES += \
     src/main.cpp \
     src/ui/mainwindow.cpp \
     src/ui/tabs/maintab/maintab.cpp \
+    src/ui/tabs/maintab/mangacover.cpp \
     src/ui/tabs/maintab/mangaentry.cpp \
     src/ui/tabs/maintab/mangalist.cpp
 
@@ -28,6 +29,7 @@ HEADERS += \
    src/constants.h \
    src/ui/mainwindow.h \
    src/ui/tabs/maintab/maintab.h \
+   src/ui/tabs/maintab/mangacover.h \
    src/ui/tabs/maintab/mangaentry.h \
    src/ui/tabs/maintab/mangalist.h
 

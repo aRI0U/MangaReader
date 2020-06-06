@@ -6,7 +6,8 @@
 MainTab::MainTab(QWidget *parent) : QWidget(parent)
 {
     MangaList *mangaList = new MangaList;
-    for (const auto &path : constants::ScansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-        mangaList->addWidget(new MangaEntry(path));
+    for (const auto &dir : constants::ScansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        mangaList->addWidget(new MangaEntry(QDir(constants::ScansPath.filePath(dir))));
+    }
     setLayout(mangaList);
 }

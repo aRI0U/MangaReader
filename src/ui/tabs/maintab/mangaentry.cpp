@@ -2,16 +2,17 @@
 #include <QVBoxLayout>
 
 #include "mangaentry.h"
+#include "mangacover.h"
 #include "constants.h"
 
-MangaEntry::MangaEntry(QWidget *parent, QString manga)
-    : QWidget(parent), m_manga(manga)
+MangaEntry::MangaEntry(QWidget *parent, QDir path)
+    : QWidget(parent), m_path(path)
 {
     initEntry();
 }
 
-MangaEntry::MangaEntry(QString manga)
-    : m_manga(manga)
+MangaEntry::MangaEntry(QDir path)
+    : m_path(path)
 {
     initEntry();
 }
@@ -22,12 +23,12 @@ void MangaEntry::initEntry()
 
     // initialize cover
     QLabel *m_cover = new QLabel;
-//    m_cover->setText("cover.png");
-    m_cover->setPixmap(QPixmap("cover.png"));
+
+    m_cover->setPixmap(MangaCover(m_path));
 
     // initialize title
     QLabel *m_title = new QLabel;
-    m_title->setText(m_manga);
+    m_title->setText(m_path.dirName());
     m_title->setFont(constants::MangaTitleFont);
 
     layout->addWidget(m_cover);
