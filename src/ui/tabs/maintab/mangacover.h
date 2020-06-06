@@ -3,11 +3,20 @@
 
 #include <QDir>
 #include <QPixmap>
+#include <QLabel>
 
-class MangaCover : public QPixmap
+#include <iostream>
+
+#include "constants.h"
+
+
+class MangaCover : public QLabel
 {
 public:
     explicit MangaCover(QDir path);
+
+private:
+    QPixmap cover;
 };
 
 #endif // MANGACOVER_H

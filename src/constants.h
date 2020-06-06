@@ -6,12 +6,12 @@
 #include <QSize>
 
 namespace constants {
-    const QDir ScansPath = QDir("/home/alain/Documents/projects/QT/MangaReader/scans");
+    const QDir ScansPath = QDir("/Users/nathan/projects/MangaReader/scans");
 
 
 
     // Manga entries constants
-    const QSize MangaCoverSize = QSize(200, 400);
+    const QSize MangaCoverSize = QSize(200, 300);
     const QFont MangaTitleFont = QFont("Arial", 20, QFont::Bold);
 }
 

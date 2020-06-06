@@ -22,9 +22,7 @@ void MangaEntry::initEntry()
     QVBoxLayout *layout = new QVBoxLayout;
 
     // initialize cover
-    QLabel *m_cover = new QLabel;
-
-    m_cover->setPixmap(MangaCover(m_path));
+    QLabel *m_cover = new MangaCover(m_path);
 
     // initialize title
     QLabel *m_title = new QLabel;
