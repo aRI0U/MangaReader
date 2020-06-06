@@ -6,7 +6,7 @@
 #include <QSize>
 
 namespace constants {
-    const QDir ScansPath = QDir("/home/alain/Documents/Scans");
+    const QDir ScansPath = QDir("/home/alain/Documents/projects/QT/MangaReader/scans");
 
 
 
