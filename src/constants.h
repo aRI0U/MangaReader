@@ -1,14 +1,12 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include <string>
-
+#include <QDir>
 #include <QFont>
 
-
 namespace constants {
-    const std::string ScansPath = "/home/alain/Documents/Scans";
-    const QFont MangaTitleFont = QFont("Arial", 20);
+    const QDir ScansPath = QDir("/home/alain/Documents/Scans");
+    const QFont MangaTitleFont = QFont("Arial", 20, QFont::Bold);
 }
 
 #endif // CONSTANTS_H
