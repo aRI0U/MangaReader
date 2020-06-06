@@ -3,6 +3,13 @@
 
 #include <QMainWindow>
 #include <QScrollArea>
+#include <QMenu>
+#include <QMenuBar>
+#include <QFileDialog>
+
+#include <iostream>
+
+#include "tabs/maintab/maintab.h"
 
 class MainWindow : public QMainWindow
 {
@@ -10,6 +17,10 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() {}
+
+public slots:
+    void openLibrary();
 };
+
 #endif // MAINWINDOW_H

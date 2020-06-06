@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "tabs/maintab/maintab.h"
 
 
 
@@ -11,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Create central zone
 
     // Create main tab
-    MainTab *mainTab = new MainTab;
+    MainTab *mainTab = new MainTab; // todo center the content and add min size
     mainTab->setStyleSheet("background-color:lightblue;");
 
     auto* scrollArea = new QScrollArea;
@@ -25,9 +24,23 @@ MainWindow::MainWindow(QWidget *parent)
 
     setCentralWidget(scrollArea); //(mainTab);
 
+    // Menu bar
+    QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
+    QAction* openLibraryAction = fileMenu->addAction(tr("Open Library"));
+    openLibraryAction->setShortcut(Qt::CTRL | Qt::Key_O);
+    openLibraryAction->setStatusTip(tr("Open a library of mangas"));
+
+    connect(openLibraryAction, SIGNAL(triggered()), this, SLOT(openLibrary()));
 }
 
-MainWindow::~MainWindow()
-{
-}
+void MainWindow::openLibrary() {
+    // Let user select a folder
+    QString folderPath = QFileDialog::getExistingDirectory(
+        this, tr("Open Library"), QDir::homePath(),
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
+    if(!folderPath.isEmpty()) {
+        std::cout << "Todo: try to open library located at " << folderPath.toUtf8().constData() << std::endl;
+        // todo
+    }
+}
