@@ -38,7 +38,7 @@ void MangaEntry::initEntry()
 void MangaEntry::mousePressEvent(QMouseEvent *e) {
     if(e->button() == Qt::LeftButton) {
         // Process left click on cover
-        std::cout << "(Todo) Opening manga at " << m_path.absolutePath().toUtf8().constData() << std::endl;
+        emit clicked(m_path);
     }
 }
 

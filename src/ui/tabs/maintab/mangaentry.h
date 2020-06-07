@@ -15,6 +15,9 @@ class MangaEntry : public QFrame
 public:
     explicit MangaEntry(QDir path);
 
+signals:
+    void clicked(QDir mangaDir);
+
 private:
     void initEntry();
 

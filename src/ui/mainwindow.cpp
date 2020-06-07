@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     QTabWidget *centralTabs = new QTabWidget;
 
-
     centralTabs->addTab(scrollArea, tr("Library"));
     setCentralWidget(centralTabs);
 
