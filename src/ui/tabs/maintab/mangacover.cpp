@@ -9,8 +9,9 @@ MangaCover::MangaCover(QDir path) : cover()
         if(!cover.load(coverPath)) {
             std::cout << "Error: loading failed (not an image type or corrupted file?)" << std::endl;
         } else {
-            std::cout << "\tw=" << width() << "; h=" << height() << std::endl;
+            std::cout << "\t(original) w=" << cover.width() << "; h=" << cover.height();
             cover = cover.scaled(constants::MangaCoverSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            std::cout << "\t-> (scaled) w=" << cover.width() << "; h=" << cover.height() << std::endl;
         }
     } else {
         std::cout << "Failed to find cover in " << path.absolutePath().toUtf8().constData() << std::endl;
