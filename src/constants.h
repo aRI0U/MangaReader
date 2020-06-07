@@ -6,9 +6,7 @@
 #include <QSize>
 
 namespace constants {
-    const QDir ScansPath = QDir("/Users/nathan/projects/MangaReader/scans");
-
-
+    const QDir ScansPath = QDir("../MangaReader/scans");
 
     // Manga entries constants
     const QSize MangaCoverSize = QSize(200, 300);
