@@ -18,12 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
     scrollArea->setWidget(mainTab);
     scrollArea->setWidgetResizable(true);
 
-// tmp dont display tabs
-//    QTabWidget *centralTabs = new QTabWidget;
-//    setCentralWidget(centralTabs);
-//    centralTabs->addTab(mainTab, tr("Library"));
+    QTabWidget *centralTabs = new QTabWidget;
 
-    setCentralWidget(scrollArea); //(mainTab);
+
+    centralTabs->addTab(scrollArea, tr("Library"));
+    setCentralWidget(centralTabs);
 
     // Menu bar
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
