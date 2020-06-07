@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Create main tab
     MainTab *mainTab = new MainTab; // todo center the content and add min size
-    mainTab->setStyleSheet("background-color:lightblue;");
 
     auto* scrollArea = new QScrollArea;
     scrollArea->setWidget(mainTab);

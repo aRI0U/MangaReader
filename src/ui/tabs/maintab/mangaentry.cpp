@@ -5,11 +5,6 @@
 #include "mangacover.h"
 #include "constants.h"
 
-MangaEntry::MangaEntry(QWidget *parent, QDir path)
-    : QWidget(parent), m_path(path)
-{
-    initEntry();
-}
 
 MangaEntry::MangaEntry(QDir path)
     : m_path(path)
@@ -36,4 +31,18 @@ void MangaEntry::initEntry()
     layout->setAlignment(m_title, Qt::AlignHCenter);
 
     setLayout(layout);
+    setStyleSheet("background-color: white;");
+    setCursor(Qt::PointingHandCursor);
 }
+
+void MangaEntry::mousePressEvent(QMouseEvent *e) {
+    if(e->button() == Qt::LeftButton) {
+        // Process left click on cover
+        std::cout << "(Todo) Opening manga at " << m_path.absolutePath().toUtf8().constData() << std::endl;
+    }
+}
+
+
+
+
+
