@@ -38,8 +38,9 @@ void MainWindow::openLibrary() {
         this, tr("Open Library"), QDir::homePath(),
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
-    if(!folderPath.isEmpty()) {
-        std::cout << "Todo: try to open library located at " << folderPath.toUtf8().constData() << std::endl;
+    QDir folder(folderPath);
+    if(folder.exists()) {
+        std::cout << "Todo: try to open library located at " << folderPath.toStdString() << std::endl;
         // todo
     }
 }

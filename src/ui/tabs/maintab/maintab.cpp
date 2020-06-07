@@ -18,5 +18,18 @@ MainTab::MainTab(QWidget *parent) : QWidget(parent)
 
 void MainTab::clickedManga(QDir mangaDir)
 {
-    std::cout << "(Todo) Opening manga at " << mangaDir.absolutePath().toStdString() << std::endl;
+    std::cout << "Opening manga at " << mangaDir.absolutePath().toStdString() << std::endl;
+
+    // todo not adaptative
+    QStringList volumeList = mangaDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    for(const QString& volStr: volumeList) {
+        std::cout << "\t" << volStr.toStdString() << std::endl;
+
+        QDir volumeDir(mangaDir.absolutePath() + "/" + volStr);
+        QStringList chapterList = volumeDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+        for(const QString& chapterStr: chapterList) {
+            std::cout << "\t\t" << chapterStr.toStdString() << std::endl;
+
+        }
+    }
 }
