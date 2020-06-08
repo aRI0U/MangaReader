@@ -18,21 +18,31 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
         treeItem->setForeground(0, QBrush(Qt::darkBlue));
         treeItem->setForeground(1, QBrush(Qt::blue));
 
-        // Add chapters
         QDir volumeDir(mangaDir.absolutePath() + "/" + volStr);
         QStringList chapterList = volumeDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-        for(const QString& chapterStr: chapterList) {
-            QTreeWidgetItem *treeItemChild = new QTreeWidgetItem();
-            treeItemChild->setText(0, chapterStr);
-            treeItemChild->setForeground(1, QBrush(Qt::darkGray));
-            treeItem->addChild(treeItemChild);
 
-            QDir chapterDir(volumeDir.absolutePath() + "/" + chapterStr);
-            QStringList pageList = chapterDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files);
-            treeItemChild->setText(1, QString::number(pageList.size()) + " pages");
+        if(!chapterList.empty()) {
+            // Add chapters then pages
+            for(const QString& chapterStr: chapterList) {
+                QTreeWidgetItem *treeItemChild = new QTreeWidgetItem();
+                treeItemChild->setText(0, chapterStr);
+                treeItemChild->setForeground(1, QBrush(Qt::darkGray));
+                treeItem->addChild(treeItemChild);
+
+                QDir chapterDir(volumeDir.absolutePath() + "/" + chapterStr);
+                QStringList pageList = chapterDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files);
+                treeItemChild->setText(1, QString::number(pageList.size()) + " pages");
+            }
+
+            treeItem->setText(1, QString::number(chapterList.size()) + " chapters");
         }
-
-        treeItem->setText(1, QString::number(chapterList.size()) + " chapters");
+        else {
+            // Add pages directly
+            QStringList pageList = volumeDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files);
+            treeItem->setText(1, QString::number(pageList.size()) + " pages");
+            treeItem->setForeground(0, QBrush(Qt::black));
+            treeItem->setForeground(1, QBrush(Qt::darkGray));
+        }
     }
 
     // show widget
@@ -40,17 +50,3 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
     layout->addWidget(treeWidget);
     setLayout(layout);
 }
-
-
-//    // todo not adaptative
-//    QStringList volumeList = mangaDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-//    for(const QString& volStr: volumeList) {
-//        std::cout << "\t" << volStr.toStdString() << std::endl;
-
-//        QDir volumeDir(mangaDir.absolutePath() + "/" + volStr);
-//        QStringList chapterList = volumeDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-//        for(const QString& chapterStr: chapterList) {
-//            std::cout << "\t\t" << chapterStr.toStdString() << std::endl;
-
-//        }
-//    }
