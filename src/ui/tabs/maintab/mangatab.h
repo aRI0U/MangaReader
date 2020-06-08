@@ -1,12 +1,16 @@
 #ifndef MANGATAB_H
 #define MANGATAB_H
 
+#include <QObject>
 #include <QWidget>
 #include <QDir>
 #include <QTabWidget>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QPixmap>
+#include <QLabel>
 
 #include <iostream>
 
@@ -18,6 +22,8 @@ public:
     explicit MangaTab(QTabWidget *parent, QDir mangaDir);
 
 private:
+    void openManga(QTreeWidgetItem *item, int column);
+
     QDir mangaDir;
     QTabWidget* parent;
 };

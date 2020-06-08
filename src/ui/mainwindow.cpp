@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Create central zone
     QTabWidget *centralTabs = new QTabWidget;
-    centralTabs->setMovable(false);
+    centralTabs->setMovable(true);
     centralTabs->setTabsClosable(false);
     // maybe make a library a button and not a tab so it cant be moved/closed
 
