@@ -15,6 +15,8 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
     for(const QString& volStr: volumeList) {
         QTreeWidgetItem *treeItem = new QTreeWidgetItem(treeWidget);
         treeItem->setText(0, volStr);
+        treeItem->setForeground(0, QBrush(Qt::darkBlue));
+        treeItem->setForeground(1, QBrush(Qt::blue));
 
         // Add chapters
         QDir volumeDir(mangaDir.absolutePath() + "/" + volStr);
@@ -22,6 +24,7 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
         for(const QString& chapterStr: chapterList) {
             QTreeWidgetItem *treeItemChild = new QTreeWidgetItem();
             treeItemChild->setText(0, chapterStr);
+            treeItemChild->setForeground(1, QBrush(Qt::darkGray));
             treeItem->addChild(treeItemChild);
 
             QDir chapterDir(volumeDir.absolutePath() + "/" + chapterStr);
