@@ -3,18 +3,21 @@
 
 #include <QDir>
 #include <QWidget>
+#include <QTabWidget>
+
+#include "mangatab.h"
 
 class MainTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MainTab(QWidget *parent = nullptr);
+    explicit MainTab(QTabWidget *parent = nullptr);
 
 public slots:
     void clickedManga(QDir mangaDir);
 
-signals:
-
+private:
+    QTabWidget* parent;
 };
 
 #endif // MAINTAB_H

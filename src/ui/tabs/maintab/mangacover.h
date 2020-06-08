@@ -12,6 +12,7 @@
 
 class MangaCover : public QLabel
 {
+    Q_OBJECT
 public:
     explicit MangaCover(QDir path);
 

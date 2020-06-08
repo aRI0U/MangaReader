@@ -10,15 +10,17 @@ MainWindow::MainWindow(QWidget *parent)
 //    showMaximized();  // don't open maximized while debugging
 
     // Create central zone
+    QTabWidget *centralTabs = new QTabWidget;
+    centralTabs->setMovable(false);
+    centralTabs->setTabsClosable(false);
+    // maybe make a library a button and not a tab so it cant be moved/closed
 
     // Create main tab
-    MainTab *mainTab = new MainTab; // todo center the content and add min size
+    MainTab *mainTab = new MainTab(centralTabs);
 
     auto* scrollArea = new QScrollArea;
     scrollArea->setWidget(mainTab);
     scrollArea->setWidgetResizable(true);
-
-    QTabWidget *centralTabs = new QTabWidget;
 
     centralTabs->addTab(scrollArea, tr("Library"));
     setCentralWidget(centralTabs);

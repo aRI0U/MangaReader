@@ -3,7 +3,8 @@
 #include "mangalist.h"
 #include "constants.h"
 
-MainTab::MainTab(QWidget *parent) : QWidget(parent)
+MainTab::MainTab(QTabWidget *parent) :
+    parent(parent)
 {
     MangaList *mangaList = new MangaList;
     for (const auto &dir : constants::ScansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
@@ -20,16 +21,16 @@ void MainTab::clickedManga(QDir mangaDir)
 {
     std::cout << "Opening manga at " << mangaDir.absolutePath().toStdString() << std::endl;
 
-    // todo not adaptative
-    QStringList volumeList = mangaDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-    for(const QString& volStr: volumeList) {
-        std::cout << "\t" << volStr.toStdString() << std::endl;
-
-        QDir volumeDir(mangaDir.absolutePath() + "/" + volStr);
-        QStringList chapterList = volumeDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-        for(const QString& chapterStr: chapterList) {
-            std::cout << "\t\t" << chapterStr.toStdString() << std::endl;
-
+    // If manga is already open, set focus on the concerned tab
+    for(int k = 0; k < parent->count(); ++k) {
+        if (parent->tabText(k) == mangaDir.dirName()) {
+            parent->setCurrentIndex(k);
+            return;
         }
     }
+
+    // Otherwise, open a new tab
+    MangaTab* manga_tab = new MangaTab(parent, mangaDir);
+    parent->addTab(manga_tab, mangaDir.dirName());
+    parent->setCurrentIndex(parent->count() - 1);
 }
