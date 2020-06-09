@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setWindowTitle("MangaReader");
     setMinimumSize(800, 600);
-//    showMaximized();  // don't open maximized while debugging
+    showMaximized();
 
     // Create central zone
     QTabWidget *centralTabs = new QTabWidget;

@@ -2,9 +2,12 @@
 
 MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
     mangaDir(mangaDir),
-    parent(parent)
+    parent(parent),
+    pageLayout(new QHBoxLayout),
+    leftImg(nullptr),
+    rightImg(nullptr)
 {
-    QTreeWidget *treeWidget = new QTreeWidget();
+    treeWidget = new QTreeWidget();
     treeWidget->setColumnCount(2);
     treeWidget->setHeaderLabels(QStringList() << "Title" << "Number of chapters/pages");
 
@@ -48,9 +51,8 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
     }
 
     // show widget
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(treeWidget);
-    setLayout(layout);
+    pageLayout->addWidget(treeWidget);
+    setLayout(pageLayout);
 
     // connect click events on tree
     connect(treeWidget, &QTreeWidget::itemDoubleClicked, this, &MangaTab::openManga);
@@ -69,23 +71,28 @@ void MangaTab::openManga(QTreeWidgetItem* item, int column) {
             for(QString& pageName: pageList) {
                 QString pagePath = pagesDir.absoluteFilePath(pageName);
                 QPixmap page(pagePath);
-                page = page.scaledToHeight(600, Qt::SmoothTransformation); // todo compute size dynamically
+//                page = page.scaledToWidth(1000, Qt::SmoothTransformation); // todo compute size dynamically
                 pages.push_back(page);
             }
 
             if(pages.size() >= 2) { // tmp hardcoded first 2 pages
-                QHBoxLayout* layout = new QHBoxLayout;
+                //
+                treeWidget->setColumnCount(1);
+                //
 
-                QLabel* left = new QLabel;
-                left->setPixmap(pages[0]);
-                QLabel* right = new QLabel;
-                right->setPixmap(pages[1]);
+                if(leftImg == nullptr || rightImg == nullptr) {
+                    leftImg = new QLabel;
+                    rightImg = new QLabel;
 
-                layout->addWidget(left);
-                layout->addWidget(right);
+                    leftImg->setScaledContents(true);
+                    rightImg->setScaledContents(true);
 
-                delete this->layout(); // todo widget needs to be removed from layout -> probably cleaner way
-                setLayout(layout);
+                    pageLayout->addWidget(leftImg);
+                    pageLayout->addWidget(rightImg);
+                }
+
+                leftImg->setPixmap(pages[0]);
+                rightImg->setPixmap(pages[1]);
             }
         }
     }

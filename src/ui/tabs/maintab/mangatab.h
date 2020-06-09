@@ -26,6 +26,10 @@ private:
 
     QDir mangaDir;
     QTabWidget* parent;
+    QHBoxLayout* pageLayout;
+    QTreeWidget* treeWidget;
+    QLabel* leftImg;
+    QLabel* rightImg;
 };
 
 #endif // MANGATAB_H
