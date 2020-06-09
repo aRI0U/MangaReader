@@ -18,20 +18,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += $$PWD/src
 
 SOURCES += \
-    src/main.cpp \
+    src/Main.cpp \
     src/ui/mainwindow.cpp \
     src/ui/tabs/maintab/maintab.cpp \
     src/ui/tabs/maintab/mangacover.cpp \
     src/ui/tabs/maintab/mangaentry.cpp \
-    src/ui/tabs/maintab/mangalist.cpp
+    src/ui/tabs/maintab/mangalist.cpp \
+    src/ui/tabs/mangatab/mangatab.cpp
 
 HEADERS += \
-   src/constants.h \
-   src/ui/mainwindow.h \
-   src/ui/tabs/maintab/maintab.h \
-   src/ui/tabs/maintab/mangacover.h \
-   src/ui/tabs/maintab/mangaentry.h \
-   src/ui/tabs/maintab/mangalist.h
+    src/constants.h \
+    src/ui/mainwindow.h \
+    src/ui/tabs/maintab/maintab.h \
+    src/ui/tabs/maintab/mangacover.h \
+    src/ui/tabs/maintab/mangaentry.h \
+    src/ui/tabs/maintab/mangalist.h \
+    src/ui/tabs/mangatab/mangatab.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
