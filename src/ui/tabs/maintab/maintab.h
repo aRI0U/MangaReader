@@ -5,9 +5,10 @@
 #include <QWidget>
 #include <QTabWidget>
 
+#include "../tab.h"
 #include "../mangatab/mangatab.h"
 
-class MainTab : public QWidget
+class MainTab : public Tab
 {
     Q_OBJECT
 public:

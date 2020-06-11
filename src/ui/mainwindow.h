@@ -15,6 +15,7 @@
 #include <iostream>
 
 #include "tabs/maintab/maintab.h"
+#include "tabs/mangatab/reader.h"
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +24,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow() {};
+    Reader* getReader();
 
 public slots:
     void closeTab(int index);

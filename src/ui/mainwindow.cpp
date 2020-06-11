@@ -11,8 +11,9 @@ MainWindow::MainWindow(QWidget* parent)
     // Create central zone
     centralTabs = new QTabWidget;
     centralTabs->setMovable(true);
-    centralTabs->setTabsClosable(true);
+    centralTabs->setTabsClosable(false);
     // maybe make a library a button and not a tab so it cant be moved/closed
+    // TODO library should not be neither movable nor closable
 
     // Create main tab
     MainTab *mainTab = new MainTab(centralTabs);
@@ -32,6 +33,11 @@ MainWindow::MainWindow(QWidget* parent)
     openLibraryAction->setShortcut(Qt::CTRL | Qt::Key_O);
     openLibraryAction->setStatusTip(tr("Open a library of mangas"));
     connect(openLibraryAction, SIGNAL(triggered()), this, SLOT(openLibrary()));
+    // quit
+    QAction* quitAction = fileMenu->addAction(tr("Quit"));
+    quitAction->setShortcut(Qt::CTRL | Qt::Key_Q);
+    quitAction->setStatusTip(tr("Quit the application"));
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 
     QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
@@ -50,8 +56,6 @@ MainWindow::MainWindow(QWidget* parent)
     connect(fullScreenAction, SIGNAL(triggered(bool)), this, SLOT(showFullScreenOrMaximized(bool)));
 }
 
-
-
 // SLOTS
 
 void MainWindow::closeTab(int index) {
@@ -66,7 +70,7 @@ void MainWindow::openLibrary() {
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
     QDir folder(folderPath);
-    if(folder.exists()) {
+    if (folder.exists()) {
         std::cout << "Todo: try to open library located at " << folderPath.toStdString() << std::endl;
         // todo
     }
@@ -74,16 +78,21 @@ void MainWindow::openLibrary() {
 
 void MainWindow::readingMode() {
     QWidget* w = new QWidget(nullptr, Qt::Window);
-    w->setStyleSheet("background-color:white;");
-    w->setFocusPolicy(Qt::StrongFocus);
+    w->setStyleSheet("background-color:black;");
+//    w->setFocusPolicy(Qt::StrongFocus);
 
     // todo add reader in it
     QHBoxLayout* l = new QHBoxLayout;
     w->setLayout(l);
-    l->addWidget(new QPushButton("tmp"));
+    // TODO cast correctly to avoid segfault
+    // TODO solve bug of not displaying after first fullscreen
+    MangaTab* currentTab = dynamic_cast<MangaTab*>(centralTabs->currentWidget());
+    Reader* reader = currentTab->getReader();
+    l->addWidget(reader);
 
-    // actions (TODO enable user to close fullscreen with key shortcut)
-    QAction* closeAction = new QAction;
+    // actions (TODO enable user to close fullscreen with keyboard shortcut)
+    QMenu* rMenu = menuBar()->addMenu(tr("&Reading"));
+    QAction* closeAction = rMenu->addAction(tr("Close"));
     closeAction->setShortcut(Qt::Key_Q);
     connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
 

@@ -15,14 +15,16 @@
 
 #include <iostream>
 
+#include "../tab.h"
 #include "reader.h"
 
-class MangaTab : public QWidget
+class MangaTab : public Tab
 {
     Q_OBJECT
 
 public:
     explicit MangaTab(QTabWidget *parent, QDir mangaDir);
+    Reader* getReader() const; // override;
 
 private:
     void openManga(QTreeWidgetItem *item, int column);

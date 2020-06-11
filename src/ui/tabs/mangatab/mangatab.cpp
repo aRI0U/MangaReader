@@ -67,6 +67,17 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
     connect(treeWidget, &QTreeWidget::itemDoubleClicked, this, &MangaTab::openManga);
 }
 
+
+// PUBLIC
+
+Reader* MangaTab::getReader() const {
+    return reader;
+}
+
+
+
+// PRIVATE
+
 void MangaTab::openManga(QTreeWidgetItem* item, int column) {
     if(column == 0 && item->text(1).endsWith("pages")) {
         std::cout << "Reading manga chapter at " << item->data(0, Qt::UserRole).toString().toStdString() << std::endl;
