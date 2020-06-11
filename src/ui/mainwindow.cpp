@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     setWindowTitle("MangaReader");
@@ -26,12 +26,28 @@ MainWindow::MainWindow(QWidget *parent)
     connect(centralTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
     // Menu bar
+
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     QAction* openLibraryAction = fileMenu->addAction(tr("Open Library"));
     openLibraryAction->setShortcut(Qt::CTRL | Qt::Key_O);
     openLibraryAction->setStatusTip(tr("Open a library of mangas"));
-
     connect(openLibraryAction, SIGNAL(triggered()), this, SLOT(openLibrary()));
+
+
+    QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
+
+
+    QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
+    // reading mode
+    QAction* readingModeAction = viewMenu->addAction(tr("ReadingMode"));
+    readingModeAction->setShortcut(Qt::Key_A); // TODO change for F5 or sth
+    connect(readingModeAction, SIGNAL(triggered()), this, SLOT(readingMode()));
+
+    // enable fullscreen
+    QAction* fullScreenAction = viewMenu->addAction(tr("Full Screen"));
+    fullScreenAction->setCheckable(true);
+    fullScreenAction->setShortcut(QKeySequence::FullScreen);
+    connect(fullScreenAction, SIGNAL(triggered(bool)), this, SLOT(showFullScreenOrMaximized(bool)));
 }
 
 
@@ -54,4 +70,16 @@ void MainWindow::openLibrary() {
         std::cout << "Todo: try to open library located at " << folderPath.toStdString() << std::endl;
         // todo
     }
+}
+
+void MainWindow::readingMode() {
+    QWindow* w = new QWindow();
+//    w->showFullScreen();
+}
+
+void MainWindow::showFullScreenOrMaximized(bool checked) {
+    if (checked)
+        showFullScreen();
+    else
+        showMaximized();
 }

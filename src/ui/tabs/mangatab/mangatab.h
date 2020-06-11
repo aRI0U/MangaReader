@@ -1,6 +1,7 @@
 #ifndef MANGATAB_H
 #define MANGATAB_H
 
+#include <QAction>
 #include <QObject>
 #include <QWidget>
 #include <QDir>

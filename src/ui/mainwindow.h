@@ -1,11 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QAction>
 #include <QMainWindow>
-#include <QScrollArea>
 #include <QMenu>
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QScrollArea>
+#include <QWindow>
 
 #include <iostream>
 
@@ -17,14 +19,18 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() {}
+    ~MainWindow() {};
 
 public slots:
     void closeTab(int index);
     void openLibrary();
+    void readingMode();
+    void showFullScreenOrMaximized(bool checked);
 
 private:
-    QTabWidget *centralTabs;
+    QTabWidget* centralTabs;
+
+
 };
 
 #endif // MAINWINDOW_H

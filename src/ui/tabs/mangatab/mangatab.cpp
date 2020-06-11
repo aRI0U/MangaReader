@@ -1,8 +1,8 @@
 #include "mangatab.h"
 
-MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
-    mangaDir(mangaDir),
+MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
     parent(parent),
+    mangaDir(mangaDir),
     pageLayout(new QHBoxLayout),
     reader(nullptr)
 {
@@ -49,7 +49,14 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
         }
     }
 
+    // reader
     reader = new Reader(this);
+    // enable fullscreen
+    /*
+    QAction* fullScreenAction = new QAction;
+    fullScreenAction->setShortcut(Qt::Key_A);//(QKeySequence::FullScreen);
+//    std::cout << QKeySequence::listToString(QKeySequence::keyBindings(QKeySequence::FullScreen)).toStdString() << std::endl;
+    connect(fullScreenAction, SIGNAL(triggered()), reader, SLOT(showFullScreen()));*/
 
     // show widget
     pageLayout->addWidget(treeWidget);
