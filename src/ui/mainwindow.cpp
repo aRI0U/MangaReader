@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -10,9 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
     showMaximized();
 
     // Create central zone
-    QTabWidget *centralTabs = new QTabWidget;
+    centralTabs = new QTabWidget;
     centralTabs->setMovable(true);
-    centralTabs->setTabsClosable(false);
+    centralTabs->setTabsClosable(true);
     // maybe make a library a button and not a tab so it cant be moved/closed
 
     // Create main tab
@@ -21,9 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
     auto* scrollArea = new QScrollArea;
     scrollArea->setWidget(mainTab);
     scrollArea->setWidgetResizable(true);
-
+    centralTabs->count();
     centralTabs->addTab(scrollArea, tr("Library"));
     setCentralWidget(centralTabs);
+
+    connect(centralTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
     // Menu bar
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
@@ -32,6 +32,15 @@ MainWindow::MainWindow(QWidget *parent)
     openLibraryAction->setStatusTip(tr("Open a library of mangas"));
 
     connect(openLibraryAction, SIGNAL(triggered()), this, SLOT(openLibrary()));
+}
+
+
+
+// SLOTS
+
+void MainWindow::closeTab(int index) {
+    if (index > 0)
+        centralTabs->removeTab(index);
 }
 
 void MainWindow::openLibrary() {

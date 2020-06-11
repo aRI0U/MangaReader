@@ -20,7 +20,11 @@ public:
     ~MainWindow() {}
 
 public slots:
+    void closeTab(int index);
     void openLibrary();
+
+private:
+    QTabWidget *centralTabs;
 };
 
 #endif // MAINWINDOW_H

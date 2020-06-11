@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QTabWidget>
 
-#include "mangatab.h"
+#include "../mangatab/mangatab.h"
 
 class MainTab : public QWidget
 {
