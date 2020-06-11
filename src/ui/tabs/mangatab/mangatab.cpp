@@ -4,8 +4,7 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
     mangaDir(mangaDir),
     parent(parent),
     pageLayout(new QHBoxLayout),
-    leftImg(nullptr),
-    rightImg(nullptr)
+    reader(nullptr)
 {
     treeWidget = new QTreeWidget();
     treeWidget->setColumnCount(2);
@@ -50,8 +49,11 @@ MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
         }
     }
 
+    reader = new Reader(this);
+
     // show widget
     pageLayout->addWidget(treeWidget);
+    pageLayout->addWidget(reader);
     setLayout(pageLayout);
 
     // connect click events on tree
@@ -66,34 +68,8 @@ void MangaTab::openManga(QTreeWidgetItem* item, int column) {
 
         QDir pagesDir(item->data(0, Qt::UserRole).toString());
         if(pagesDir.exists()) {
-            QVector<QPixmap> pages;
-            QStringList pageList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
-            for(QString& pageName: pageList) {
-                QString pagePath = pagesDir.absoluteFilePath(pageName);
-                QPixmap page(pagePath);
-//                page = page.scaledToWidth(1000, Qt::SmoothTransformation); // todo compute size dynamically
-                pages.push_back(page);
-            }
-
-            if(pages.size() >= 2) { // tmp hardcoded first 2 pages
-                //
-                treeWidget->setColumnCount(1);
-                //
-
-                if(leftImg == nullptr || rightImg == nullptr) {
-                    leftImg = new QLabel;
-                    rightImg = new QLabel;
-
-                    leftImg->setScaledContents(true);
-                    rightImg->setScaledContents(true);
-
-                    pageLayout->addWidget(leftImg);
-                    pageLayout->addWidget(rightImg);
-                }
-
-                leftImg->setPixmap(pages[0]);
-                rightImg->setPixmap(pages[1]);
-            }
+            treeWidget->setColumnCount(1);
+            reader->setPagesDir(pagesDir);
         }
     }
 }

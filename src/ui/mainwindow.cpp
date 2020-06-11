@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("MangaReader");
     setMinimumSize(800, 600);
     showMaximized();
+//    setFocusPolicy(Qt::StrongFocus);
 
     // Create central zone
     centralTabs = new QTabWidget;
@@ -19,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     auto* scrollArea = new QScrollArea;
     scrollArea->setWidget(mainTab);
     scrollArea->setWidgetResizable(true);
-    centralTabs->count();
     centralTabs->addTab(scrollArea, tr("Library"));
     setCentralWidget(centralTabs);
 

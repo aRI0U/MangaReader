@@ -14,6 +14,8 @@
 
 #include <iostream>
 
+#include "reader.h"
+
 class MangaTab : public QWidget
 {
     Q_OBJECT
@@ -28,8 +30,8 @@ private:
     QTabWidget* parent;
     QHBoxLayout* pageLayout;
     QTreeWidget* treeWidget;
-    QLabel* leftImg;
-    QLabel* rightImg;
+
+    Reader* reader;
 };
 
 #endif // MANGATAB_H
