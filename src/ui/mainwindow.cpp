@@ -73,8 +73,22 @@ void MainWindow::openLibrary() {
 }
 
 void MainWindow::readingMode() {
-    QWindow* w = new QWindow();
-//    w->showFullScreen();
+    QWidget* w = new QWidget(nullptr, Qt::Window);
+    w->setStyleSheet("background-color:white;");
+    w->setFocusPolicy(Qt::StrongFocus);
+
+    // todo add reader in it
+    QHBoxLayout* l = new QHBoxLayout;
+    w->setLayout(l);
+    l->addWidget(new QPushButton("tmp"));
+
+    // actions (TODO enable user to close fullscreen with key shortcut)
+    QAction* closeAction = new QAction;
+    closeAction->setShortcut(Qt::Key_Q);
+    connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
+
+    // display
+    w->showFullScreen();
 }
 
 void MainWindow::showFullScreenOrMaximized(bool checked) {

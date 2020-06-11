@@ -2,12 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QAction>
+#include <QGuiApplication>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QScrollArea>
-#include <QWindow>
+#include <QWidget>
+
+#include <QPushButton> // tmp
 
 #include <iostream>
 
