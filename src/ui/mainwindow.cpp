@@ -100,8 +100,8 @@ void MainWindow::readingMode() {
         connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
 
         // display
-        w->show(); // easier for debugging
-    //    w->showFullScreen(); // TODO adapt to actual screen's size
+//        w->show(); // easier for debugging
+        w->showFullScreen(); // TODO adapt to actual screen's size
     } else {
         std::cout << "no active reader" << std::endl;
     }

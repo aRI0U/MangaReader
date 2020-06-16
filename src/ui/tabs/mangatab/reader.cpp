@@ -9,6 +9,15 @@ Reader::Reader(QWidget *parent) :
 {
     layout->setSpacing(0);
     setLayout(layout);
+
+    prevPagesAction = new QAction(this);
+    nextPagesAction = new QAction(this);
+
+    addAction(prevPagesAction);
+    addAction(nextPagesAction);
+
+    connect(prevPagesAction, SIGNAL(triggered()), this, SLOT(displayPrevPages()));
+    connect(nextPagesAction, SIGNAL(triggered()), this, SLOT(displayNextPages()));
 }
 
 void Reader::setPagesDir(QDir value) {
@@ -43,11 +52,22 @@ QPixmap Reader::loadPage(int index) const {
     return page.scaledToWidth(1000, Qt::SmoothTransformation); // todo compute size dynamically
 }
 
+void Reader::displayPrevPages() {
+    std::cout << "TODO display previous pages" << std::endl;
+}
+
 void Reader::displayNextPages() {
     for (QLabel* img : {rightImg, leftImg}) {
         if (nextPageIndex < nPages)
             img->setPixmap(loadPage(nextPageIndex++));
         else
-            img->clear(); // TODO check whether
+            img->clear();
     }
+}
+
+void Reader::mousePressEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton)
+        nextPagesAction->trigger();
+    else
+        std::cout << "no effect" << std::endl;
 }

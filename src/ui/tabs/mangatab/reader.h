@@ -1,9 +1,11 @@
 #ifndef READER_H
 #define READER_H
 
+#include <QAction>
 #include <QDir>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMouseEvent>
 #include <QPixmap>
 #include <QWidget>
 
@@ -18,6 +20,7 @@ public:
     QPixmap loadPage(int index) const;
 
 public slots:
+    void displayPrevPages();
     void displayNextPages();
 
 signals:
@@ -27,11 +30,17 @@ private:
     QDir pagesDir;
     QStringList pagesList;
 
-    QLabel *leftImg;
-    QLabel *rightImg;
+    QLabel* leftImg;
+    QLabel* rightImg;
 
     int nPages;
     int nextPageIndex;
+
+    QAction* prevPagesAction;
+    QAction* nextPagesAction;
+
+protected:
+    void mousePressEvent(QMouseEvent* event);
 };
 
 #endif // READER_H
