@@ -17,11 +17,12 @@ public:
     void setPagesDir(QDir value);
     bool isActive() const;
 
-    QPixmap loadPage(int index) const;
+    QPixmap loadPage(const int index) const;
 
 public slots:
     void displayPrevPages();
     void displayNextPages();
+    void readingMode(bool enabled);
 
 signals:
 
@@ -38,9 +39,13 @@ private:
 
     QAction* prevPagesAction;
     QAction* nextPagesAction;
+    QAction* readingModeAction;
+
+    // backups for reading mode
 
 protected:
     void mousePressEvent(QMouseEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
 };
 
 #endif // READER_H

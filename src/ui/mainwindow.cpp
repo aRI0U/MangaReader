@@ -44,10 +44,6 @@ MainWindow::MainWindow(QWidget* parent)
 
 
     QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
-    // reading mode
-    QAction* readingModeAction = viewMenu->addAction(tr("ReadingMode"));
-    readingModeAction->setShortcut(Qt::Key_A); // TODO change for F5 or sth
-    connect(readingModeAction, SIGNAL(triggered()), this, SLOT(readingMode()));
 
     // enable fullscreen
     QAction* fullScreenAction = viewMenu->addAction(tr("Full Screen"));
@@ -73,37 +69,6 @@ void MainWindow::openLibrary() {
     if (folder.exists()) {
         std::cout << "Todo: try to open library located at " << folderPath.toStdString() << std::endl;
         // todo
-    }
-}
-
-void MainWindow::readingMode() {
-    QWidget* w = new QWidget(this, Qt::Window);
-    w->setStyleSheet("background-color:black;");
-    w->setFocusPolicy(Qt::StrongFocus);
-
-    // todo add reader in it
-    QHBoxLayout* l = new QHBoxLayout;
-    w->setLayout(l);
-    // TODO avoid reading mode when no reading (current solution sucks)
-    // TODO solve bug of not displaying after first fullscreen
-    Tab* currentTab = static_cast<Tab*>(centralTabs->currentWidget());
-    Reader* reader = currentTab->getReader();
-
-    if ( reader->isActive() ) {
-        std::cout << reader << std::endl;
-        l->addWidget(reader);
-
-        // actions
-        QAction* closeAction = new QAction(tr("Close"));
-        closeAction->setShortcuts({Qt::Key_Q, Qt::Key_Z}); // TODO choose appropriate shortcuts
-        w->addAction(closeAction);
-        connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
-
-        // display
-//        w->show(); // easier for debugging
-        w->showFullScreen(); // TODO adapt to actual screen's size
-    } else {
-        std::cout << "no active reader" << std::endl;
     }
 }
 

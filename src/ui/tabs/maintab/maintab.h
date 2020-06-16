@@ -15,8 +15,6 @@ class MainTab : public Tab
 public:
     explicit MainTab(QTabWidget *parent = nullptr);
 
-    Reader* getReader() const override;
-
 public slots:
     void clickedManga(QDir mangaDir);
 

@@ -68,15 +68,6 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
 }
 
 
-// PUBLIC
-
-Reader* MangaTab::getReader() const {
-    std::cout << "reader found" << std::endl;
-    return reader;
-}
-
-
-
 // PRIVATE
 
 void MangaTab::openManga(QTreeWidgetItem* item, int column) {
