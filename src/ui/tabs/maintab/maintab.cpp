@@ -34,3 +34,8 @@ void MainTab::clickedManga(QDir mangaDir)
     parent->addTab(manga_tab, mangaDir.dirName());
     parent->setCurrentIndex(parent->count() - 1);
 }
+
+Reader* MainTab::getReader() const {
+    std::cout << "no reader" << std::endl;
+    return nullptr;
+}

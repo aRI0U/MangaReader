@@ -71,6 +71,7 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
 // PUBLIC
 
 Reader* MangaTab::getReader() const {
+    std::cout << "reader found" << std::endl;
     return reader;
 }
 

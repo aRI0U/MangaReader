@@ -1,4 +1,5 @@
 #include "reader.h"
+#include <iostream>
 
 Reader::Reader(QWidget *parent) :
     QWidget(parent),
@@ -10,8 +11,7 @@ Reader::Reader(QWidget *parent) :
     setLayout(layout);
 }
 
-void Reader::setPagesDir(QDir value)
-{
+void Reader::setPagesDir(QDir value) {
     pagesDir = value;
     QVector<QPixmap> pages;
     QStringList pageList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
@@ -38,4 +38,9 @@ void Reader::setPagesDir(QDir value)
         rightImg->setPixmap(pages[0]); // manga should be read from right to left
         leftImg->setPixmap(pages[1]);
     }
+}
+
+bool Reader::isActive() const {
+    std::cout << leftImg << " - " << rightImg << std::endl;
+    return (leftImg != nullptr);
 }

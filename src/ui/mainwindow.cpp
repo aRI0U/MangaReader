@@ -86,19 +86,25 @@ void MainWindow::readingMode() {
     w->setLayout(l);
     // TODO cast correctly to avoid segfault
     // TODO solve bug of not displaying after first fullscreen
-    Tab* currentTab = dynamic_cast<MangaTab*>(centralTabs->currentWidget());
+    Tab* currentTab = static_cast<Tab*>(centralTabs->currentWidget());
     Reader* reader = currentTab->getReader();
-    l->addWidget(reader);
 
-    // actions
-    QAction* closeAction = new QAction(tr("Close"));
-    closeAction->addShortcuts(Qt::Key_Q);
-    w->addAction(closeAction);
-    connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
+    if ( reader->isActive() ) {
+        std::cout << reader << std::endl;
+        l->addWidget(reader);
 
-    // display
-    w->show(); // easier for debugging
-//    w->showFullScreen();
+        // actions
+        QAction* closeAction = new QAction(tr("Close"));
+        closeAction->setShortcut(Qt::Key_Q);
+        w->addAction(closeAction);
+        connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
+
+        // display
+        w->show(); // easier for debugging
+    //    w->showFullScreen();
+    } else {
+        std::cout << "no active reader" << std::endl;
+    }
 }
 
 void MainWindow::showFullScreenOrMaximized(bool checked) {

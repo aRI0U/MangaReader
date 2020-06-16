@@ -24,7 +24,7 @@ class MangaTab : public Tab
 
 public:
     explicit MangaTab(QTabWidget *parent, QDir mangaDir);
-    Reader* getReader() const; // override;
+    Reader* getReader() const override;
 
 private:
     void openManga(QTreeWidgetItem *item, int column);

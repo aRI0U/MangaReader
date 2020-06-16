@@ -11,7 +11,7 @@ class Tab : public QWidget
 public:
     explicit Tab(QWidget *parent = nullptr);
 
-    Reader* getReader() const;
+    virtual Reader* getReader() const;
 
 signals:
 

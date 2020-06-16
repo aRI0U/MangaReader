@@ -13,6 +13,7 @@ class Reader : public QWidget
 public:
     explicit Reader(QWidget *parent);
     void setPagesDir(QDir value);
+    bool isActive() const;
 
 signals:
 
