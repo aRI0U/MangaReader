@@ -84,7 +84,7 @@ void MainWindow::readingMode() {
     // todo add reader in it
     QHBoxLayout* l = new QHBoxLayout;
     w->setLayout(l);
-    // TODO cast correctly to avoid segfault
+    // TODO avoid reading mode when no reading (current solution sucks)
     // TODO solve bug of not displaying after first fullscreen
     Tab* currentTab = static_cast<Tab*>(centralTabs->currentWidget());
     Reader* reader = currentTab->getReader();
@@ -95,13 +95,13 @@ void MainWindow::readingMode() {
 
         // actions
         QAction* closeAction = new QAction(tr("Close"));
-        closeAction->setShortcut(Qt::Key_Q);
+        closeAction->setShortcuts({Qt::Key_Q, Qt::Key_Z}); // TODO choose appropriate shortcuts
         w->addAction(closeAction);
         connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
 
         // display
         w->show(); // easier for debugging
-    //    w->showFullScreen();
+    //    w->showFullScreen(); // TODO adapt to actual screen's size
     } else {
         std::cout << "no active reader" << std::endl;
     }

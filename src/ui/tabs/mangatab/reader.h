@@ -15,13 +15,23 @@ public:
     void setPagesDir(QDir value);
     bool isActive() const;
 
+    QPixmap loadPage(int index) const;
+
+public slots:
+    void displayNextPages();
+
 signals:
 
 private:
     QHBoxLayout *layout;
     QDir pagesDir;
+    QStringList pagesList;
+
     QLabel *leftImg;
     QLabel *rightImg;
+
+    int nPages;
+    int nextPageIndex;
 };
 
 #endif // READER_H

@@ -13,34 +13,41 @@ Reader::Reader(QWidget *parent) :
 
 void Reader::setPagesDir(QDir value) {
     pagesDir = value;
-    QVector<QPixmap> pages;
-    QStringList pageList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
-    for(QString& pageName: pageList) {
-        QString pagePath = pagesDir.absoluteFilePath(pageName);
-        QPixmap page(pagePath);
-//                page = page.scaledToWidth(1000, Qt::SmoothTransformation); // todo compute size dynamically
-        pages.push_back(page);
+    pagesList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
+
+    nPages = pagesList.size();
+    nextPageIndex = 0;
+
+    if (leftImg == nullptr || rightImg == nullptr) {
+        leftImg = new QLabel;
+        rightImg = new QLabel;
+
+        leftImg->setScaledContents(true);
+        rightImg->setScaledContents(true);
+
+        layout->addWidget(leftImg);
+        layout->addWidget(rightImg);
     }
 
-    if(pages.size() >= 2) { // tmp hardcoded first 2 pages
-
-        if(leftImg == nullptr || rightImg == nullptr) {
-            leftImg = new QLabel;
-            rightImg = new QLabel;
-
-            leftImg->setScaledContents(true);
-            rightImg->setScaledContents(true);
-
-            layout->addWidget(leftImg);
-            layout->addWidget(rightImg);
-        }
-
-        rightImg->setPixmap(pages[0]); // manga should be read from right to left
-        leftImg->setPixmap(pages[1]);
-    }
+    displayNextPages();
 }
 
 bool Reader::isActive() const {
     std::cout << leftImg << " - " << rightImg << std::endl;
     return (leftImg != nullptr);
+}
+
+QPixmap Reader::loadPage(int index) const {
+    QString pagePath = pagesDir.absoluteFilePath(pagesList[index]);
+    QPixmap page(pagePath);
+    return page.scaledToWidth(1000, Qt::SmoothTransformation); // todo compute size dynamically
+}
+
+void Reader::displayNextPages() {
+    for (QLabel* img : {rightImg, leftImg}) {
+        if (nextPageIndex < nPages)
+            img->setPixmap(loadPage(nextPageIndex++));
+        else
+            img->clear(); // TODO check whether
+    }
 }
