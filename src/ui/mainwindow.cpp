@@ -77,27 +77,28 @@ void MainWindow::openLibrary() {
 }
 
 void MainWindow::readingMode() {
-    QWidget* w = new QWidget(nullptr, Qt::Window);
+    QWidget* w = new QWidget(this, Qt::Window);
     w->setStyleSheet("background-color:black;");
-//    w->setFocusPolicy(Qt::StrongFocus);
+    w->setFocusPolicy(Qt::StrongFocus);
 
     // todo add reader in it
     QHBoxLayout* l = new QHBoxLayout;
     w->setLayout(l);
     // TODO cast correctly to avoid segfault
     // TODO solve bug of not displaying after first fullscreen
-    MangaTab* currentTab = dynamic_cast<MangaTab*>(centralTabs->currentWidget());
+    Tab* currentTab = dynamic_cast<MangaTab*>(centralTabs->currentWidget());
     Reader* reader = currentTab->getReader();
     l->addWidget(reader);
 
-    // actions (TODO enable user to close fullscreen with keyboard shortcut)
-    QMenu* rMenu = menuBar()->addMenu(tr("&Reading"));
-    QAction* closeAction = rMenu->addAction(tr("Close"));
-    closeAction->setShortcut(Qt::Key_Q);
+    // actions
+    QAction* closeAction = new QAction(tr("Close"));
+    closeAction->addShortcuts(Qt::Key_Q);
+    w->addAction(closeAction);
     connect(closeAction, SIGNAL(triggered()), w, SLOT(close()));
 
     // display
-    w->showFullScreen();
+    w->show(); // easier for debugging
+//    w->showFullScreen();
 }
 
 void MainWindow::showFullScreenOrMaximized(bool checked) {
