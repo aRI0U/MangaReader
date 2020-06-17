@@ -12,15 +12,23 @@ Reader::Reader(QWidget *parent) :
 
     prevPagesAction = new QAction(this);
     nextPagesAction = new QAction(this);
-    readingModeAction = new QAction(this);
+    enterReadingModeAction = new QAction(this);
+    exitReadingModeAction = new QAction(this);
 
     addAction(prevPagesAction);
     addAction(nextPagesAction);
-    addAction(readingModeAction);
+    addAction(enterReadingModeAction);
+    addAction(exitReadingModeAction);
+
+    exitReadingModeAction->setEnabled(false);
+
+    enterReadingModeAction->setShortcut(Qt::Key_A);
+    exitReadingModeAction->setShortcut(Qt::Key_Q);
 
     connect(prevPagesAction, SIGNAL(triggered()), this, SLOT(displayPrevPages()));
     connect(nextPagesAction, SIGNAL(triggered()), this, SLOT(displayNextPages()));
-    connect(readingModeAction, SIGNAL(triggered(bool)), this, SLOT(readingMode(bool)));
+//    connect(enterReadingModeAction, SIGNAL(triggered()), this, SLOT(enterReadingMode()));
+//    connect(exitReadingModeAction, SIGNAL(triggered()), this, SLOT(exitReadingMode()));
 }
 
 void Reader::setPagesDir(QDir value) {
@@ -70,37 +78,40 @@ void Reader::displayNextPages() {
     }
 }
 
-void Reader::readingMode(bool checked) {
-    std::cout << checked << std::endl;
-    if (checked) {
-        setParent(nullptr);
-        setStyleSheet("background-color:black;");
-        // focuspolicy?
-        setWindowFlags(
-                      windowFlags()
-                    | Qt::Window
-                    | Qt::CustomizeWindowHint
-                    | Qt::WindowStaysOnTopHint
-                    | Qt::WindowMaximizeButtonHint
-                    | Qt::WindowCloseButtonHint);
-        setWindowState(windowState() | Qt::WindowFullScreen);
-        show();
-    } else {
-        close();
-    }
+void Reader::enterReadingMode() {
+    // backup
+    bakWindowFlags = windowFlags();
+    bakWindowState = windowState();
+
+    enterReadingModeAction->setEnabled(false);
+    exitReadingModeAction->setEnabled(true);
+    setStyleSheet("background-color:black;");
+    setWindowFlags(
+                  windowFlags()
+                | Qt::Window
+                | Qt::CustomizeWindowHint
+                | Qt::WindowStaysOnTopHint
+                | Qt::WindowMaximizeButtonHint
+                | Qt::WindowCloseButtonHint);
+    setWindowState(windowState() | Qt::WindowFullScreen);
+    activateWindow();
+    show();
+}
+
+void Reader::exitReadingMode() {
+    enterReadingModeAction->setEnabled(true);
+    exitReadingModeAction->setEnabled(false);
+
+    setWindowFlags(bakWindowFlags);
+    setWindowState(bakWindowState);
 }
 
 void Reader::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton)
         nextPagesAction->trigger();
-//        readingModeAction->setChecked(!readingModeAction->isChecked());
-    else
-        std::cout << "no effect" << std::endl;
 }
 
 void Reader::mouseDoubleClickEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton)
-        readingModeAction->setChecked(!readingModeAction->isChecked());
-    else
-        std::cout << "no effect" << std::endl;
+        enterReadingModeAction->trigger();
 }

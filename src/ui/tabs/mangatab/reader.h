@@ -19,10 +19,15 @@ public:
 
     QPixmap loadPage(const int index) const;
 
+    QAction* enterReadingModeAction;
+    QAction* exitReadingModeAction;
+
+    void enterReadingMode();
+    void exitReadingMode();
+
 public slots:
     void displayPrevPages();
     void displayNextPages();
-    void readingMode(bool enabled);
 
 signals:
 
@@ -39,9 +44,10 @@ private:
 
     QAction* prevPagesAction;
     QAction* nextPagesAction;
-    QAction* readingModeAction;
 
     // backups for reading mode
+    Qt::WindowFlags bakWindowFlags;
+    Qt::WindowStates bakWindowState;
 
 protected:
     void mousePressEvent(QMouseEvent* event);

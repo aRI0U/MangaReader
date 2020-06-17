@@ -65,8 +65,20 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
 
     // connect click events on tree
     connect(treeWidget, &QTreeWidget::itemDoubleClicked, this, &MangaTab::openManga);
+
+    // connect reader's actions to enter/exit reading mode
+    connect(reader->enterReadingModeAction, SIGNAL(triggered()), this, SLOT(enterReadingMode()));
+    connect(reader->exitReadingModeAction, SIGNAL(triggered()), this, SLOT(exitReadingMode()));
 }
 
+void MangaTab::enterReadingMode() {
+    reader->enterReadingMode();
+}
+
+void MangaTab::exitReadingMode() {
+    reader->exitReadingMode();
+    pageLayout->addWidget(reader);
+}
 
 // PRIVATE
 
