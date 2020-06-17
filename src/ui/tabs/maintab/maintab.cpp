@@ -1,7 +1,4 @@
 #include "maintab.h"
-#include "mangaentry.h"
-#include "mangalist.h"
-#include "constants.h"
 
 MainTab::MainTab(QTabWidget *parent) :
     parent(parent)
@@ -22,7 +19,7 @@ void MainTab::clickedManga(QDir mangaDir)
     std::cout << "Opening manga at " << mangaDir.absolutePath().toStdString() << std::endl;
 
     // If manga is already open, set focus on the concerned tab
-    for(int k = 0; k < parent->count(); ++k) {
+    for (int k = 0; k < parent->count(); ++k) {
         if (parent->tabText(k) == mangaDir.dirName()) {
             parent->setCurrentIndex(k);
             return;

@@ -3,8 +3,9 @@
 
 #include <QDir>
 #include <QLabel>
-#include <QWidget>
 #include <QMouseEvent>
+#include <QWidget>
+
 
 #include <iostream>
 

@@ -1,4 +1,6 @@
 #include "reader.h"
+
+
 #include <iostream>
 
 Reader::Reader(QWidget *parent) :
@@ -27,8 +29,6 @@ Reader::Reader(QWidget *parent) :
 
     connect(prevPagesAction, SIGNAL(triggered()), this, SLOT(displayPrevPages()));
     connect(nextPagesAction, SIGNAL(triggered()), this, SLOT(displayNextPages()));
-//    connect(enterReadingModeAction, SIGNAL(triggered()), this, SLOT(enterReadingMode()));
-//    connect(exitReadingModeAction, SIGNAL(triggered()), this, SLOT(exitReadingMode()));
 }
 
 void Reader::setPagesDir(QDir value) {
@@ -39,11 +39,8 @@ void Reader::setPagesDir(QDir value) {
     nextPageIndex = 0;
 
     if (leftImg == nullptr || rightImg == nullptr) {
-        leftImg = new QLabel;
-        rightImg = new QLabel;
-
-//        leftImg->setScaledContents(true);
-//        rightImg->setScaledContents(true);
+        leftImg = new PixmapLabel;
+        rightImg = new PixmapLabel;
 
         layout->addWidget(leftImg);
         layout->addWidget(rightImg);
@@ -60,7 +57,7 @@ bool Reader::isActive() const {
 QPixmap Reader::loadPage(const int index) const {
     QString pagePath = pagesDir.absoluteFilePath(pagesList[index]);
     QPixmap page(pagePath);
-    return page.scaledToHeight(height(), Qt::SmoothTransformation); // todo compute size dynamically
+    return page; // todo compute size dynamically
 }
 
 // SLOTS
@@ -70,9 +67,9 @@ void Reader::displayPrevPages() {
 }
 
 void Reader::displayNextPages() {
-    for (QLabel* img : {rightImg, leftImg}) {
+    for (PixmapLabel* img : {rightImg, leftImg}) {
         if (nextPageIndex < nPages)
-            img->setPixmap(loadPage(nextPageIndex++));
+            img->updatePixmap(loadPage(nextPageIndex++));
         else
             img->clear();
     }

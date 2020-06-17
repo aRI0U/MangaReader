@@ -9,6 +9,8 @@
 #include <QPixmap>
 #include <QWidget>
 
+#include "pixmaplabel.h"
+
 class Reader : public QWidget
 {
     Q_OBJECT
@@ -36,8 +38,8 @@ private:
     QDir pagesDir;
     QStringList pagesList;
 
-    QLabel* leftImg;
-    QLabel* rightImg;
+    PixmapLabel* leftImg;
+    PixmapLabel* rightImg;
 
     int nPages;
     int nextPageIndex;

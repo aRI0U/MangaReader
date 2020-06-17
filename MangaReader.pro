@@ -25,6 +25,7 @@ SOURCES += \
     src/ui/tabs/maintab/mangaentry.cpp \
     src/ui/tabs/maintab/mangalist.cpp \
     src/ui/tabs/mangatab/mangatab.cpp \
+    src/ui/tabs/mangatab/pixmaplabel.cpp \
     src/ui/tabs/mangatab/reader.cpp \
     src/ui/tabs/tab.cpp
 
@@ -36,6 +37,7 @@ HEADERS += \
     src/ui/tabs/maintab/mangaentry.h \
     src/ui/tabs/maintab/mangalist.h \
     src/ui/tabs/mangatab/mangatab.h \
+    src/ui/tabs/mangatab/pixmaplabel.h \
     src/ui/tabs/mangatab/reader.h \
     src/ui/tabs/tab.h
 
