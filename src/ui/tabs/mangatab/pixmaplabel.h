@@ -16,7 +16,7 @@ public:
 
 public slots:
     void updatePixmap( const QPixmap& );
-    void resizeEvent( QResizeEvent* );
+    void resizeEvent();
 
 private:
     QPixmap pix;

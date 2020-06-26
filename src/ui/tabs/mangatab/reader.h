@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QList>
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QWidget>
@@ -19,10 +20,10 @@ public:
     void setPagesDir(QDir value);
     bool isActive() const;
 
-    QPixmap loadPage(const int index) const;
-
     QAction* enterReadingModeAction;
     QAction* exitReadingModeAction;
+
+    void initDoublePages();
 
     void enterReadingMode();
     void exitReadingMode();
@@ -34,6 +35,7 @@ public slots:
 signals:
 
 private:
+    // attributes
     QHBoxLayout *layout;
     QDir pagesDir;
     QStringList pagesList;
@@ -41,8 +43,9 @@ private:
     PixmapLabel* leftImg;
     PixmapLabel* rightImg;
 
-    int nPages;
-    int nextPageIndex;
+    QList<QList<int>> doublePages;
+    int nDoublePages;
+    int currentDoublePageIndex;
 
     QAction* prevPagesAction;
     QAction* nextPagesAction;
@@ -50,6 +53,11 @@ private:
     // backups for reading mode
     Qt::WindowFlags bakWindowFlags;
     Qt::WindowStates bakWindowState;
+
+    // methods
+    void displayPages(const int index);
+    QPixmap loadPage(const int index) const;
+
 
 protected:
     void mousePressEvent(QMouseEvent* event);

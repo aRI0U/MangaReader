@@ -24,6 +24,8 @@ Reader::Reader(QWidget *parent) :
 
     exitReadingModeAction->setEnabled(false);
 
+    nextPagesAction->setShortcut(Qt::Key_Left);
+    prevPagesAction->setShortcut(Qt::Key_Right);
     enterReadingModeAction->setShortcut(Qt::Key_A);
     exitReadingModeAction->setShortcut(Qt::Key_Q);
 
@@ -35,9 +37,6 @@ void Reader::setPagesDir(QDir value) {
     pagesDir = value;
     pagesList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
 
-    nPages = pagesList.size();
-    nextPageIndex = 0;
-
     if (leftImg == nullptr || rightImg == nullptr) {
         leftImg = new PixmapLabel;
         rightImg = new PixmapLabel;
@@ -45,8 +44,8 @@ void Reader::setPagesDir(QDir value) {
         layout->addWidget(leftImg);
         layout->addWidget(rightImg);
     }
-
-    displayNextPages();
+    initDoublePages();
+    displayPages(0);
 }
 
 bool Reader::isActive() const {
@@ -54,24 +53,44 @@ bool Reader::isActive() const {
     return (leftImg != nullptr);
 }
 
-QPixmap Reader::loadPage(const int index) const {
-    QString pagePath = pagesDir.absoluteFilePath(pagesList[index]);
-    QPixmap page(pagePath);
-    return page; // todo compute size dynamically
+void Reader::initDoublePages() {
+    doublePages.clear();
+    currentDoublePageIndex = 0;
+
+    int nPages = pagesList.size();
+
+    if (nPages != 0) {
+        doublePages = {{0}};
+        for (int currentPageIndex = 1;  currentPageIndex < nPages; currentPageIndex++) {
+            // TODO load only one page when it is big or if it is the last, and two otherwise
+            QList<int> currentDoublePage;
+            currentDoublePage.append(currentPageIndex);
+            currentPageIndex++;
+            currentDoublePage.append(currentPageIndex);
+
+            doublePages.append(currentDoublePage);
+            std::cout << currentDoublePage.at(0) << "-" << currentDoublePage.at(1) << std::endl;
+        }
+    }
+    nDoublePages = doublePages.size();
 }
 
 // SLOTS
 
 void Reader::displayPrevPages() {
-    std::cout << "TODO display previous pages" << std::endl;
+    if (--currentDoublePageIndex >= 0)
+        displayPages(currentDoublePageIndex);
+    else
+        currentDoublePageIndex = 0;
 }
 
 void Reader::displayNextPages() {
-    for (PixmapLabel* img : {rightImg, leftImg}) {
-        if (nextPageIndex < nPages)
-            img->updatePixmap(loadPage(nextPageIndex++));
-        else
-            img->clear();
+    if (++currentDoublePageIndex < nDoublePages)
+        displayPages(currentDoublePageIndex);
+    else {
+        rightImg->clear();
+        leftImg->clear();
+        currentDoublePageIndex = nDoublePages;
     }
 }
 
@@ -111,4 +130,33 @@ void Reader::mousePressEvent(QMouseEvent* event) {
 void Reader::mouseDoubleClickEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton)
         enterReadingModeAction->trigger();
+}
+
+
+// PRIVATE
+
+QPixmap Reader::loadPage(const int index) const {
+    QString pagePath = pagesDir.absoluteFilePath(pagesList[index]);
+    QPixmap page(pagePath);
+    return page; // todo compute size dynamically
+}
+
+void Reader::displayPages(const int index) {
+    QList<int> currentDoublePage = doublePages.at(index);
+    switch (currentDoublePage.size()) {
+        case 1:
+            rightImg->updatePixmap(loadPage(currentDoublePage.at(0)));
+            leftImg->clear();
+            break;
+        case 2:
+            rightImg->updatePixmap(loadPage(currentDoublePage.at(0)));
+            leftImg->updatePixmap(loadPage(currentDoublePage.at(1)));
+            break;
+        default:
+            throw std::runtime_error(
+                        std::string("Reader can only display 1 or 2 images at the same time. Got a list of ") +
+                        std::to_string(currentDoublePage.size()) +
+                        " images.");
+            break;
+    }
 }
