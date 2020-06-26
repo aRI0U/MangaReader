@@ -60,17 +60,52 @@ void Reader::initDoublePages() {
     int nPages = pagesList.size();
 
     if (nPages != 0) {
-        doublePages = {{0}};
-        for (int currentPageIndex = 1;  currentPageIndex < nPages; currentPageIndex++) {
-            // TODO load only one page when it is big or if it is the last, and two otherwise
-            QList<int> currentDoublePage;
-            currentDoublePage.append(currentPageIndex);
-            currentPageIndex++;
-            currentDoublePage.append(currentPageIndex);
+        QList<QList<int>> pageGroups = {{0}, {}};
 
-            doublePages.append(currentDoublePage);
-            std::cout << currentDoublePage.at(0) << "-" << currentDoublePage.at(1) << std::endl;
+        for (int i = 1; i < nPages; i++) {
+            QPixmap image = loadPage(i);
+
+            if (image.width() > image.height()) {
+                if (pageGroups.last().isEmpty())
+                    pageGroups.last().append(i);
+                else
+                    pageGroups.append({i});
+
+                // TODO do this directly
+                QList<int> empty;
+                pageGroups.append(empty);
+            } else
+                pageGroups.last().append(i);
         }
+
+        // eventually remove the last empty group
+        if (pageGroups.last().isEmpty())
+            pageGroups.removeLast();
+
+        for (QList<int> group : pageGroups) {
+            if (group.size() <= 2)
+                doublePages.append(group);
+            else {
+                if (group.size() % 2 == 0) {
+                    while (!group.isEmpty())
+                        doublePages.append({group.takeFirst(), group.takeFirst()});
+                } else { // TODO find a clever way to solve this problem
+                    doublePages.append({group.takeFirst()});
+                    while (!group.isEmpty())
+                        doublePages.append({group.takeFirst(), group.takeFirst()});
+                }
+            }
+        }
+//        for (int currentPageIndex = 1;  currentPageIndex < nPages; currentPageIndex++) {
+//            // TODO load only one page when it is big or if it is the last, and two otherwise
+//            QList<int> currentDoublePage;
+//            currentDoublePage.append(currentPageIndex);
+//            currentPageIndex++;
+//            currentDoublePage.append(currentPageIndex);
+
+//            doublePages.append(currentDoublePage);
+//            std::cout << currentDoublePage.at(0) << "-" << currentDoublePage.at(1) << std::endl;
+//        }
     }
     nDoublePages = doublePages.size();
 }
