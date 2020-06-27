@@ -4,8 +4,8 @@ MainTab::MainTab(QTabWidget *parent) :
     parent(parent)
 {
     MangaList *mangaList = new MangaList;
-    for (const auto &dir : constants::ScansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        MangaEntry *mangaEntry = new MangaEntry(QDir(constants::ScansPath.filePath(dir)));
+    for (const auto &dir : config::ScansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        MangaEntry *mangaEntry = new MangaEntry(QDir(config::ScansPath.filePath(dir)));
         mangaList->addWidget(mangaEntry);
         QObject::connect(mangaEntry, SIGNAL(clicked(QDir)), this, SLOT(clickedManga(QDir)));
     }

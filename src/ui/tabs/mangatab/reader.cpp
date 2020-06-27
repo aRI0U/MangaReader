@@ -75,7 +75,7 @@ void Reader::initDoublePages() {
                 pageGroups.last().append(i);
         }
 
-        // eventually remove the last empty group
+        // eventually remove the last group (if empty)
         if (pageGroups.last().isEmpty())
             pageGroups.removeLast();
 
@@ -93,16 +93,6 @@ void Reader::initDoublePages() {
                 }
             }
         }
-//        for (int currentPageIndex = 1;  currentPageIndex < nPages; currentPageIndex++) {
-//            // TODO load only one page when it is big or if it is the last, and two otherwise
-//            QList<int> currentDoublePage;
-//            currentDoublePage.append(currentPageIndex);
-//            currentPageIndex++;
-//            currentDoublePage.append(currentPageIndex);
-
-//            doublePages.append(currentDoublePage);
-//            std::cout << currentDoublePage.at(0) << "-" << currentDoublePage.at(1) << std::endl;
-//        }
     }
     nDoublePages = doublePages.size();
 }

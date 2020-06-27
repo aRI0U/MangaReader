@@ -7,7 +7,7 @@
 
 #include "mangaentry.h"
 #include "mangalist.h"
-#include "constants.h"
+#include "config.h"
 #include "../tab.h"
 #include "../mangatab/mangatab.h"
 #include "../mangatab/reader.h"
