@@ -71,3 +71,5 @@ Thumbs.db
 *.dll
 *.exe
 
+# other
+src/config.h
