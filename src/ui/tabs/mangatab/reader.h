@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QList>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QPixmap>
 #include <QWidget>
 
@@ -40,8 +41,7 @@ private:
     QDir pagesDir;
     QStringList pagesList;
 
-    PixmapLabel* leftImg;
-    PixmapLabel* rightImg;
+    PixmapLabel* label;
 
     QList<QList<int>> doublePages;
     int nDoublePages;

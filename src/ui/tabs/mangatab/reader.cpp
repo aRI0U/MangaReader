@@ -6,8 +6,7 @@
 Reader::Reader(QWidget *parent) :
     QWidget(parent),
     layout(new QHBoxLayout),
-    leftImg(nullptr),
-    rightImg(nullptr)
+    label(nullptr)
 {
     layout->setSpacing(0);
     setLayout(layout);
@@ -37,20 +36,18 @@ void Reader::setPagesDir(QDir value) {
     pagesDir = value;
     pagesList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
 
-    if (leftImg == nullptr || rightImg == nullptr) {
-        leftImg = new PixmapLabel;
-        rightImg = new PixmapLabel;
+    if (!isActive()) {
+        label = new PixmapLabel;
+        label->setAlignment(Qt::AlignHCenter);
 
-        layout->addWidget(leftImg);
-        layout->addWidget(rightImg);
+        layout->addWidget(label);
     }
     initDoublePages();
     displayPages(0);
 }
 
 bool Reader::isActive() const {
-    std::cout << leftImg << " - " << rightImg << std::endl;
-    return (leftImg != nullptr);
+    return (label != nullptr);
 }
 
 void Reader::initDoublePages() {
@@ -123,8 +120,7 @@ void Reader::displayNextPages() {
     if (++currentDoublePageIndex < nDoublePages)
         displayPages(currentDoublePageIndex);
     else {
-        rightImg->clear();
-        leftImg->clear();
+        label->clear();
         currentDoublePageIndex = nDoublePages;
     }
 }
@@ -180,13 +176,32 @@ void Reader::displayPages(const int index) {
     QList<int> currentDoublePage = doublePages.at(index);
     switch (currentDoublePage.size()) {
         case 1:
-            rightImg->updatePixmap(loadPage(currentDoublePage.at(0)));
-            leftImg->clear();
+            label->updatePixmap(loadPage(currentDoublePage.at(0)));
             break;
+
         case 2:
-            rightImg->updatePixmap(loadPage(currentDoublePage.at(0)));
-            leftImg->updatePixmap(loadPage(currentDoublePage.at(1)));
+        {
+            // load both images
+            QPixmap rightPage = loadPage(currentDoublePage.at(0));
+            QPixmap leftPage = loadPage(currentDoublePage.at(1));
+
+            // rescale images to have the same height
+            if (rightPage.height() > leftPage.height())
+                leftPage = leftPage.scaledToHeight(rightPage.height(), Qt::SmoothTransformation);
+            else
+                rightPage = rightPage.scaledToHeight(leftPage.height(), Qt::SmoothTransformation);
+
+            // draw both images on a new pixmap
+            QPixmap collage = QPixmap(leftPage.width() + rightPage.width(), leftPage.height());
+            QPainter painter(&collage);
+
+            painter.drawPixmap(0, 0, leftPage.width(), leftPage.height(), leftPage);
+            painter.drawPixmap(leftPage.width(), 0, rightPage.width(), rightPage.height(), rightPage);
+
+            label->updatePixmap(collage);
             break;
+        }
+
         default:
             throw std::runtime_error(
                         std::string("Reader can only display 1 or 2 images at the same time. Got a list of ") +
