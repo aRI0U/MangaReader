@@ -35,6 +35,10 @@ void MangaEntry::initEntry()
     setCursor(Qt::PointingHandCursor);
 }
 
+void MangaEntry::changeReadDirection() {
+    readDirectionLR = !readDirectionLR;
+}
+
 void MangaEntry::mousePressEvent(QMouseEvent *e) {
     if(e->button() == Qt::LeftButton) {
         // Process left click on cover

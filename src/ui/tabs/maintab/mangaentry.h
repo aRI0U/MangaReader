@@ -16,6 +16,9 @@ class MangaEntry : public QFrame
 public:
     explicit MangaEntry(QDir path);
 
+public slots:
+    void changeReadDirection();
+
 signals:
     void clicked(QDir mangaDir);
 
@@ -28,6 +31,7 @@ private:
     QLabel *m_title;
     QDir m_path;
 
+    bool readDirectionLR = false;
 };
 
 #endif // MANGAENTRY_H

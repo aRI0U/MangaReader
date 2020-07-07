@@ -8,10 +8,12 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QScrollArea>
+#include <QSettings>
 #include <QWidget>
 
 #include <iostream>
 
+#include "constants.h"
 #include "tabs/maintab/maintab.h"
 
 class MainWindow : public QMainWindow
@@ -22,6 +24,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow() {};
 
+    void readSettings();
+    void writeSettings();
+
 public slots:
     void closeTab(int index);
     void openLibrary();
@@ -29,6 +34,9 @@ public slots:
 
 private:
     QTabWidget* centralTabs;
+
+protected:
+    void closeEvent(QCloseEvent* event);
 };
 
 #endif // MAINWINDOW_H

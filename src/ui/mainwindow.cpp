@@ -50,6 +50,8 @@ MainWindow::MainWindow(QWidget* parent)
     fullScreenAction->setCheckable(true);
     fullScreenAction->setShortcut(QKeySequence::FullScreen);
     connect(fullScreenAction, SIGNAL(triggered(bool)), this, SLOT(showFullScreenOrMaximized(bool)));
+
+    readSettings();
 }
 
 // SLOTS
@@ -77,4 +79,27 @@ void MainWindow::showFullScreenOrMaximized(bool checked) {
         showFullScreen();
     else
         showMaximized();
+}
+
+void MainWindow::readSettings() {
+    QSettings settings;
+
+    settings.beginGroup("MainWindow");
+    resize(settings.value("size", minimumSize()).toSize());
+    move(settings.value("pos", QPoint(0, 0)).toPoint());
+    settings.endGroup();
+}
+
+void MainWindow::writeSettings() {
+    QSettings settings;
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("size", size());
+    settings.setValue("pos", pos());
+    settings.endGroup();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    writeSettings();
+    event->accept();
 }

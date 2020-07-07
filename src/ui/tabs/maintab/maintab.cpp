@@ -1,6 +1,6 @@
 #include "maintab.h"
 
-MainTab::MainTab(QTabWidget *parent) :
+MainTab::MainTab(QTabWidget* parent) :
     parent(parent)
 {
     MangaList *mangaList = new MangaList;
