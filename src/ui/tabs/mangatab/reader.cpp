@@ -110,8 +110,7 @@ void Reader::displayNextPages() {
     if (++currentDoublePageIndex < nDoublePages)
         displayPages(currentDoublePageIndex);
     else {
-        label->clear();
-        currentDoublePageIndex = nDoublePages;
+        emit endOfChapter();
     }
 }
 
@@ -198,5 +197,5 @@ void Reader::displayPages(const int index) {
                         std::to_string(currentDoublePage.size()) +
                         " images.");
             break;
-    }
+    };
 }

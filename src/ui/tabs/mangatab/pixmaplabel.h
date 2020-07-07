@@ -12,14 +12,16 @@ class PixmapLabel : public QLabel
 public:
     explicit PixmapLabel(QWidget* parent = nullptr);
 
-    QPixmap scaledPixmap() const;
-
-public slots:
-    void updatePixmap( const QPixmap& );
     void resizeEvent();
+    void updatePixmap( const QPixmap& );
+
+protected:
+    void resizeEvent(QResizeEvent* event);
 
 private:
     QPixmap pix;
+
+    QPixmap scaledPixmap(const QSize size) const;
 };
 
 #endif // PIXMAPLABEL_H

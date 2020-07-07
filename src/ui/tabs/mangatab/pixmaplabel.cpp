@@ -9,14 +9,18 @@ PixmapLabel::PixmapLabel(QWidget* parent) :
 
 void PixmapLabel::updatePixmap (const QPixmap& p) {
     pix = p;
-    setPixmap(scaledPixmap());
+    resizeEvent();
 }
 
-QPixmap PixmapLabel::scaledPixmap() const {
-    return pix.scaledToHeight(size().height(), Qt::SmoothTransformation);
+QPixmap PixmapLabel::scaledPixmap(const QSize size) const {
+    return pix.scaledToHeight(size.height(), Qt::SmoothTransformation);
 }
 
 void PixmapLabel::resizeEvent() {
+    resizeEvent(new QResizeEvent(size(), size()));
+}
+
+void PixmapLabel::resizeEvent(QResizeEvent* event) {
     if (!pix.isNull())
-        setPixmap(scaledPixmap());
+        setPixmap(scaledPixmap(event->size()));
 }

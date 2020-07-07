@@ -34,6 +34,7 @@ public slots:
     void displayNextPages();
 
 signals:
+    void endOfChapter();
 
 private:
     // attributes

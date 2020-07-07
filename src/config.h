@@ -4,7 +4,7 @@
 #include <QDir>
 
 namespace config {
-    const QDir ScansPath = QDir("../MangaReader/scans");
+    const QDir ScansPath = QDir("/home/alain/Documents/Scans");
 }
 
 #endif // CONFIG_H
