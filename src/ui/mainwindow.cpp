@@ -5,8 +5,9 @@ MainWindow::MainWindow(QWidget* parent)
 {
     setWindowTitle("MangaReader");
     setMinimumSize(800, 600);
-    showMaximized();
 //    setFocusPolicy(Qt::StrongFocus);
+
+    QSettings settings;
 
     // Create central zone
     centralTabs = new QTabWidget;
@@ -16,9 +17,10 @@ MainWindow::MainWindow(QWidget* parent)
     // TODO library should not be neither movable nor closable
 
     // Create main tab
-    MainTab *mainTab = new MainTab(centralTabs);
+    QDir scansPath(settings.value("Library/scansPath").toString());
+    MainTab *mainTab = new MainTab(centralTabs, scansPath);
 
-    auto* scrollArea = new QScrollArea;
+    QScrollArea* scrollArea = new QScrollArea;
     scrollArea->setWidget(mainTab);
     scrollArea->setWidgetResizable(true);
     centralTabs->addTab(scrollArea, tr("Library"));
@@ -33,6 +35,7 @@ MainWindow::MainWindow(QWidget* parent)
     openLibraryAction->setShortcut(Qt::CTRL | Qt::Key_O);
     openLibraryAction->setStatusTip(tr("Open a library of mangas"));
     connect(openLibraryAction, SIGNAL(triggered()), this, SLOT(openLibrary()));
+    connect(this, SIGNAL(openLibraryRequest(QDir)), mainTab, SLOT(openLibrary(QDir)));
     // quit
     QAction* quitAction = fileMenu->addAction(tr("Quit"));
     quitAction->setShortcut(Qt::CTRL | Qt::Key_Q);
@@ -69,8 +72,9 @@ void MainWindow::openLibrary() {
 
     QDir folder(folderPath);
     if (folder.exists()) {
-        std::cout << "Todo: try to open library located at " << folderPath.toStdString() << std::endl;
-        // todo
+        QSettings settings;
+        settings.setValue("Library/scansPath", folderPath);
+        emit openLibraryRequest(folder);
     }
 }
 

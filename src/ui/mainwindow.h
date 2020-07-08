@@ -32,6 +32,9 @@ public slots:
     void openLibrary();
     void showFullScreenOrMaximized(bool checked);
 
+signals:
+    void openLibraryRequest(QDir scansPath);
+
 private:
     QTabWidget* centralTabs;
 

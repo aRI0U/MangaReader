@@ -1,11 +1,17 @@
 #include "maintab.h"
 
-MainTab::MainTab(QTabWidget* parent) :
+MainTab::MainTab(QTabWidget* parent, QDir scansPath) :
     parent(parent)
 {
+    openLibrary(scansPath);
+}
+
+void MainTab::openLibrary(const QDir scansPath) {
+    delete layout();
+
     MangaList *mangaList = new MangaList;
-    for (const auto &dir : config::ScansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        MangaEntry *mangaEntry = new MangaEntry(QDir(config::ScansPath.filePath(dir)));
+    for (const auto &dir : scansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        MangaEntry *mangaEntry = new MangaEntry(QDir(scansPath.filePath(dir)));
         mangaList->addWidget(mangaEntry);
         QObject::connect(mangaEntry, SIGNAL(clicked(QDir)), this, SLOT(clickedManga(QDir)));
     }

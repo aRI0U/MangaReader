@@ -30,7 +30,6 @@ SOURCES += \
     src/ui/tabs/tab.cpp
 
 HEADERS += \
-    src/config.h \
     src/constants.h \
     src/ui/mainwindow.h \
     src/ui/tabs/maintab/maintab.h \
