@@ -3,6 +3,8 @@
 
 #include <QAction>
 #include <QDir>
+#include <QDebug>
+#include <QFile>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QList>
@@ -57,7 +59,8 @@ private:
 
     // methods
     void displayPages(const int index);
-    QPixmap loadPage(const int index) const;
+    QPixmap loadPage(const int index, const char* format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor) const;
+    void renameFile(const int index, const char* format);
 
 
 protected:

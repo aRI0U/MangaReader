@@ -1,8 +1,5 @@
 #include "reader.h"
 
-
-#include <iostream>
-
 Reader::Reader(QWidget *parent) :
     QWidget(parent),
     layout(new QHBoxLayout),
@@ -62,6 +59,14 @@ void Reader::initDoublePages() {
         for (int i = 1; i < nPages; i++) {
             QPixmap image = loadPage(i);
 
+            if (image.isNull()) {
+                for (const char* format : {"png", "jpg"}) {
+                    image = loadPage(i, format);
+                    if (!image.isNull())
+                        renameFile(i, format);
+                }
+            }
+
             if (image.width() > image.height()) {
                 if (pageGroups.last().isEmpty())
                     pageGroups.last().append(i);
@@ -93,6 +98,7 @@ void Reader::initDoublePages() {
                 }
             }
         }
+        qDebug() << "Double pages successfully initialized:" << doublePages;
     }
     nDoublePages = doublePages.size();
 }
@@ -155,10 +161,15 @@ void Reader::mouseDoubleClickEvent(QMouseEvent* event) {
 
 // PRIVATE
 
-QPixmap Reader::loadPage(const int index) const {
-    QString pagePath = pagesDir.absoluteFilePath(pagesList[index]);
-    QPixmap page(pagePath);
-    return page; // todo compute size dynamically
+QPixmap Reader::loadPage(const int index, const char* format, Qt::ImageConversionFlags flags) const {
+    QString pagePath = pagesDir.absoluteFilePath(pagesList.at(index));
+
+    QPixmap page(pagePath, format, flags);
+
+    if (page.isNull())
+        qDebug() << "Error loading " << pagePath;
+
+    return page;
 }
 
 void Reader::displayPages(const int index) {
@@ -198,4 +209,17 @@ void Reader::displayPages(const int index) {
                         " images.");
             break;
     };
+}
+
+void Reader::renameFile(const int index, const char* format) {
+    // build old and new name
+    const QString oldName = pagesDir.absoluteFilePath(pagesList.at(index));
+    const QString newName = oldName.left(oldName.size() - 3) + format;
+
+    // rename file
+    QFile::rename(oldName, newName);
+
+    // update pagesList
+    QString fname = newName.split("/").last();
+    pagesList.replace(index, fname);
 }
