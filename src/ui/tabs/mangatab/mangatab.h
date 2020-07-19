@@ -25,6 +25,8 @@ class MangaTab : public Tab
 public:
     explicit MangaTab(QTabWidget *parent, QDir mangaDir);
 
+    QString mangaName();
+
 public slots:
     void enterReadingMode();
     void exitReadingMode();

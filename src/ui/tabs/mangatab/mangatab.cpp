@@ -50,7 +50,7 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
     }
 
     // reader
-    reader = new Reader(this);
+    reader = new Reader(this, mangaDir.dirName());
 
     // show widget
     pageLayout->addWidget(treeWidget);
@@ -64,6 +64,13 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
     connect(reader->enterReadingModeAction, SIGNAL(triggered()), this, SLOT(enterReadingMode()));
     connect(reader->exitReadingModeAction, SIGNAL(triggered()), this, SLOT(exitReadingMode()));
 }
+
+
+QString MangaTab::mangaName() {
+    return mangaDir.dirName();
+}
+
+// SLOTS
 
 void MangaTab::enterReadingMode() {
     reader->enterReadingMode();

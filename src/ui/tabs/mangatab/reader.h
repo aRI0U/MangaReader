@@ -11,15 +11,18 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
+#include <QSettings>
 #include <QWidget>
 
 #include "pixmaplabel.h"
+
+enum direction { RightToLeft = true, LeftToRight = false };
 
 class Reader : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Reader(QWidget *parent);
+    explicit Reader(QWidget* parent, QString manga);
     void setPagesDir(QDir value);
     bool isActive() const;
 
@@ -32,15 +35,21 @@ public:
     void exitReadingMode();
 
 public slots:
+    void swipeLeft();
+    void swipeRight();
+
     void displayPrevPages();
     void displayNextPages();
+
+    void updateReadingDirection();
 
 signals:
     void endOfChapter();
 
 private:
     // attributes
-    QHBoxLayout *layout;
+    QHBoxLayout* layout;
+    QString mangaName;
     QDir pagesDir;
     QStringList pagesList;
 
@@ -50,8 +59,10 @@ private:
     int nDoublePages;
     int currentDoublePageIndex;
 
-    QAction* prevPagesAction;
-    QAction* nextPagesAction;
+    QAction* leftAction;
+    QAction* rightAction;
+
+    direction readingDirection;
 
     // backups for reading mode
     Qt::WindowFlags bakWindowFlags;

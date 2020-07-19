@@ -1,32 +1,35 @@
 #include "reader.h"
 
-Reader::Reader(QWidget *parent) :
+Reader::Reader(QWidget* parent, QString manga) :
     QWidget(parent),
     layout(new QHBoxLayout),
-    label(nullptr)
+    label(nullptr),
+    mangaName(manga)
 {
     layout->setSpacing(0);
     setLayout(layout);
 
-    prevPagesAction = new QAction(this);
-    nextPagesAction = new QAction(this);
+    leftAction = new QAction(this);
+    rightAction = new QAction(this);
     enterReadingModeAction = new QAction(this);
     exitReadingModeAction = new QAction(this);
 
-    addAction(prevPagesAction);
-    addAction(nextPagesAction);
+    addAction(leftAction);
+    addAction(rightAction);
     addAction(enterReadingModeAction);
     addAction(exitReadingModeAction);
 
     exitReadingModeAction->setEnabled(false);
 
-    nextPagesAction->setShortcut(Qt::Key_Left);
-    prevPagesAction->setShortcut(Qt::Key_Right);
+    leftAction->setShortcut(Qt::Key_Left);
+    rightAction->setShortcut(Qt::Key_Right);
     enterReadingModeAction->setShortcut(Qt::Key_A);
     exitReadingModeAction->setShortcut(Qt::Key_Q);
 
-    connect(prevPagesAction, SIGNAL(triggered()), this, SLOT(displayPrevPages()));
-    connect(nextPagesAction, SIGNAL(triggered()), this, SLOT(displayNextPages()));
+    connect(leftAction, SIGNAL(triggered()), this, SLOT(swipeLeft()));
+    connect(rightAction, SIGNAL(triggered()), this, SLOT(swipeRight()));
+
+    updateReadingDirection();
 }
 
 void Reader::setPagesDir(QDir value) {
@@ -104,6 +107,19 @@ void Reader::initDoublePages() {
 }
 
 // SLOTS
+void Reader::swipeLeft() {
+    if (readingDirection == RightToLeft)
+        displayNextPages();
+    else
+        displayPrevPages();
+}
+
+void Reader::swipeRight() {
+    if (readingDirection == LeftToRight)
+        displayNextPages();
+    else
+        displayPrevPages();
+}
 
 void Reader::displayPrevPages() {
     if (--currentDoublePageIndex >= 0)
@@ -150,7 +166,7 @@ void Reader::exitReadingMode() {
 
 void Reader::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton)
-        nextPagesAction->trigger();
+        displayNextPages();
 }
 
 void Reader::mouseDoubleClickEvent(QMouseEvent* event) {
@@ -182,8 +198,16 @@ void Reader::displayPages(const int index) {
         case 2:
         {
             // load both images
-            QPixmap rightPage = loadPage(currentDoublePage.at(0));
-            QPixmap leftPage = loadPage(currentDoublePage.at(1));
+            QPixmap leftPage, rightPage;
+
+            if (readingDirection == RightToLeft) {
+                rightPage = loadPage(currentDoublePage.at(0));
+                leftPage = loadPage(currentDoublePage.at(1));
+            }
+            else {
+                leftPage = loadPage(currentDoublePage.at(0));
+                rightPage = loadPage(currentDoublePage.at(1));
+            }
 
             // rescale images to have the same height
             if (rightPage.height() > leftPage.height())
@@ -222,4 +246,11 @@ void Reader::renameFile(const int index, const char* format) {
     // update pagesList
     QString fname = newName.split("/").last();
     pagesList.replace(index, fname);
+}
+
+
+void Reader::updateReadingDirection() {
+    QSettings settings;
+
+    readingDirection = static_cast<direction>(settings.value(mangaName + "/readingDirection", RightToLeft).toBool());
 }
