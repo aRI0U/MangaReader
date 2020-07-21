@@ -11,7 +11,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 #include <QSettings>
+#include <QString>
 #include <QWidget>
 
 #include "pixmaplabel.h"
@@ -33,6 +36,9 @@ public:
 
     void enterReadingMode();
     void exitReadingMode();
+
+    static bool lessThan(QString a, QString b);
+    static QStringList sorted(QStringList list);
 
 public slots:
     void swipeLeft();

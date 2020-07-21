@@ -13,7 +13,7 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
     treeWidget->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     // Add volumes/tomes
-    QStringList volumeList = mangaDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    QStringList volumeList = Reader::sorted(mangaDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
     for(const QString& volStr: volumeList) {
         QTreeWidgetItem *treeItem = new QTreeWidgetItem(treeWidget);
         treeItem->setText(0, volStr);
@@ -21,7 +21,7 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
         treeItem->setForeground(1, QBrush(Qt::blue));
 
         QDir volumeDir(mangaDir.absolutePath() + "/" + volStr);
-        QStringList chapterList = volumeDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+        QStringList chapterList = Reader::sorted(volumeDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
         if(!chapterList.empty()) {
             // Add chapters then pages

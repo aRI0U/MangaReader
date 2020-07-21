@@ -36,6 +36,8 @@ void Reader::setPagesDir(QDir value) {
     pagesDir = value;
     pagesList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
 
+    pagesList = sorted(pagesList);
+
     if (!isActive()) {
         label = new PixmapLabel;
         label->setAlignment(Qt::AlignHCenter);
@@ -253,4 +255,39 @@ void Reader::updateReadingDirection() {
     QSettings settings;
 
     readingDirection = static_cast<direction>(settings.value(mangaName + "/readingDirection", RightToLeft).toBool());
+}
+
+bool Reader::lessThan(QString a, QString b) {
+    // if there is a number in the string, compare those numbers
+    QRegularExpression re("\\d+");
+    QRegularExpressionMatch match_a, match_b;
+
+    match_a = re.match(a);
+    match_b = re.match(b);
+
+    int matches = 2*match_a.hasMatch() + match_b.hasMatch(); // trick to compare two booleans at the same time
+
+    switch (matches) {
+        case 3:  // (true, true)
+            return (match_a.captured(0).toInt() < match_b.captured(0).toInt());
+
+        case 2:  // (true, false)
+            return false;
+
+        case 1:  // (false, true)
+            return true;
+
+        case 0:  // (false, false)
+            return (a < b);
+
+        default:
+            throw std::runtime_error("matches is composed of 2 bits and is thus in [0, 3]");
+    }
+}
+
+QStringList Reader::sorted(QStringList list) {
+    std::sort(list.begin(),
+              list.end(),
+              Reader::lessThan);
+    return list;
 }
