@@ -71,5 +71,8 @@ Thumbs.db
 *.dll
 *.exe
 
-# other
-src/config.h
+# compressed binaries
+*.7z
+
+# installer
+MangaReader-setup
