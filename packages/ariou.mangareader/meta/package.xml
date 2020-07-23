@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
-    <DisplayName>The root component</DisplayName>
-    <Description>Install this example.</Description>
-    <Version>0.1.0-1</Version>
-    <ReleaseDate>2010-09-21</ReleaseDate>
+    <DisplayName>MangaReader</DisplayName>
+    <Description>Main application</Description>
+    <Version>0.1.0</Version>
+    <ReleaseDate>2020-07-23</ReleaseDate>
     <Licenses>
-        <License name="Beer Public License Agreement" file="LICENCE.txt" />
+        <License name="GNU General Public Licence v3" file="LICENCE" />
     </Licenses>
     <Default>true</Default>
     <Script>installscript.qs</Script>
