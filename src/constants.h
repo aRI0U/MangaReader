@@ -11,7 +11,7 @@ namespace constants {
     const QString applicationName("MangaReader");
 
     // Manga entries constants
-    const QSize MangaCoverSize = QSize(200, 300);
+    const QSize MangaCoverSize = QSize(210, 297);
     const QFont MangaTitleFont = QFont("Arial", 20, QFont::Bold);
 }
 

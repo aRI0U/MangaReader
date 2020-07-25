@@ -4,7 +4,6 @@
 
 ## TODOs
 
-- Go automatically to next chapter when one is over
 - Pipe with downloader
 - Enable user to set reading direction
 - Solve bug background disappear first library opening

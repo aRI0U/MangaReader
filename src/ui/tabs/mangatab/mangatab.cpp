@@ -1,4 +1,4 @@
-#include "mangatab.h"
+﻿#include "mangatab.h"
 
 MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
     parent(parent),
@@ -20,16 +20,16 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
         treeItem->setForeground(0, QBrush(Qt::darkBlue));
         treeItem->setForeground(1, QBrush(Qt::blue));
 
-        QDir volumeDir(mangaDir.absolutePath() + "/" + volStr);
+        QDir volumeDir(mangaDir.absoluteFilePath(volStr));
         QStringList chapterList = Reader::sorted(volumeDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
         if(!chapterList.empty()) {
             // Add chapters then pages
             for(const QString& chapterStr: chapterList) {
-                QTreeWidgetItem *treeItemChild = new QTreeWidgetItem();
+                QTreeWidgetItem* treeItemChild = new QTreeWidgetItem(treeItem);
                 treeItemChild->setText(0, chapterStr);
                 treeItemChild->setForeground(1, QBrush(Qt::darkGray));
-                treeItem->addChild(treeItemChild);
+//                treeItem->addChild(treeItemChild);
 
                 QDir chapterDir(volumeDir.absolutePath() + "/" + chapterStr);
                 QStringList pageList = chapterDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files);
@@ -58,7 +58,8 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
     setLayout(pageLayout);
 
     // connect click events on tree
-    connect(treeWidget, &QTreeWidget::itemDoubleClicked, this, &MangaTab::openManga);
+    connect(treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(openChapter(QTreeWidgetItem*,int)));
+    connect(reader, SIGNAL(endOfChapter()), this, SLOT(openNextChapter()));
 
     // connect reader's actions to enter/exit reading mode
     connect(reader->enterReadingModeAction, SIGNAL(triggered()), this, SLOT(enterReadingMode()));
@@ -81,10 +82,12 @@ void MangaTab::exitReadingMode() {
     pageLayout->addWidget(reader);
 }
 
-// PRIVATE
+void MangaTab::openChapter(QTreeWidgetItem* item, int column) {
+    if (column == 0 && item->text(1).endsWith("pages")) {
+        // update the current chapter index
+        currentChapterItem = item;
 
-void MangaTab::openManga(QTreeWidgetItem* item, int column) {
-    if(column == 0 && item->text(1).endsWith("pages")) {
+        // open chapter
         std::cout << "Reading manga chapter at " << item->data(0, Qt::UserRole).toString().toStdString() << std::endl;
         // todo prevent reading is chapter has 0 pages
         // (add boolean "readable" setData in column 1)
@@ -97,3 +100,15 @@ void MangaTab::openManga(QTreeWidgetItem* item, int column) {
     }
 }
 
+void MangaTab::openNextChapter() {
+    QTreeWidgetItem* parent = currentChapterItem->parent();
+    if (parent != nullptr) {
+        int index = parent->indexOfChild(currentChapterItem);
+        if (++index < parent->childCount()) {
+            QTreeWidgetItem* nextChapterItem = parent->child(index);
+            currentChapterItem->setSelected(false);
+            nextChapterItem->setSelected(true);
+            openChapter(nextChapterItem, 0);
+        }
+    }
+}

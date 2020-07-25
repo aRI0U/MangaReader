@@ -19,6 +19,6 @@ MangaCover::MangaCover(QDir path) : cover()
 
     setFixedSize(constants::MangaCoverSize);
     setPixmap(cover);
-    setStyleSheet("border:1px solid black;");
+//    setStyleSheet("border:1px solid black;");
     setAlignment(Qt::AlignCenter);
 }

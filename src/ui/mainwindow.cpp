@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget* parent)
     setMinimumSize(800, 600);
 //    setFocusPolicy(Qt::StrongFocus);
 
-//    createStatusBar();
+    createStatusBar();
     createCentralWidget();
     createActions();
 
@@ -104,11 +104,11 @@ void MainWindow::readSettings() {
     QSettings settings;
 
     settings.beginGroup("MainWindow");
-//    resize(settings.value("size", minimumSize()).toSize());
-//    move(settings.value("pos", QPoint(0, 0)).toPoint());
+    // resize
     const QByteArray geometry = settings.value("geometry", QByteArray()).toByteArray();
-    if (!geometry.isEmpty())
+    if (!geometry.isEmpty()) {
         restoreGeometry(geometry);
+    }
     settings.endGroup();
 }
 
@@ -116,8 +116,6 @@ void MainWindow::writeSettings() {
     QSettings settings;
 
     settings.beginGroup("MainWindow");
-//    settings.setValue("size", size());
-//    settings.setValue("pos", pos());
     settings.setValue("geometry", saveGeometry());
     settings.endGroup();
 }

@@ -30,10 +30,11 @@ public:
 public slots:
     void enterReadingMode();
     void exitReadingMode();
+    void openChapter(QTreeWidgetItem *item, int column);
+    void openNextChapter();
 
 private:
-    void openManga(QTreeWidgetItem *item, int column);
-
+    QTreeWidgetItem* currentChapterItem;
     QDir mangaDir;
     QTabWidget* parent;
     QHBoxLayout* pageLayout;
