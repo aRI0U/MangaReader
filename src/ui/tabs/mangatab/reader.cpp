@@ -61,7 +61,7 @@ void Reader::initDoublePages() {
     if (nPages != 0) {
         QList<QList<int>> pageGroups = {{0}, {}};
 
-        for (int i = 1; i < nPages; i++) {
+        for (int i = 0; i < nPages; i++) {
             QPixmap image = loadPage(i);
 
             if (image.isNull()) {
@@ -71,6 +71,9 @@ void Reader::initDoublePages() {
                         renameFile(i, format);
                 }
             }
+
+            if (i == 0)
+                continue;
 
             if (image.width() > image.height()) {
                 if (pageGroups.last().isEmpty())
