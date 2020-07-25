@@ -7,6 +7,14 @@ MainWindow::MainWindow(QWidget* parent)
     setMinimumSize(800, 600);
 //    setFocusPolicy(Qt::StrongFocus);
 
+//    createStatusBar();
+    createCentralWidget();
+    createActions();
+
+    readSettings();
+}
+
+void MainWindow::createCentralWidget() {
     QSettings settings;
 
     // Create central zone
@@ -17,8 +25,7 @@ MainWindow::MainWindow(QWidget* parent)
     // TODO library should not be neither movable nor closable
 
     // Create main tab
-    QDir scansPath(settings.value("Library/scansPath").toString());
-    MainTab *mainTab = new MainTab(centralTabs, scansPath);
+    mainTab = new MainTab(centralTabs);
 
     QScrollArea* scrollArea = new QScrollArea;
     scrollArea->setWidget(mainTab);
@@ -27,9 +34,15 @@ MainWindow::MainWindow(QWidget* parent)
     setCentralWidget(centralTabs);
 
     connect(centralTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    connect(mainTab, SIGNAL(reportLibraryOpen(QString)), statusBar(), SLOT(showMessage(QString)));
 
-    // Menu bar
+    // eventually open library
+    QVariant scansPath = settings.value("Library/scansPath");
+    if (!scansPath.isNull())
+        mainTab->openLibrary(QDir(scansPath.toString()));
+}
 
+void MainWindow::createActions() {
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
     QAction* openLibraryAction = fileMenu->addAction(tr("Open Library"));
     openLibraryAction->setShortcut(Qt::CTRL | Qt::Key_O);
@@ -53,8 +66,10 @@ MainWindow::MainWindow(QWidget* parent)
     fullScreenAction->setCheckable(true);
     fullScreenAction->setShortcut(QKeySequence::FullScreen);
     connect(fullScreenAction, SIGNAL(triggered(bool)), this, SLOT(showFullScreenOrMaximized(bool)));
+}
 
-    readSettings();
+void MainWindow::createStatusBar() {
+    statusBar()->showMessage("");
 }
 
 // SLOTS

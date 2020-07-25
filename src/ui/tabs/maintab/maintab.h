@@ -15,11 +15,14 @@ class MainTab : public Tab
 {
     Q_OBJECT
 public:
-    explicit MainTab(QTabWidget *parent = nullptr, QDir scansPath = QDir());
+    explicit MainTab(QTabWidget* parent = nullptr);
 
 public slots:
-    void clickedManga(QDir mangaDir);
     void openLibrary(QDir scansPath);
+    void clickedManga(QDir mangaDir);
+
+signals:
+    void reportLibraryOpen(QString message);
 
 private:
     QTabWidget* parent;

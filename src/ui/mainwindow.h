@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QScrollArea>
 #include <QSettings>
+#include <QStatusBar>
 #include <QWidget>
 
 #include <iostream>
@@ -24,9 +25,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow() {};
 
-    void readSettings();
-    void writeSettings();
-
 public slots:
     void closeTab(int index);
     void openLibrary();
@@ -36,7 +34,14 @@ signals:
     void openLibraryRequest(QDir scansPath);
 
 private:
+    void createCentralWidget();
+    void createActions();
+    void createStatusBar();
+    void readSettings();
+    void writeSettings();
+
     QTabWidget* centralTabs;
+    MainTab* mainTab;
 
 protected:
     void closeEvent(QCloseEvent* event);

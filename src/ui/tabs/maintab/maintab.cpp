@@ -1,14 +1,11 @@
 #include "maintab.h"
 
-MainTab::MainTab(QTabWidget* parent, QDir scansPath) :
+MainTab::MainTab(QTabWidget* parent) :
     parent(parent)
 {
-    openLibrary(scansPath);
 }
 
 void MainTab::openLibrary(const QDir scansPath) {
-    delete layout();
-
     MangaList *mangaList = new MangaList;
     for (const auto &dir : scansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         MangaEntry *mangaEntry = new MangaEntry(QDir(scansPath.filePath(dir)));
@@ -18,6 +15,8 @@ void MainTab::openLibrary(const QDir scansPath) {
 
     setStyleSheet("background-color: lightblue;");
     setLayout(mangaList);
+    emit reportLibraryOpen(tr("Successfully opened library located at ") + scansPath.absolutePath());
+//    emit libraryOpen(scansPath.absolutePath());
 }
 
 void MainTab::clickedManga(QDir mangaDir)
