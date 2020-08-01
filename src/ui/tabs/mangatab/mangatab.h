@@ -18,6 +18,8 @@
 #include "../tab.h"
 #include "reader.h"
 
+//#include "utils/notification.h"
+
 class MangaTab : public Tab
 {
     Q_OBJECT

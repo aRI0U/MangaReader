@@ -27,7 +27,9 @@ SOURCES += \
     src/ui/tabs/mangatab/mangatab.cpp \
     src/ui/tabs/mangatab/pixmaplabel.cpp \
     src/ui/tabs/mangatab/reader.cpp \
-    src/ui/tabs/tab.cpp
+    src/ui/tabs/tab.cpp \
+    src/utils/notifications/notificationlayout.cpp \
+    src/utils/notifications/notificationwidget.cpp
 
 HEADERS += \
     src/constants.h \
@@ -39,7 +41,9 @@ HEADERS += \
     src/ui/tabs/mangatab/mangatab.h \
     src/ui/tabs/mangatab/pixmaplabel.h \
     src/ui/tabs/mangatab/reader.h \
-    src/ui/tabs/tab.h
+    src/ui/tabs/tab.h \
+    src/utils/notifications/notificationlayout.h \
+    src/utils/notifications/notificationwidget.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

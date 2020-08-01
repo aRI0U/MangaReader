@@ -96,6 +96,7 @@ void MangaTab::openChapter(QTreeWidgetItem* item, int column) {
         if(pagesDir.exists()) {
             treeWidget->setColumnCount(1);
             reader->setPagesDir(pagesDir);
+//            sendNotification(pagesDir.dirName(), "none");
         }
     }
 }
