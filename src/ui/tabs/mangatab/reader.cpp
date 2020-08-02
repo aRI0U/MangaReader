@@ -23,8 +23,12 @@ Reader::Reader(QWidget* parent, QString manga) :
 
     leftAction->setShortcut(Qt::Key_Left);
     rightAction->setShortcut(Qt::Key_Right);
-    enterReadingModeAction->setShortcut(Qt::Key_A);
-    exitReadingModeAction->setShortcut(Qt::Key_Q);
+    enterReadingModeAction->setShortcut(Qt::Key_F5);
+    exitReadingModeAction->setShortcuts({Qt::Key_Q,
+                                         Qt::Key_F5,
+                                         Qt::Key_Escape,
+                                         Qt::Key_Backspace
+                                        });
 
     connect(leftAction, SIGNAL(triggered()), this, SLOT(swipeLeft()));
     connect(rightAction, SIGNAL(triggered()), this, SLOT(swipeRight()));
@@ -153,7 +157,6 @@ void Reader::enterReadingMode() {
                   windowFlags()
                 | Qt::Window
                 | Qt::CustomizeWindowHint
-                | Qt::WindowStaysOnTopHint
                 | Qt::WindowMaximizeButtonHint
                 | Qt::WindowCloseButtonHint);
     setWindowState(windowState() | Qt::WindowFullScreen);

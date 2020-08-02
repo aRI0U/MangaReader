@@ -17,6 +17,7 @@
 #include "constants.h"
 #include "tabs/maintab/maintab.h"
 #include "utils/notifications/notificationlayout.h"
+#include "utils/notifications/notificationmanager.h"
 
 class MainWindow : public QMainWindow
 {
@@ -28,7 +29,6 @@ public:
 
 public slots:
     void closeTab(int index);
-    void displayNotification(QString title, QString description);
     void openLibrary();
     void showFullScreenOrMaximized(bool checked);
 
@@ -39,13 +39,14 @@ private:
     void createCentralWidget();
     void createActions();
     void createStatusBar();
+    void initializeNotificationsManager();
     void readSettings();
     void writeSettings();
 
     QTabWidget* centralTabs;
     MainTab* mainTab;
 
-    NotificationLayout notificationLayout;
+    NotificationLayout* notificationLayout;
 
 protected:
     void closeEvent(QCloseEvent* event);

@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget* parent)
     createStatusBar();
     createCentralWidget();
     createActions();
+    initializeNotificationsManager();
 
     readSettings();
 }
@@ -72,15 +73,16 @@ void MainWindow::createStatusBar() {
     statusBar()->showMessage("");
 }
 
+void MainWindow::initializeNotificationsManager() {
+    notificationLayout = new NotificationLayout();
+    notifications.init(this, notificationLayout);
+}
+
 // SLOTS
 
 void MainWindow::closeTab(int index) {
     if (index > 0)
         centralTabs->removeTab(index);
-}
-
-void MainWindow::displayNotification(QString title, QString description) {
-    notificationLayout.addNotificationWidget(this, title, description);
 }
 
 void MainWindow::openLibrary() {

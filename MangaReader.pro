@@ -29,6 +29,7 @@ SOURCES += \
     src/ui/tabs/mangatab/reader.cpp \
     src/ui/tabs/tab.cpp \
     src/utils/notifications/notificationlayout.cpp \
+    src/utils/notifications/notificationmanager.cpp \
     src/utils/notifications/notificationwidget.cpp
 
 HEADERS += \
@@ -43,6 +44,7 @@ HEADERS += \
     src/ui/tabs/mangatab/reader.h \
     src/ui/tabs/tab.h \
     src/utils/notifications/notificationlayout.h \
+    src/utils/notifications/notificationmanager.h \
     src/utils/notifications/notificationwidget.h
 
 # Default rules for deployment.

@@ -5,9 +5,10 @@ NotificationWidget::NotificationWidget(QWidget* parent, const QString title, con
 {
     //operator | declared in the global namespace
     //without this string compilation will be failed
-    Qt::WindowFlags flags = (Qt::FramelessWindowHint | // Disable window decoration
-                             Qt::Tool // Discard display in a separate window
-                             );
+    Qt::WindowFlags flags = (
+                  Qt::FramelessWindowHint    // Disable window decoration
+                | Qt::Tool                   // Discard display in a separate window
+                | Qt::WindowStaysOnTopHint);
     setWindowFlags(flags);
 
     setAttribute(Qt::WA_TranslucentBackground); // Indicates that the background will be transparent
@@ -40,7 +41,7 @@ void NotificationWidget::initUI(const QString title, const QString message) {
 
     QLabel* labelTitle = new QLabel(title);
     labelTitle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-    labelTitle->setStyleSheet("font-weight: bold;");
+    labelTitle->setStyleSheet("font-weight: bold; color: blue;");
     titleLayout->addWidget(labelTitle);
 
     QLabel* labelMessage = new QLabel(message);

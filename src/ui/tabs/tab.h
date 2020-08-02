@@ -12,7 +12,7 @@ public:
     explicit Tab(QWidget *parent = nullptr);
 
 signals:
-
+    void sendNotification(QString title, QString description);
 };
 
 #endif // TAB_H

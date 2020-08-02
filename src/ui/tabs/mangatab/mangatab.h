@@ -18,7 +18,7 @@
 #include "../tab.h"
 #include "reader.h"
 
-//#include "utils/notification.h"
+#include "utils/notifications/notificationmanager.h"
 
 class MangaTab : public Tab
 {
