@@ -16,6 +16,7 @@
 
 #include "constants.h"
 #include "tabs/maintab/maintab.h"
+#include "utils/notifications/notificationlayout.h"
 
 class MainWindow : public QMainWindow
 {
@@ -27,6 +28,7 @@ public:
 
 public slots:
     void closeTab(int index);
+    void displayNotification(QString title, QString description);
     void openLibrary();
     void showFullScreenOrMaximized(bool checked);
 
@@ -42,6 +44,8 @@ private:
 
     QTabWidget* centralTabs;
     MainTab* mainTab;
+
+    NotificationLayout notificationLayout;
 
 protected:
     void closeEvent(QCloseEvent* event);

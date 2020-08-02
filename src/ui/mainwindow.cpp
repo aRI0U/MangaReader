@@ -79,6 +79,10 @@ void MainWindow::closeTab(int index) {
         centralTabs->removeTab(index);
 }
 
+void MainWindow::displayNotification(QString title, QString description) {
+    notificationLayout.addNotificationWidget(this, title, description);
+}
+
 void MainWindow::openLibrary() {
     // Let user select a folder
     QString folderPath = QFileDialog::getExistingDirectory(
