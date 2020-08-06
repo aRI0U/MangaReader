@@ -76,7 +76,6 @@ private:
     // methods
     void displayPages(const int index);
     QPixmap loadPage(const int index, const char* format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor) const;
-    void renameFile(const int index, const char* format);
 
 
 protected:
