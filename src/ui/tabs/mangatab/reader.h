@@ -65,9 +65,6 @@ private:
     int nDoublePages;
     int currentDoublePageIndex;
 
-    QAction* leftAction;
-    QAction* rightAction;
-
     direction readingDirection;
 
     // backups for reading mode

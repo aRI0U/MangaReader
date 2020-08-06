@@ -9,13 +9,15 @@ Reader::Reader(QWidget* parent, QString manga) :
     layout->setSpacing(0);
     setLayout(layout);
 
-    leftAction = new QAction(this);
-    rightAction = new QAction(this);
+    QAction* leftAction = new QAction(this);
+    QAction* rightAction = new QAction(this);
+    QAction* nextAction = new QAction(this);
     enterReadingModeAction = new QAction(this);
     exitReadingModeAction = new QAction(this);
 
     addAction(leftAction);
     addAction(rightAction);
+    addAction(nextAction);
     addAction(enterReadingModeAction);
     addAction(exitReadingModeAction);
 
@@ -23,6 +25,7 @@ Reader::Reader(QWidget* parent, QString manga) :
 
     leftAction->setShortcut(Qt::Key_Left);
     rightAction->setShortcut(Qt::Key_Right);
+    nextAction->setShortcut(Qt::Key_Space);
     enterReadingModeAction->setShortcut(Qt::Key_F5);
     exitReadingModeAction->setShortcuts({Qt::Key_Q,
                                          Qt::Key_F5,
@@ -32,6 +35,7 @@ Reader::Reader(QWidget* parent, QString manga) :
 
     connect(leftAction, SIGNAL(triggered()), this, SLOT(swipeLeft()));
     connect(rightAction, SIGNAL(triggered()), this, SLOT(swipeRight()));
+    connect(nextAction, SIGNAL(triggered()), this, SLOT(displayNextPages()));
 
     updateReadingDirection();
 }

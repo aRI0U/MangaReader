@@ -29,7 +29,6 @@ MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
                 QTreeWidgetItem* treeItemChild = new QTreeWidgetItem(treeItem);
                 treeItemChild->setText(0, chapterStr);
                 treeItemChild->setForeground(1, QBrush(Qt::darkGray));
-//                treeItem->addChild(treeItemChild);
 
                 QDir chapterDir(volumeDir.absolutePath() + "/" + chapterStr);
                 QStringList pageList = chapterDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files);
