@@ -38,6 +38,9 @@ Reader::Reader(QWidget* parent, QString manga) :
     connect(nextAction, SIGNAL(triggered()), this, SLOT(displayNextPages()));
 
     updateReadingDirection();
+
+    QSettings settings;
+    QPixmapCache::setCacheLimit(settings.value("caches/pixmap/size", 131072).toInt());
 }
 
 void Reader::setPagesDir(QDir value) {
@@ -61,61 +64,8 @@ bool Reader::isActive() const {
 }
 
 void Reader::initDoublePages() {
-    doublePages.clear();
+    doublePages = PageGrouper::groupPages(pagesDir, pagesList);
     currentDoublePageIndex = 0;
-
-    int nPages = pagesList.size();
-
-    if (nPages != 0) {
-        QList<QList<int>> pageGroups = {{0}, {}};
-
-        for (int i = 0; i < nPages; i++) {
-            QPixmap image = loadPage(i);
-
-            if (image.isNull()) {
-                for (const char* format : {"png", "jpg"}) {
-                    image = loadPage(i, format);
-                    if (!image.isNull())
-                        renameFile(i, format);
-                }
-            }
-
-            if (i == 0)
-                continue;
-
-            if (image.width() > image.height()) {
-                if (pageGroups.last().isEmpty())
-                    pageGroups.last().append(i);
-                else
-                    pageGroups.append({i});
-
-                // TODO do this directly
-                QList<int> empty;
-                pageGroups.append(empty);
-            } else
-                pageGroups.last().append(i);
-        }
-
-        // eventually remove the last group (if empty)
-        if (pageGroups.last().isEmpty())
-            pageGroups.removeLast();
-
-        for (QList<int> group : pageGroups) {
-            if (group.size() <= 2)
-                doublePages.append(group);
-            else {
-                if (group.size() % 2 == 0) {
-                    while (!group.isEmpty())
-                        doublePages.append({group.takeFirst(), group.takeFirst()});
-                } else { // TODO find a clever way to solve this problem
-                    doublePages.append({group.takeFirst()});
-                    while (!group.isEmpty())
-                        doublePages.append({group.takeFirst(), group.takeFirst()});
-                }
-            }
-        }
-        qDebug() << "Double pages successfully initialized:" << doublePages;
-    }
     nDoublePages = doublePages.size();
 }
 
@@ -192,10 +142,12 @@ void Reader::mouseDoubleClickEvent(QMouseEvent* event) {
 QPixmap Reader::loadPage(const int index, const char* format, Qt::ImageConversionFlags flags) const {
     QString pagePath = pagesDir.absoluteFilePath(pagesList.at(index));
 
-    QPixmap page(pagePath, format, flags);
+    QPixmap page;
 
-    if (page.isNull())
-        qDebug() << "Error loading " << pagePath;
+    if (!QPixmapCache::find(pagePath, &page)) {
+        page.load(pagePath, format, flags);
+        QPixmapCache::insert(pagePath, page);
+    }
 
     return page;
 }

@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
+#include <QPixmapCache>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QSettings>
@@ -18,6 +19,7 @@
 #include <QWidget>
 
 #include "pixmaplabel.h"
+#include "utils/pagegroup/PageGrouper.h"
 
 enum direction { RightToLeft = true, LeftToRight = false };
 

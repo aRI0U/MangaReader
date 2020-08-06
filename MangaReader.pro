@@ -30,7 +30,8 @@ SOURCES += \
     src/ui/tabs/tab.cpp \
     src/utils/notifications/notificationlayout.cpp \
     src/utils/notifications/notificationmanager.cpp \
-    src/utils/notifications/notificationwidget.cpp
+    src/utils/notifications/notificationwidget.cpp \
+    src/utils/pagegroup/PageGrouper.cpp
 
 HEADERS += \
     src/constants.h \
@@ -45,7 +46,8 @@ HEADERS += \
     src/ui/tabs/tab.h \
     src/utils/notifications/notificationlayout.h \
     src/utils/notifications/notificationmanager.h \
-    src/utils/notifications/notificationwidget.h
+    src/utils/notifications/notificationwidget.h \
+    src/utils/pagegroup/PageGrouper.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
