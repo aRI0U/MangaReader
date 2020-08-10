@@ -5,11 +5,25 @@ QPixmap PageGrouper::loadPage(const QString path,  const char* format, const Qt:
     QPixmap page;
 
     if (!QPixmapCache::find(path, &page)) {
-        page.load(path, format, flags);
-        QPixmapCache::insert(path, page);
+        if (page.load(path, format, flags))
+            QPixmapCache::insert(path, page);
     }
 
     return page;
+}
+
+QString PageGrouper::loadCorruptedImage(QString path, QPixmap& image) {
+    QList<QByteArray> supportedFormats = QImageReader::supportedImageFormats();
+    supportedFormats.removeAt(4);
+    qDebug() << supportedFormats;
+    for (const char* format : supportedFormats) {
+        qDebug() << format;
+        if (image.load(path, format)) {
+            QPixmapCache::insert(path, image);
+            return renameFile(path, format);
+        }
+    }
+    qDebug() << "no valid format";
 }
 
 QString PageGrouper::renameFile(const QString fname, const char* format) {
@@ -20,10 +34,21 @@ QString PageGrouper::renameFile(const QString fname, const char* format) {
     QFile::rename(fname, newName);
 
     // return new file name
-    return newName.split("/").last();
+    return newName;
 }
 
-QList<QList<int>> PageGrouper::groupPages(QDir pagesDir, QStringList pagesList) {
+QStringList PageGrouper::correctExtensions(QStringList pagesList) {
+    for (int i = 0; i < pagesList.size(); i++) {
+        QString path = pagesList[i];
+        QPixmap image = loadPage(path);
+        if (image.isNull()) {
+            path = loadCorruptedImage(path, image);
+        }
+    }
+    return pagesList;
+}
+
+QList<QList<int>> PageGrouper::groupPages(QStringList pagesList) {
     int nPages = pagesList.size();
     QList<QList<int>> doublePages;
 
@@ -31,18 +56,11 @@ QList<QList<int>> PageGrouper::groupPages(QDir pagesDir, QStringList pagesList) 
         QList<QList<int>> pageGroups = {{0}, {}};
 
         for (int i = 0; i < nPages; i++) {
-            QString pagePath = pagesDir.absoluteFilePath(pagesList.at(i));
+            QString pagePath = pagesList.at(i);
             QPixmap image = loadPage(pagePath);
 
-            if (image.isNull()) {
-                for (const char* format : {"png", "jpg"}) {
-                    image = loadPage(pagePath, format);
-                    if (!image.isNull()) {
-                        QString newName = renameFile(pagePath, format);
-                        pagesList.replace(i, newName);
-                    }
-                }
-            }
+            if (image.isNull())
+                qDebug() << "invalid image:" << pagePath;
 
             if (i == 0)
                 continue;

@@ -39,15 +39,21 @@ Reader::Reader(QWidget* parent, QString manga) :
 
     updateReadingDirection();
 
+
     QSettings settings;
-    QPixmapCache::setCacheLimit(settings.value("caches/pixmap/size", 131072).toInt());
+    settings.beginGroup("reader/caches");
+    doublePagesCache.setMaxCost(settings.value("doublePages", 1000).toInt());
+    QPixmapCache::setCacheLimit(settings.value("Pixmap", 131072).toInt());
+    settings.endGroup();
 }
 
 void Reader::setPagesDir(QDir value) {
     pagesDir = value;
-    pagesList = pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name);
-
-    pagesList = sorted(pagesList);
+    QStringList pagesListRelative = sorted(pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name));
+    pagesList.clear();
+//    for (QStringList::const_iterator fname = pagesListRelative.cbegin(); fname != pagesListRelative.cend(); ++fname)
+    foreach (const QString& fname, pagesListRelative)
+        pagesList.append(pagesDir.absoluteFilePath(fname));
 
     if (!isActive()) {
         label = new PixmapLabel;
@@ -55,6 +61,7 @@ void Reader::setPagesDir(QDir value) {
 
         layout->addWidget(label);
     }
+    pagesList = PageGrouper::correctExtensions(pagesList);
     initDoublePages();
     displayPages(0);
 }
@@ -64,7 +71,14 @@ bool Reader::isActive() const {
 }
 
 void Reader::initDoublePages() {
-    doublePages = PageGrouper::groupPages(pagesDir, pagesList);
+//    QString key = pagesDir.absolutePath();
+//    if (false && doublePagesCache.contains(key))
+//        doublePages = doublePagesCache.take(key);
+//    else {
+//        doublePages = PageGrouper::groupPages(pagesList);
+//        doublePagesCache.insert(key, doublePages, doublePages->size());
+//    }
+    doublePages = PageGrouper::groupPages(pagesList);
     currentDoublePageIndex = 0;
     nDoublePages = doublePages.size();
 }
@@ -140,7 +154,7 @@ void Reader::mouseDoubleClickEvent(QMouseEvent* event) {
 // PRIVATE
 
 QPixmap Reader::loadPage(const int index, const char* format, Qt::ImageConversionFlags flags) const {
-    QString pagePath = pagesDir.absoluteFilePath(pagesList.at(index));
+    QString pagePath = pagesList.at(index);
 
     QPixmap page;
 
@@ -198,20 +212,6 @@ void Reader::displayPages(const int index) {
             break;
     };
 }
-
-void Reader::renameFile(const int index, const char* format) {
-    // build old and new name
-    const QString oldName = pagesDir.absoluteFilePath(pagesList.at(index));
-    const QString newName = oldName.left(oldName.size() - 3) + format;
-
-    // rename file
-    QFile::rename(oldName, newName);
-
-    // update pagesList
-    QString fname = newName.split("/").last();
-    pagesList.replace(index, fname);
-}
-
 
 void Reader::updateReadingDirection() {
     QSettings settings;

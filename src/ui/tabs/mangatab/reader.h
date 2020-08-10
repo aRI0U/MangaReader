@@ -2,6 +2,7 @@
 #define READER_H
 
 #include <QAction>
+#include <QCache>
 #include <QDir>
 #include <QDebug>
 #include <QFile>
@@ -66,6 +67,8 @@ private:
     QList<QList<int>> doublePages;
     int nDoublePages;
     int currentDoublePageIndex;
+
+    QCache<QString, QList<QList<int>>> doublePagesCache;
 
     direction readingDirection;
 
