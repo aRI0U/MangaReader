@@ -83,7 +83,6 @@ private:
 
 protected:
     void mousePressEvent(QMouseEvent* event);
-    void mouseDoubleClickEvent(QMouseEvent* event);
 };
 
 #endif // READER_H

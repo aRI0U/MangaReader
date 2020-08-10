@@ -113,6 +113,7 @@ void Reader::displayNextPages() {
     if (++currentDoublePageIndex < nDoublePages)
         displayPages(currentDoublePageIndex);
     else {
+        currentDoublePageIndex = nDoublePages - 1;
         emit endOfChapter();
     }
 }
@@ -147,11 +148,6 @@ void Reader::exitReadingMode() {
 void Reader::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton)
         displayNextPages();
-}
-
-void Reader::mouseDoubleClickEvent(QMouseEvent* event) {
-    if (event->button() == Qt::LeftButton)
-        enterReadingModeAction->trigger();
 }
 
 
