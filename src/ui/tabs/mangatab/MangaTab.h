@@ -15,10 +15,10 @@
 
 #include <iostream>
 
-#include "../tab.h"
-#include "reader.h"
+#include "../Tab.h"
+#include "Reader.h"
 
-#include "utils/notifications/notificationmanager.h"
+#include "utils/notifications/NotificationManager.h"
 
 class MangaTab : public Tab
 {

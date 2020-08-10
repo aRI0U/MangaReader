@@ -2,7 +2,7 @@
 #include <QTranslator>
 
 #include "constants.h"
-#include "ui/mainwindow.h"
+#include "ui/MainWindow.h"
 
 int main(int argc, char *argv[])
 {

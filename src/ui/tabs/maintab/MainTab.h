@@ -5,11 +5,11 @@
 #include <QWidget>
 #include <QTabWidget>
 
-#include "mangaentry.h"
-#include "mangalist.h"
-#include "../tab.h"
-#include "../mangatab/mangatab.h"
-#include "../mangatab/reader.h"
+#include "MangaEntry.h"
+#include "MangaList.h"
+#include "../Tab.h"
+#include "../mangatab/MangaTab.h"
+#include "../mangatab/Reader.h"
 
 class MainTab : public Tab
 {

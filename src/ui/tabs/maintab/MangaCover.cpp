@@ -1,4 +1,4 @@
-#include "mangacover.h"
+#include "MangaCover.h"
 
 MangaCover::MangaCover(QDir path) : cover()
 {

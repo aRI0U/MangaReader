@@ -18,37 +18,37 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += $$PWD/src
 
 SOURCES += \
-    src/Main.cpp \
-    src/ui/mainwindow.cpp \
-    src/ui/tabs/maintab/maintab.cpp \
-    src/ui/tabs/maintab/mangacover.cpp \
-    src/ui/tabs/maintab/mangaentry.cpp \
-    src/ui/tabs/maintab/mangalist.cpp \
-    src/ui/tabs/mangatab/mangatab.cpp \
-    src/ui/tabs/mangatab/pixmaplabel.cpp \
-    src/ui/tabs/mangatab/reader.cpp \
-    src/ui/tabs/tab.cpp \
+    src/main.cpp \
+    src/ui/MainWindow.cpp \
+    src/ui/tabs/Tab.cpp \
+    src/ui/tabs/maintab/MainTab.cpp \
+    src/ui/tabs/maintab/MangaCover.cpp \
+    src/ui/tabs/maintab/MangaEntry.cpp \
+    src/ui/tabs/maintab/MangaList.cpp \
+    src/ui/tabs/mangatab/MangaTab.cpp \
+    src/ui/tabs/mangatab/PixmapLabel.cpp \
+    src/ui/tabs/mangatab/Reader.cpp \
     src/utils/download/FileDownloader.cpp \
-    src/utils/notifications/notificationlayout.cpp \
-    src/utils/notifications/notificationmanager.cpp \
-    src/utils/notifications/notificationwidget.cpp \
+    src/utils/notifications/NotificationLayout.cpp \
+    src/utils/notifications/NotificationManager.cpp \
+    src/utils/notifications/NotificationWidget.cpp \
     src/utils/pagegroup/PageGrouper.cpp
 
 HEADERS += \
     src/constants.h \
-    src/ui/mainwindow.h \
-    src/ui/tabs/maintab/maintab.h \
-    src/ui/tabs/maintab/mangacover.h \
-    src/ui/tabs/maintab/mangaentry.h \
-    src/ui/tabs/maintab/mangalist.h \
-    src/ui/tabs/mangatab/mangatab.h \
-    src/ui/tabs/mangatab/pixmaplabel.h \
-    src/ui/tabs/mangatab/reader.h \
-    src/ui/tabs/tab.h \
+    src/ui/MainWindow.h \
+    src/ui/tabs/Tab.h \
+    src/ui/tabs/maintab/MainTab.h \
+    src/ui/tabs/maintab/MangaCover.h \
+    src/ui/tabs/maintab/MangaEntry.h \
+    src/ui/tabs/maintab/MangaList.h \
+    src/ui/tabs/mangatab/MangaTab.h \
+    src/ui/tabs/mangatab/PixmapLabel.h \
+    src/ui/tabs/mangatab/Reader.h \
     src/utils/download/FileDownloader.h \
-    src/utils/notifications/notificationlayout.h \
-    src/utils/notifications/notificationmanager.h \
-    src/utils/notifications/notificationwidget.h \
+    src/utils/notifications/NotificationLayout.h \
+    src/utils/notifications/NotificationManager.h \
+    src/utils/notifications/NotificationWidget.h \
     src/utils/pagegroup/PageGrouper.h
 
 # Default rules for deployment.

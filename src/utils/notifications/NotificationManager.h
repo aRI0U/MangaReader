@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 
-#include "notificationlayout.h"
+#include "NotificationLayout.h"
 
 class NotificationManager : public QObject
 {

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "mangatab/reader.h"
+#include "mangatab/Reader.h"
 
 class Tab : public QWidget
 {

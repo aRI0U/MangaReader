@@ -1,4 +1,4 @@
-#include "notificationwidget.h"
+#include "NotificationWidget.h"
 
 NotificationWidget::NotificationWidget(QWidget* parent, const QString title, const QString message)
     : QWidget(parent)

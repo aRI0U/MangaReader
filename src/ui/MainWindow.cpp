@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -34,8 +34,10 @@ void MainWindow::createCentralWidget() {
     centralTabs->addTab(scrollArea, tr("Library"));
     setCentralWidget(centralTabs);
 
-    connect(centralTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
-    connect(mainTab, SIGNAL(reportLibraryOpen(QString)), statusBar(), SLOT(showMessage(QString)));
+    connect(centralTabs, SIGNAL(tabCloseRequested(int)),
+            this, SLOT(closeTab(int)));
+    connect(mainTab, SIGNAL(reportLibraryOpen(QString)),
+            statusBar(), SLOT(showMessage(QString)));
 
     // eventually open library
     QVariant scansPath = settings.value("Library/scansPath");
@@ -48,13 +50,16 @@ void MainWindow::createActions() {
     QAction* openLibraryAction = fileMenu->addAction(tr("Open Library"));
     openLibraryAction->setShortcut(Qt::CTRL | Qt::Key_O);
     openLibraryAction->setStatusTip(tr("Open a library of mangas"));
-    connect(openLibraryAction, SIGNAL(triggered()), this, SLOT(openLibrary()));
-    connect(this, SIGNAL(openLibraryRequest(QDir)), mainTab, SLOT(openLibrary(QDir)));
+    connect(openLibraryAction, SIGNAL(triggered()),
+            this, SLOT(openLibrary()));
+    connect(this, SIGNAL(openLibraryRequest(QDir)),
+            mainTab, SLOT(openLibrary(QDir)));
     // quit
     QAction* quitAction = fileMenu->addAction(tr("Quit"));
     quitAction->setShortcut(Qt::CTRL | Qt::Key_Q);
     quitAction->setStatusTip(tr("Quit the application"));
-    connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));
+    connect(quitAction, SIGNAL(triggered()),
+            this, SLOT(close()));
 
 
     QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
@@ -66,7 +71,8 @@ void MainWindow::createActions() {
     QAction* fullScreenAction = viewMenu->addAction(tr("Full Screen"));
     fullScreenAction->setCheckable(true);
     fullScreenAction->setShortcut(QKeySequence::FullScreen);
-    connect(fullScreenAction, SIGNAL(triggered(bool)), this, SLOT(showFullScreenOrMaximized(bool)));
+    connect(fullScreenAction, SIGNAL(triggered(bool)),
+            this, SLOT(showFullScreenOrMaximized(bool)));
 }
 
 void MainWindow::createStatusBar() {

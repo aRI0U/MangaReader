@@ -3,7 +3,8 @@
 FileDownloader::FileDownloader(QObject *parent) : QObject(parent)
 {
     webCtrl = new QNetworkAccessManager(this);
-    connect(webCtrl, SIGNAL(finished(QNetworkReply*)), this, SLOT(writeDownloadedData(QNetworkReply*)));
+    connect(webCtrl, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(writeDownloadedData(QNetworkReply*)));
 }
 
 void FileDownloader::setSourceURL(QString url) {
@@ -33,4 +34,5 @@ void FileDownloader::writeDownloadedData(QNetworkReply* reply) {
     const QByteArray data = reply->readAll();
     targetFile.write(data);
     targetFile.close();
+    reply->deleteLater();
 }

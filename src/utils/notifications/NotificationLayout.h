@@ -6,7 +6,7 @@
 #include <QMap>
 #include <QObject>
 
-#include "notificationwidget.h"
+#include "NotificationWidget.h"
 
 class NotificationLayout : public QObject
 {

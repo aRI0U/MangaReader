@@ -1,4 +1,4 @@
-#include "notificationmanager.h"
+#include "NotificationManager.h"
 
 NotificationManager::NotificationManager(QObject *parent) : QObject(parent)
 {

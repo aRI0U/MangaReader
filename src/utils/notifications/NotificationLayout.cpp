@@ -1,4 +1,4 @@
-#include "notificationlayout.h"
+#include "NotificationLayout.h"
 
 struct NotificationLayout::NotificationWidgetParams
 {
@@ -40,12 +40,15 @@ void NotificationLayout::addNotificationWidget(QWidget* parent, const QString ti
     if (!notifications.contains(parent))
     {
         parent->installEventFilter(this);
-        connect(parent, &QObject::destroyed, this, &NotificationLayout::onParentWidgetDestroyed);
+        connect(parent, &QObject::destroyed,
+                this, &NotificationLayout::onParentWidgetDestroyed);
     }
 
     NotificationWidget* widget = new NotificationWidget(parent, title, message);
-    connect(widget, &NotificationWidget::CloseButtonClicked, this, &NotificationLayout::onCloseClicked);
-    connect(widget, &QObject::destroyed, this, &NotificationLayout::onWidgetDestroyed);
+    connect(widget, &NotificationWidget::CloseButtonClicked,
+            this, &NotificationLayout::onCloseClicked);
+    connect(widget, &QObject::destroyed, this,
+            &NotificationLayout::onWidgetDestroyed);
 
     NotificationWidgetParams widgetParams;
     widgetParams.InitAnimation(widget);

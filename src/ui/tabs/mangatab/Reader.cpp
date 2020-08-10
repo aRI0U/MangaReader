@@ -1,4 +1,4 @@
-#include "reader.h"
+#include "Reader.h"
 
 Reader::Reader(QWidget* parent, QString manga) :
     QWidget(parent),

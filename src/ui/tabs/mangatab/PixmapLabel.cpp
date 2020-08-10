@@ -1,4 +1,4 @@
-#include "pixmaplabel.h"
+#include "PixmapLabel.h"
 #include <iostream>
 
 PixmapLabel::PixmapLabel(QWidget* parent) :

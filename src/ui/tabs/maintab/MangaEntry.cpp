@@ -1,8 +1,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include "mangaentry.h"
-#include "mangacover.h"
+#include "MangaEntry.h"
+#include "MangaCover.h"
 #include "constants.h"
 
 

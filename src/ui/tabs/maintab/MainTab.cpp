@@ -1,4 +1,4 @@
-#include "maintab.h"
+#include "MainTab.h"
 
 MainTab::MainTab(QTabWidget* parent) :
     parent(parent)
@@ -10,7 +10,8 @@ void MainTab::openLibrary(const QDir scansPath) {
     for (const auto &dir : scansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         MangaEntry *mangaEntry = new MangaEntry(QDir(scansPath.filePath(dir)));
         mangaList->addWidget(mangaEntry);
-        QObject::connect(mangaEntry, SIGNAL(clicked(QDir)), this, SLOT(clickedManga(QDir)));
+        connect(mangaEntry, SIGNAL(clicked(QDir)),
+                this, SLOT(clickedManga(QDir)));
     }
 
     setStyleSheet("background-color: lightblue;");

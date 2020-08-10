@@ -19,7 +19,7 @@
 #include <QString>
 #include <QWidget>
 
-#include "pixmaplabel.h"
+#include "PixmapLabel.h"
 #include "utils/pagegroup/PageGrouper.h"
 
 enum direction { RightToLeft = true, LeftToRight = false };

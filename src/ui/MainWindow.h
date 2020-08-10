@@ -15,9 +15,9 @@
 #include <iostream>
 
 #include "constants.h"
-#include "tabs/maintab/maintab.h"
-#include "utils/notifications/notificationlayout.h"
-#include "utils/notifications/notificationmanager.h"
+#include "tabs/maintab/MainTab.h"
+#include "utils/notifications/NotificationLayout.h"
+#include "utils/notifications/NotificationManager.h"
 
 class MainWindow : public QMainWindow
 {
