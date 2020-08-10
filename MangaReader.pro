@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,6 +28,7 @@ SOURCES += \
     src/ui/tabs/mangatab/pixmaplabel.cpp \
     src/ui/tabs/mangatab/reader.cpp \
     src/ui/tabs/tab.cpp \
+    src/utils/download/FileDownloader.cpp \
     src/utils/notifications/notificationlayout.cpp \
     src/utils/notifications/notificationmanager.cpp \
     src/utils/notifications/notificationwidget.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     src/ui/tabs/mangatab/pixmaplabel.h \
     src/ui/tabs/mangatab/reader.h \
     src/ui/tabs/tab.h \
+    src/utils/download/FileDownloader.h \
     src/utils/notifications/notificationlayout.h \
     src/utils/notifications/notificationmanager.h \
     src/utils/notifications/notificationwidget.h \
