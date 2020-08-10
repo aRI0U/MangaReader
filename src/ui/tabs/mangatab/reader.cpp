@@ -39,7 +39,6 @@ Reader::Reader(QWidget* parent, QString manga) :
 
     updateReadingDirection();
 
-
     QSettings settings;
     settings.beginGroup("reader/caches");
     doublePagesCache.setMaxCost(settings.value("doublePages", 1000).toInt());
@@ -51,7 +50,7 @@ void Reader::setPagesDir(QDir value) {
     pagesDir = value;
     QStringList pagesListRelative = sorted(pagesDir.entryList(QStringList() << "*.png" << "*.jpg", QDir::Files, QDir::Name));
     pagesList.clear();
-//    for (QStringList::const_iterator fname = pagesListRelative.cbegin(); fname != pagesListRelative.cend(); ++fname)
+
     foreach (const QString& fname, pagesListRelative)
         pagesList.append(pagesDir.absoluteFilePath(fname));
 
@@ -61,8 +60,19 @@ void Reader::setPagesDir(QDir value) {
 
         layout->addWidget(label);
     }
-    pagesList = PageGrouper::correctExtensions(pagesList);
-    initDoublePages();
+
+    // check if volume has already been opened
+    QString key = pagesDir.absolutePath();
+
+    if (doublePagesCache.contains(key))
+        doublePages = *doublePagesCache.take(key);
+
+    else {  // if not check that extensions are valid and compute double pages
+        pagesList = PageGrouper::correctExtensions(pagesList);
+        initDoublePages();
+        doublePagesCache.insert(key, &doublePages, doublePages.size());
+    }
+
     displayPages(0);
 }
 
@@ -71,14 +81,8 @@ bool Reader::isActive() const {
 }
 
 void Reader::initDoublePages() {
-//    QString key = pagesDir.absolutePath();
-//    if (false && doublePagesCache.contains(key))
-//        doublePages = doublePagesCache.take(key);
-//    else {
-//        doublePages = PageGrouper::groupPages(pagesList);
-//        doublePagesCache.insert(key, doublePages, doublePages->size());
-//    }
     doublePages = PageGrouper::groupPages(pagesList);
+
     currentDoublePageIndex = 0;
     nDoublePages = doublePages.size();
 }
