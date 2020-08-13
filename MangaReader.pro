@@ -1,6 +1,4 @@
-QT       += core gui network
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui network webenginewidgets widgets
 
 CONFIG += c++11
 
@@ -29,6 +27,7 @@ SOURCES += \
     src/ui/tabs/mangatab/PixmapLabel.cpp \
     src/ui/tabs/mangatab/Reader.cpp \
     src/utils/download/FileDownloader.cpp \
+    src/utils/download/ScantradDownloader.cpp \
     src/utils/notifications/NotificationLayout.cpp \
     src/utils/notifications/NotificationManager.cpp \
     src/utils/notifications/NotificationWidget.cpp \
@@ -46,6 +45,7 @@ HEADERS += \
     src/ui/tabs/mangatab/PixmapLabel.h \
     src/ui/tabs/mangatab/Reader.h \
     src/utils/download/FileDownloader.h \
+    src/utils/download/ScantradDownloader.h \
     src/utils/notifications/NotificationLayout.h \
     src/utils/notifications/NotificationManager.h \
     src/utils/notifications/NotificationWidget.h \

@@ -13,6 +13,10 @@ namespace constants {
     // Manga entries constants
     const QSize MangaCoverSize = QSize(210, 297);
     const QFont MangaTitleFont = QFont("Arial", 20, QFont::Bold);
+
+    // Scantrad constants
+    const QString scantradHTMLDir = "html_scantrad";
+    const QString scantradBaseUrl = "https://scantrad.net";
 }
 
 #endif // CONSTANTS_H

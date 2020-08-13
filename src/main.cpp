@@ -3,6 +3,7 @@
 
 #include "constants.h"
 #include "ui/MainWindow.h"
+#include "utils/download/ScantradDownloader.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,10 @@ int main(int argc, char *argv[])
     QTranslator translator;
     translator.load(QString("translations/MangaReader_") + QLocale::system().name());
     app.installTranslator(&translator);
+
+    // tmp
+    ScantradDownloader downloader;
+    downloader.downloadLastChapters("one-piece");
 
     MainWindow w;
     w.show();
