@@ -3,12 +3,20 @@
 
 #include <QDir>
 #include <QObject>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QUrl>
-#include <QWebEnginePage>
 
 #include "constants.h"
+#include "utils/html/QSgml.h"
 #include "FileDownloader.h"
+
+
+struct Chapter {
+    unsigned int number;
+    QString name;
+    QUrl url;
+};
 
 class ScantradDownloader : public QObject
 {
@@ -22,10 +30,13 @@ signals:
 
 private:
     QDir htmlDir;
+    QSgml* html;
 
-    QString baseURL;
+    QUrl baseURL;
 
     FileDownloader* downloader;
+
+    QList<Chapter> extractChaptersFromHtml();
 };
 
 #endif // SCANTRADDOWNLOADER_H
