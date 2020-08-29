@@ -28,11 +28,16 @@ ScantradDownloader::ScantradDownloader(QObject *parent) : QObject(parent) {
 }
 
 void ScantradDownloader::downloadLastChapters(const QString mangaName) {
-    QFile htmlFile(htmlDir.absoluteFilePath(mangaName + ".html"));
+    QDir mangaAuxDir(htmlDir.absoluteFilePath(mangaName));
+    QUrl mangaUrl(baseURL.resolved(QUrl(mangaName)));
+    QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
+
+    if (!mangaAuxDir.mkpath("."))
+        qDebug() << "Failed to create dir" << mangaAuxDir;
 
     // eventually download html
     if (!htmlFile.exists())
-        downloader->download(baseURL.resolved(QUrl(mangaName)).url(), htmlFile.fileName());
+        downloader->download(mangaUrl, htmlFile);
 
     // read html
     html = new QSgml(htmlFile);
@@ -42,6 +47,9 @@ void ScantradDownloader::downloadLastChapters(const QString mangaName) {
     // TODO download chapters
     for (const Chapter chapter : chapters) {
         qDebug() << chapter;
+        QFile chapterHtml(mangaAuxDir.absoluteFilePath("chapter_" + QString::number(chapter.number) + ".html"));
+        if (!chapterHtml.exists())
+            downloader->download(mangaUrl.resolved(chapter.url), chapterHtml);
     }
 }
 
