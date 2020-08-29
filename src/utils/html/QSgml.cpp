@@ -389,7 +389,7 @@ void QSgml::getElementsByName(QString Name,QString AtrName,QString AtrValue,QLis
 }
 
 // find an element with a defined attribute-name
-void QSgml::getElementsByAttribute(QString AtrName,QList<QSgmlTag*> *Elements)
+void QSgml::getElementsByAttribute(QString AtrName, QList<QSgmlTag*> *Elements)
 {
    QSgmlTag *Tag = DocTag;
 

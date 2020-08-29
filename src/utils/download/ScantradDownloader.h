@@ -24,19 +24,21 @@ class ScantradDownloader : public QObject
 public:
     explicit ScantradDownloader(QObject *parent = nullptr);
 
-    void downloadLastChapters(const QString mangaName);
+    void downloadLastChapters(const QString &mangaName);
 
 signals:
 
+private slots:
+    void downloadFinished(QUrl url, QFile &file);
+    void extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile);
+    void downloadChapter(const QDir &dir, const Chapter &chapter);
+
 private:
     QDir htmlDir;
-    QSgml* html;
 
     QUrl baseURL;
 
     FileDownloader* downloader;
-
-    QList<Chapter> extractChaptersFromHtml();
 };
 
 #endif // SCANTRADDOWNLOADER_H

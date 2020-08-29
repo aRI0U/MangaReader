@@ -15,6 +15,7 @@ public:
     void download(QUrl url, QFile &target);
 
 signals:
+    void fileDownloaded(QUrl url, QFile& file);
 
 private slots:
     void writeDownloadedData(QNetworkReply *reply);

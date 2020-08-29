@@ -24,4 +24,6 @@ void FileDownloader::writeDownloadedData(QNetworkReply *reply) {
     targetFile.close();
 
     reply->deleteLater();
+
+    emit fileDownloaded(reply->url(), targetFile);
 }

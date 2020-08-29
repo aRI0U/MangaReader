@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     // tmp
     ScantradDownloader downloader;
-    downloader.downloadLastChapters("one-piece");
+    downloader.downloadLastChapters("hunter-x-hunter");
 
     MainWindow w;
     w.show();
