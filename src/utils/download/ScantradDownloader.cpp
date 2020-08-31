@@ -16,7 +16,7 @@ QDebug operator<<(QDebug debug, const Chapter &chapter) {
 ScantradDownloader::ScantradDownloader(QObject *parent) : QObject(parent) {
     downloader = new FileDownloader(this);
 
-    baseURL = QUrl(constants::scantradBaseUrl);
+    baseUrl = QUrl(constants::scantradBaseUrl);
 
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
     QString dirName = constants::scantradHTMLDir;
@@ -32,7 +32,7 @@ ScantradDownloader::ScantradDownloader(QObject *parent) : QObject(parent) {
 
 void ScantradDownloader::downloadLastChapters(const QString &mangaName) {
     QDir mangaAuxDir(htmlDir.absoluteFilePath(mangaName));
-    QUrl mangaUrl(baseURL.resolved(QUrl(mangaName)));
+    QUrl mangaUrl(baseUrl.resolved(QUrl(mangaName)));
     QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
 
     if (!mangaAuxDir.mkpath("."))
@@ -52,7 +52,7 @@ void ScantradDownloader::downloadFinished(QUrl url, QFile &file) {
         extractChaptersFromHtml(url, file);
 
     else if (fname.startsWith("chapter"))
-        return;
+        extractImagesFromChapter(url, file);
 }
 
 void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) {
@@ -64,10 +64,10 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &ht
     QRegularExpressionMatch reMatch;
 
     html->getElementsByAttribute("class", "chapitre", &elements);
-    for (QSgmlTag* elem : elements) {
+    for (QSgmlTag *elem : elements) {
         Chapter chapter;
 
-        QSgmlTag* numberElement = elem->find("span", "class", "chl-num");
+        QSgmlTag *numberElement = elem->find("span", "class", "chl-num");
         if (numberElement == nullptr)
             qDebug() << "This chapter does not have a number element:" << elem->toString();
         else {
@@ -97,11 +97,68 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &ht
     }
 }
 
+void ScantradDownloader::extractImagesFromChapter(const QUrl &chapterUrl, QFile &chapterFile) {
+    Chapter chapter = chapterMetadata.value(chapterFile.fileName());
+
+    QSgml html(chapterFile);
+
+    QList<QSgmlTag*> elements;
+
+    html.getElementsByAttribute("class", "sc-lel", &elements);
+
+    QStringList tmp = chapterFile.fileName().split("/");
+    QString mangaName = constants::mappings.value(tmp.at(tmp.size() - 2));
+
+    // TODO use QStringBuilder + format language
+    QString chapterName = tr("Chapitre ")
+            + QString::number(chapter.number)
+            + tr(" : ")
+            + chapter.name;
+
+    QSettings settings;
+    QDir libraryDir(settings.value("Library/scansPath").toString());
+
+    QDir chapterDir(libraryDir.absoluteFilePath(mangaName + "/" + chapterName));
+
+    qDebug() << chapterDir;
+    chapterDir.mkpath(".");
+
+    QList<QUrl> imageUrlList;
+
+    for (QSgmlTag *elem : elements) {
+        QList<QSgmlTag*> images = elem->getElementsByName("img");
+
+        for (QSgmlTag *image : images) {
+            if (!image->hasAttribute("data-src"))
+                continue;
+
+            QString imageUrl(image->getArgValue("data-src"));
+            if (imageUrl.startsWith("lel"))
+                imageUrlList.append(QUrl(imageUrl));
+        }
+    }
+
+    qDebug() << imageUrlList;
+
+    for (int i = 0; i < imageUrlList.size(); ++i) {
+        QFile imageFile(chapterDir.absoluteFilePath(QString::number(i+1).rightJustified(2, '0') + ".png"));
+
+        if (imageFile.exists())
+            continue;
+
+        downloader->download(baseUrl.resolved(imageUrlList.at(i)), imageFile);
+    }
+}
+
 void ScantradDownloader::downloadChapter(const QDir &dir, const Chapter &chapter) {
     qDebug() << chapter;
 
     QFile chapterHtml(dir.absoluteFilePath("chapter_" + QString::number(chapter.number) + ".html"));
 
-    if (!chapterHtml.exists())
+    chapterMetadata.insert(chapterHtml.fileName(), chapter);
+
+    if (chapterHtml.exists())
+        emit downloader->fileDownloaded(chapter.url, chapterHtml);
+    else
         downloader->download(chapter.url, chapterHtml);
 }

@@ -17,6 +17,12 @@ namespace constants {
     // Scantrad constants
     const QString scantradHTMLDir = "html_scantrad";
     const QString scantradBaseUrl = "https://scantrad.net";
+
+    // Manga name mappings
+    const QHash<QString, QString> mappings = {
+        {"hunter-x-hunter", "Hunter x Hunter"},
+        {"one-piece", "One Piece"}
+    };
 }
 
 #endif // CONSTANTS_H
