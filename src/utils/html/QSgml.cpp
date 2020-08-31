@@ -414,7 +414,7 @@ void QSgml::getElementsByAttribute(QString AtrName,QString AtrValue,QList<QSgmlT
    {
       if( Tag->Attributes.find(AtrName)!=Tag->Attributes.end() )
       {
-         if( Tag->Attributes[AtrName]==AtrValue )
+         if( Tag->Attributes.value(AtrName).split(' ').contains(AtrValue) )
          {
             Elements->append( Tag );
          }

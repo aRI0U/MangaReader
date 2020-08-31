@@ -133,14 +133,14 @@ void ScantradDownloader::extractImagesFromChapter(const QUrl &chapterUrl, QFile 
                 continue;
 
             QString imageUrl(image->getArgValue("data-src"));
+            qDebug() << imageUrl;
             if (imageUrl.startsWith("lel"))
                 imageUrlList.append(QUrl(imageUrl));
         }
     }
 
-    qDebug() << imageUrlList;
-
     for (int i = 0; i < imageUrlList.size(); ++i) {
+        qDebug() << imageUrlList.at(i);
         QFile imageFile(chapterDir.absoluteFilePath(QString::number(i+1).rightJustified(2, '0') + ".png"));
 
         if (imageFile.exists())
