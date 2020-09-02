@@ -52,7 +52,7 @@ void ScantradDownloader::downloadFinished(QUrl url, QFile &file) {
         extractChaptersFromHtml(url, file);
 
     else if (fname.startsWith("chapter"))
-        extractImagesFromChapter(url, file);
+        extractImagesFromChapter(file);
 }
 
 void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) {
@@ -97,7 +97,7 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &ht
     }
 }
 
-void ScantradDownloader::extractImagesFromChapter(const QUrl &chapterUrl, QFile &chapterFile) {
+void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
     Chapter chapter = chapterMetadata.value(chapterFile.fileName());
 
     QSgml html(chapterFile);

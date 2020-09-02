@@ -10,7 +10,8 @@
 
 #include "constants.h"
 #include "utils/html/QSgml.h"
-#include "FileDownloader.h"
+
+#include "../FileDownloader.h"
 
 
 struct Chapter {
@@ -32,7 +33,7 @@ signals:
 private slots:
     void downloadFinished(QUrl url, QFile &file);
     void extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile);
-    void extractImagesFromChapter(const QUrl &chapterUrl, QFile &chapterFile);
+    void extractImagesFromChapter(QFile &chapterFile);
     void downloadChapter(const QDir &dir, const Chapter &chapter);
 
 private:

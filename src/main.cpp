@@ -3,7 +3,6 @@
 
 #include "constants.h"
 #include "ui/MainWindow.h"
-#include "utils/download/ScantradDownloader.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,13 +11,15 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName(constants::organizationName);
     QCoreApplication::setApplicationName(constants::applicationName);
 
-    QTranslator translator;
-    translator.load(QString("translations/MangaReader_") + QLocale::system().name());
-    app.installTranslator(&translator);
+    QSettings settings;
 
-    // tmp
-    ScantradDownloader downloader;
-    downloader.downloadLastChapters("hunter-x-hunter");
+    QTranslator translator;
+    QString language = settings.value("language", QLocale::system().name()).toString();
+    QString translationFile = QDir(constants::translationsPath).absoluteFilePath(language);
+
+    if (!translator.load(translationFile))
+        qDebug() << translationFile << "is not a valid translation file";
+    app.installTranslator(&translator);
 
     MainWindow w;
     w.show();

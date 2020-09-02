@@ -18,6 +18,7 @@ INCLUDEPATH += $$PWD/src
 SOURCES += \
     src/main.cpp \
     src/ui/MainWindow.cpp \
+    src/ui/settings/SettingsWindow.cpp \
     src/ui/tabs/Tab.cpp \
     src/ui/tabs/maintab/MainTab.cpp \
     src/ui/tabs/maintab/MangaCover.cpp \
@@ -27,7 +28,7 @@ SOURCES += \
     src/ui/tabs/mangatab/PixmapLabel.cpp \
     src/ui/tabs/mangatab/Reader.cpp \
     src/utils/download/FileDownloader.cpp \
-    src/utils/download/ScantradDownloader.cpp \
+    src/utils/download/scantrad/ScantradDownloader.cpp \
     src/utils/html/QSgml.cpp \
     src/utils/html/QSgmlTag.cpp \
     src/utils/notifications/NotificationLayout.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
 HEADERS += \
     src/constants.h \
     src/ui/MainWindow.h \
+    src/ui/settings/SettingsWindow.h \
     src/ui/tabs/Tab.h \
     src/ui/tabs/maintab/MainTab.h \
     src/ui/tabs/maintab/MangaCover.h \
@@ -47,7 +49,7 @@ HEADERS += \
     src/ui/tabs/mangatab/PixmapLabel.h \
     src/ui/tabs/mangatab/Reader.h \
     src/utils/download/FileDownloader.h \
-    src/utils/download/ScantradDownloader.h \
+    src/utils/download/scantrad/ScantradDownloader.h \
     src/utils/html/QSgml.h \
     src/utils/html/QSgmlTag.h \
     src/utils/notifications/NotificationLayout.h \

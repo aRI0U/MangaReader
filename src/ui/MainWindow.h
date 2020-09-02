@@ -16,6 +16,8 @@
 
 #include "constants.h"
 #include "tabs/maintab/MainTab.h"
+#include "settings/SettingsWindow.h"
+
 #include "utils/notifications/NotificationLayout.h"
 #include "utils/notifications/NotificationManager.h"
 
@@ -31,6 +33,7 @@ public slots:
     void closeTab(int index);
     void openLibrary();
     void showFullScreenOrMaximized(bool checked);
+    void openSettingsWindow();
 
 signals:
     void openLibraryRequest(QDir scansPath);
@@ -47,6 +50,8 @@ private:
     MainTab* mainTab;
 
     NotificationLayout* notificationLayout;
+
+    SettingsWindow *settingsWindow;
 
 protected:
     void closeEvent(QCloseEvent* event);

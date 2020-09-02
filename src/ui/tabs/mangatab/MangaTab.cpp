@@ -1,6 +1,6 @@
 ﻿#include "MangaTab.h"
 
-MangaTab::MangaTab(QTabWidget* parent, QDir mangaDir) :
+MangaTab::MangaTab(QTabWidget *parent, QDir mangaDir) :
     parent(parent),
     mangaDir(mangaDir),
     pageLayout(new QHBoxLayout),

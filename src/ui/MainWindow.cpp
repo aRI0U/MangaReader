@@ -61,9 +61,13 @@ void MainWindow::createActions() {
     connect(quitAction, SIGNAL(triggered()),
             this, SLOT(close()));
 
-
-    QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
-
+    QMenu *editMenu = menuBar()->addMenu(tr("&Edit"));
+    // settings
+    QAction *settingsAction = editMenu->addAction(tr("&Settings"));
+    settingsAction->setShortcut(Qt::CTRL | Qt::ALT | Qt::Key_S);
+    settingsAction->setStatusTip("Open the settings");
+    connect(settingsAction, SIGNAL(triggered()),
+            this, SLOT(openSettingsWindow()));
 
     QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
 
@@ -103,6 +107,11 @@ void MainWindow::openLibrary() {
         settings.setValue("Library/scansPath", folderPath);
         emit openLibraryRequest(folder);
     }
+}
+
+void MainWindow::openSettingsWindow() {
+    settingsWindow = new SettingsWindow(this);
+    settingsWindow->show();
 }
 
 void MainWindow::showFullScreenOrMaximized(bool checked) {

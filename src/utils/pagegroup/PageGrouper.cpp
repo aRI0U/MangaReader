@@ -12,7 +12,7 @@ QPixmap PageGrouper::loadPage(const QString path,  const char* format, const Qt:
     return page;
 }
 
-QString PageGrouper::loadCorruptedImage(QString path, QPixmap& image) {
+QString PageGrouper::loadCorruptedImage(QString path, QPixmap &image) {
     QList<QByteArray> supportedFormats = QImageReader::supportedImageFormats();
     supportedFormats.removeAt(4);
     qDebug() << supportedFormats;
@@ -24,9 +24,10 @@ QString PageGrouper::loadCorruptedImage(QString path, QPixmap& image) {
         }
     }
     qDebug() << "no valid format";
+    return QString();
 }
 
-QString PageGrouper::renameFile(const QString fname, const char* format) {
+QString PageGrouper::renameFile(const QString fname, const char *format) {
     // build new name
     const QString newName = fname.left(fname.size() - 3) + format;
 
