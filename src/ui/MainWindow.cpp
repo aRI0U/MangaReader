@@ -47,7 +47,7 @@ void MainWindow::createCentralWidget() {
 
 void MainWindow::createActions() {
     QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
-    QAction* openLibraryAction = fileMenu->addAction(tr("Open Library"));
+    QAction* openLibraryAction = fileMenu->addAction(tr("&Open..."));
     openLibraryAction->setShortcut(Qt::CTRL | Qt::Key_O);
     openLibraryAction->setStatusTip(tr("Open a library of mangas"));
     connect(openLibraryAction, SIGNAL(triggered()),
@@ -55,7 +55,7 @@ void MainWindow::createActions() {
     connect(this, SIGNAL(openLibraryRequest(QDir)),
             mainTab, SLOT(openLibrary(QDir)));
     // quit
-    QAction* quitAction = fileMenu->addAction(tr("Quit"));
+    QAction* quitAction = fileMenu->addAction(tr("&Quit"));
     quitAction->setShortcut(Qt::CTRL | Qt::Key_Q);
     quitAction->setStatusTip(tr("Quit the application"));
     connect(quitAction, SIGNAL(triggered()),

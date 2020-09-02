@@ -1,7 +1,10 @@
 #ifndef SETTINGSWINDOW_H
 #define SETTINGSWINDOW_H
 
-#include <QDebug>
+#include <QMenu>
+#include <QScrollArea>
+
+#include <QVBoxLayout>
 #include <QWidget>
 
 class SettingsWindow : public QWidget
@@ -12,6 +15,7 @@ public:
 
 signals:
 
+private:
 };
 
 #endif // SETTINGSWINDOW_H

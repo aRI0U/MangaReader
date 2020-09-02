@@ -57,6 +57,10 @@ HEADERS += \
     src/utils/notifications/NotificationWidget.h \
     src/utils/pagegroup/PageGrouper.h
 
+TRANSLATIONS += \
+    translations/MangaReader_en.ts \
+    translations/MangaReader_fr.ts
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

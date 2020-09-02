@@ -14,12 +14,16 @@ int main(int argc, char *argv[])
     QSettings settings;
 
     QTranslator translator;
-    QString language = settings.value("language", QLocale::system().name()).toString();
-    QString translationFile = QDir(constants::translationsPath).absoluteFilePath(language);
 
-    if (!translator.load(translationFile))
-        qDebug() << translationFile << "is not a valid translation file";
-    app.installTranslator(&translator);
+    QLocale language = settings.contains("language")
+            ? QLocale(settings.value("language").toString())
+            : QLocale::system();
+
+    if (translator.load(language, constants::applicationName, "_", constants::translationsPath))
+        app.installTranslator(&translator);
+    else
+        qDebug() << "Failed to load translation file";
+
 
     MainWindow w;
     w.show();
