@@ -24,12 +24,12 @@
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="50"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Open...</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="58"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Quit</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="101"/>
@@ -95,14 +95,42 @@
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="6"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="7"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="13"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="19"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="66"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="83"/>
+        <source>Download</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="25"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="96"/>
         <source>Language</source>
         <translation>Language</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="74"/>
+        <source>Automatically check for new chapters</source>
+        <translation>Automatically check for new chapters</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="78"/>
+        <source>Automatically download new chapters</source>
+        <translation>Automatically download new chapters</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="100"/>
+        <source>Application language:</source>
+        <translation>Application language:</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="134"/>
+        <source>Language settings have been modified. Changes will be effective next time you open the app.</source>
+        <translation>Language settings have been modified. Changes will be effective next time you open the app.</translation>
     </message>
 </context>
 </TS>

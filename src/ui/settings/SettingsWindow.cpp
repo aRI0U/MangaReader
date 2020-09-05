@@ -1,17 +1,31 @@
 #include "SettingsWindow.h"
 
 SettingsWindow::SettingsWindow(QWidget *parent)
-    : QWidget(parent, Qt::Window)
+    : QWidget(parent, Qt::Window),
+      layout(new QHBoxLayout(this))
 {
     setWindowTitle(tr("Settings"));
-
-    QLayout *layout = new QVBoxLayout(this);
+    setFocusPolicy(Qt::StrongFocus);
+    setWindowModality(Qt::ApplicationModal);
+    setMinimumSize(constants::settingsWindowMinimumSize);
 
     QScrollArea *scrollArea = new QScrollArea();
     QMenu *menu = new QMenu();
 
-    menu->addAction(new QAction(tr("Language")));
+    scrollArea->setFixedWidth(constants::settingsMenuWidth);
+    menu->setFixedWidth(scrollArea->width());
 
+    // download settings
+    QAction *downloadSettings = new QAction(tr("Download"));
+    menu->addAction(downloadSettings);
+    connect(downloadSettings, SIGNAL(triggered()),
+            this, SLOT(openDownloadSettings()));
+
+    // language settings
+    QAction *languageSettings = new QAction(tr("Language"));
+    menu->addAction(languageSettings);
+    connect(languageSettings, SIGNAL(triggered()),
+            this, SLOT(openLanguageSettings()));
 
     menu->addAction(new QAction("test"));
     menu->addAction(new QAction("test"));
@@ -44,4 +58,79 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     scrollArea->setWidget(menu);
 
     layout->addWidget(scrollArea);
+    layout->setAlignment(scrollArea, Qt::AlignLeft);
+}
+
+
+void SettingsWindow::openDownloadSettings() {
+    QGroupBox *settingsWidget = new QGroupBox(tr("Download"), this);
+    QGridLayout *internalLayout = new QGridLayout(settingsWidget);
+
+
+    internalLayout->addWidget(new QLabel("Followed series:"), 0, 0, Qt::AlignLeft);
+    internalLayout->addWidget(new QLabel("TODO: list of available series"), 1, 0, 1, -1, Qt::AlignLeft);
+
+    // automatic download of last chapters
+    QCheckBox *checkCheckBox = new QCheckBox(tr("Automatically check for new chapters"));
+    internalLayout->addWidget(checkCheckBox, 2, 0);
+
+    // automatic download of last chapters
+    QCheckBox *downloadCheckBox = new QCheckBox(tr("Automatically download new chapters"));
+    internalLayout->addWidget(downloadCheckBox, 3, 0);
+    connect(downloadCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(setAutomaticDownloadState(bool)));
+
+    QPushButton *downloadButton = new QPushButton(tr("Download"));
+    internalLayout->addWidget(downloadButton, 3, 1, Qt::AlignRight);
+
+
+    QLayoutItem *old = layout->takeAt(1);
+
+    if (old != nullptr)
+        delete old->widget();
+
+    layout->addWidget(settingsWidget);
+}
+
+void SettingsWindow::openLanguageSettings() {
+    QGroupBox *settingsWidget = new QGroupBox(tr("Language"), this);
+    QGridLayout *internalLayout = new QGridLayout(settingsWidget);
+
+
+    internalLayout->addWidget(new QLabel(tr("Application language:")), 0, 0, Qt::AlignRight);
+
+    languageChoices = new QComboBox(this);
+    QDir translationsDir(constants::translationsPath);
+    QRegularExpression translationRegex(constants::applicationName + "_*.qm");
+    for (const QString &translationFile : translationsDir.entryList({translationRegex.pattern()}, QDir::Files | QDir::NoDotAndDotDot)) {
+        QString languageString = translationFile.split('_').at(1).split('.').at(0);  // TODO: do this properly with regex or sth...
+        QLocale::Language language = QLocale(languageString).language();
+        languageChoices->addItem(QLocale::languageToString(language), languageString);
+    }
+    internalLayout->addWidget(languageChoices, 0, 1, Qt::AlignLeft);
+    connect(languageChoices, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(setLanguage(int)));
+
+
+    QLayoutItem *old = layout->takeAt(1);
+
+    if (old != nullptr)
+        delete old->widget();
+
+    layout->addWidget(settingsWidget);
+}
+
+
+void SettingsWindow::setAutomaticDownloadState(bool checked) {
+    QSettings settings;
+    settings.setValue("Download/auto", checked);
+}
+
+void SettingsWindow::setLanguage(int index) {
+    QSettings settings;
+    settings.setValue("Language/language", languageChoices->itemData(index));
+
+    QMessageBox msgBox;
+    msgBox.setText(tr("Language settings have been modified. Changes will be effective next time you open the app."));
+    msgBox.exec();
 }

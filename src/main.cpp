@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
 
     QTranslator translator;
 
-    QLocale language = settings.contains("language")
-            ? QLocale(settings.value("language").toString())
+    QLocale language = settings.contains("Language/language")
+            ? QLocale(settings.value("Language/language").toString())
             : QLocale::system();
 
     if (translator.load(language, constants::applicationName, "_", constants::translationsPath))

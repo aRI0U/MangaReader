@@ -95,14 +95,42 @@
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="6"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="7"/>
         <source>Settings</source>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="13"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="19"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="66"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="83"/>
+        <source>Download</source>
+        <translation>Téléchargement</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="25"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="96"/>
         <source>Language</source>
         <translation>Langue</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="74"/>
+        <source>Automatically check for new chapters</source>
+        <translation>Guetter automatiquement les nouveaux chapitres</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="78"/>
+        <source>Automatically download new chapters</source>
+        <translation>Télécharger automatiquement les nouveaux chapitres</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="100"/>
+        <source>Application language:</source>
+        <translation>Langue de l&apos;application :</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="134"/>
+        <source>Language settings have been modified. Changes will be effective next time you open the app.</source>
+        <translation>Les paramètres de langue ont été modifiés. Les changements prendront effet au prochain redémarrage.</translation>
     </message>
 </context>
 </TS>
