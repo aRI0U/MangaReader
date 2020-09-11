@@ -15,9 +15,11 @@
 #include <iostream>
 
 #include "constants.h"
+
 #include "tabs/maintab/MainTab.h"
 #include "settings/SettingsWindow.h"
 
+//#include "utils/download/scansDownloaders.h"
 #include "utils/notifications/NotificationLayout.h"
 #include "utils/notifications/NotificationManager.h"
 
@@ -27,22 +29,28 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() {};
+    ~MainWindow() {}
 
 public slots:
-    void closeTab(int index);
     void openLibrary();
-    void showFullScreenOrMaximized(bool checked);
     void openSettingsWindow();
+    void showFullScreenOrMaximized(bool checked);
+    void updateLibrary();
 
 signals:
     void openLibraryRequest(QDir scansPath);
+
+private slots:
+    void closeTab(int index);
 
 private:
     void createCentralWidget();
     void createActions();
     void createStatusBar();
+
     void initializeNotificationsManager();
+    void initializeDownloaders();
+
     void readSettings();
     void writeSettings();
 
@@ -50,6 +58,8 @@ private:
     MainTab* mainTab;
 
     NotificationLayout* notificationLayout;
+
+//    QList<AbstractScansDownloader *> downloaders;
 
     SettingsWindow *settingsWindow;
 

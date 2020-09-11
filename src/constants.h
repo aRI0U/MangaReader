@@ -14,7 +14,8 @@ namespace constants {
     // Sizes
     const QSize MangaCoverSize = QSize(210, 297);
 
-    const QSize settingsWindowMinimumSize(800, 600);
+    const QSize mainWindowMinimumSize(800, 600);
+    const QSize settingsWindowMinimumSize(600, 400);
     const int settingsMenuWidth(140);
     const int settingsWidgetWidth(200);
 

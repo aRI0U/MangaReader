@@ -27,33 +27,33 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     connect(languageSettings, SIGNAL(triggered()),
             this, SLOT(openLanguageSettings()));
 
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
-    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
+//    menu->addAction(new QAction("test"));
 
     scrollArea->setWidget(menu);
 
@@ -67,12 +67,14 @@ void SettingsWindow::openDownloadSettings() {
     QGridLayout *internalLayout = new QGridLayout(settingsWidget);
 
 
-    internalLayout->addWidget(new QLabel("Followed series:"), 0, 0, Qt::AlignLeft);
+    internalLayout->addWidget(new QLabel(tr("Followed series:")), 0, 0, Qt::AlignLeft);
     internalLayout->addWidget(new QLabel("TODO: list of available series"), 1, 0, 1, -1, Qt::AlignLeft);
 
     // automatic download of last chapters
     QCheckBox *checkCheckBox = new QCheckBox(tr("Automatically check for new chapters"));
     internalLayout->addWidget(checkCheckBox, 2, 0);
+    connect(checkCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(setAutomaticCheckState(bool)));
 
     // automatic download of last chapters
     QCheckBox *downloadCheckBox = new QCheckBox(tr("Automatically download new chapters"));
@@ -82,6 +84,17 @@ void SettingsWindow::openDownloadSettings() {
 
     QPushButton *downloadButton = new QPushButton(tr("Download"));
     internalLayout->addWidget(downloadButton, 3, 1, Qt::AlignRight);
+
+    // enable download only when automatic checking is activated
+    connect(checkCheckBox, SIGNAL(toggled(bool)),
+            downloadCheckBox, SLOT(setEnabled(bool)));
+
+    // restore previous/default values
+    QSettings settings;
+    settings.beginGroup("Download");
+    checkCheckBox->setChecked(settings.value("autoCheck", false).toBool());
+    downloadCheckBox->setChecked(settings.value("autoDownload", false).toBool());
+    settings.endGroup();
 
 
     QLayoutItem *old = layout->takeAt(1);
@@ -121,9 +134,14 @@ void SettingsWindow::openLanguageSettings() {
 }
 
 
+void SettingsWindow::setAutomaticCheckState(bool checked) {
+    QSettings settings;
+    settings.setValue("Download/autoCheck", checked);
+}
+
 void SettingsWindow::setAutomaticDownloadState(bool checked) {
     QSettings settings;
-    settings.setValue("Download/auto", checked);
+    settings.setValue("Download/autoDownload", checked);
 }
 
 void SettingsWindow::setLanguage(int index) {

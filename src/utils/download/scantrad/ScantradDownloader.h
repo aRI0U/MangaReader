@@ -1,34 +1,24 @@
 #ifndef SCANTRADDOWNLOADER_H
 #define SCANTRADDOWNLOADER_H
 
-#include <QDir>
-#include <QObject>
 #include <QRegularExpression>
 #include <QSettings>
 #include <QStandardPaths>
-#include <QUrl>
 
-#include "constants.h"
+#include "../AbstractScansDownloader.h"
+
 #include "utils/html/QSgml.h"
 
-#include "../FileDownloader.h"
-
-
-struct Chapter {
-    unsigned int number;
-    QString name;
-    QUrl url;
-};
-
-class ScantradDownloader : public QObject
+class ScantradDownloader : public AbstractScansDownloader
 {
     Q_OBJECT
 public:
     explicit ScantradDownloader(QObject *parent = nullptr);
 
-    void downloadLastChapters(const QString &mangaName);
+//    virtual void downloadChapters(const QString &mangaName) override;
 
 signals:
+    void chapterDownloaded(QString &chapterName);
 
 private slots:
     void downloadFinished(QUrl url, QFile &file);
@@ -37,12 +27,6 @@ private slots:
     void downloadChapter(const QDir &dir, const Chapter &chapter);
 
 private:
-    QDir htmlDir;
-
-    QUrl baseUrl;
-
-    FileDownloader* downloader;
-
     QHash<QString, Chapter> chapterMetadata;
 };
 

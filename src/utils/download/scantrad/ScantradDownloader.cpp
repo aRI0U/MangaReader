@@ -1,21 +1,8 @@
 #include "ScantradDownloader.h"
 
-QDebug operator<<(QDebug debug, const Chapter &chapter) {
-    QDebugStateSaver saver(debug);
-    debug.nospace().noquote()
-            << "Chapter "
-            << chapter.number
-            << ": "
-            << chapter.name
-            << "<"
-            << chapter.url.toString()
-            << ">";
-    return debug;
-}
-
-ScantradDownloader::ScantradDownloader(QObject *parent) : QObject(parent) {
-    downloader = new FileDownloader(this);
-
+ScantradDownloader::ScantradDownloader(QObject *parent)
+    : AbstractScansDownloader(parent)
+{
     baseUrl = QUrl(constants::scantradBaseUrl);
 
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
@@ -30,20 +17,20 @@ ScantradDownloader::ScantradDownloader(QObject *parent) : QObject(parent) {
             this, SLOT(downloadFinished(QUrl,QFile&)));
 }
 
-void ScantradDownloader::downloadLastChapters(const QString &mangaName) {
-    QDir mangaAuxDir(htmlDir.absoluteFilePath(mangaName));
-    QUrl mangaUrl(baseUrl.resolved(QUrl(mangaName)));
-    QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
+//void ScantradDownloader::downloadChapters(const QString &mangaName) {
+//    QDir mangaAuxDir(htmlDir.absoluteFilePath(mangaName));
+//    QUrl mangaUrl(baseUrl.resolved(QUrl(mangaName)));
+//    QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
 
-    if (!mangaAuxDir.mkpath("."))
-        qDebug() << "Failed to create dir" << mangaAuxDir;
+//    if (!mangaAuxDir.mkpath("."))
+//        qDebug() << "Failed to create dir" << mangaAuxDir;
 
-    // eventually download html
-    if (htmlFile.exists())
-        emit downloader->fileDownloaded(mangaUrl, htmlFile);
-    else
-        downloader->download(mangaUrl, htmlFile);
-}
+//    // eventually download html
+//    if (htmlFile.exists())
+//        emit downloader->fileDownloaded(mangaUrl, htmlFile);
+//    else
+//        downloader->download(mangaUrl, htmlFile);
+//}
 
 void ScantradDownloader::downloadFinished(QUrl url, QFile &file) {
     QString fname = QFileInfo(file).fileName();
@@ -56,8 +43,8 @@ void ScantradDownloader::downloadFinished(QUrl url, QFile &file) {
 }
 
 void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) {
-    QDir parentDir = QFileInfo(htmlFile).dir();
     QSgml *html = new QSgml(htmlFile);
+    QDir parentDir(QFileInfo(htmlFile).dir());
 
     QList<QSgmlTag*> elements;
     QRegularExpression numberRegex("\\d+");

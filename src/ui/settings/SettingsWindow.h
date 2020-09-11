@@ -30,6 +30,7 @@ public slots:
 signals:
 
 private slots:
+    void setAutomaticCheckState(bool checked);
     void setAutomaticDownloadState(bool checked);
     void setLanguage(int index);
 
