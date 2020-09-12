@@ -15,13 +15,13 @@ class ScantradDownloader : public AbstractScansDownloader
 public:
     explicit ScantradDownloader(QObject *parent = nullptr);
 
-//    virtual void downloadChapters(const QString &mangaName) override;
+    void downloadChapters(const QString &mangaName) override;
 
 signals:
     void chapterDownloaded(QString &chapterName);
 
 private slots:
-    void downloadFinished(QUrl url, QFile &file);
+    void downloadFinished(QDownload *download);
     void extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile);
     void extractImagesFromChapter(QFile &chapterFile);
     void downloadChapter(const QDir &dir, const Chapter &chapter);

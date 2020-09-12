@@ -27,9 +27,10 @@ SOURCES += \
     src/ui/tabs/mangatab/MangaTab.cpp \
     src/ui/tabs/mangatab/PixmapLabel.cpp \
     src/ui/tabs/mangatab/Reader.cpp \
-    src/utils/download/AbstractScansDownloader.cpp \
-    src/utils/download/FileDownloader.cpp \
-    src/utils/download/scantrad/ScantradDownloader.cpp \
+    src/utils/download/QDownload.cpp \
+    src/utils/download/QDownloader.cpp \
+    src/utils/scandl/AbstractScansDownloader.cpp \
+    src/utils/scandl/scantrad/ScantradDownloader.cpp \
     src/utils/html/QSgml.cpp \
     src/utils/html/QSgmlTag.cpp \
     src/utils/notifications/NotificationLayout.cpp \
@@ -49,10 +50,11 @@ HEADERS += \
     src/ui/tabs/mangatab/MangaTab.h \
     src/ui/tabs/mangatab/PixmapLabel.h \
     src/ui/tabs/mangatab/Reader.h \
-    src/utils/download/AbstractScansDownloader.h \
-    src/utils/download/FileDownloader.h \
-    src/utils/download/scansDownloaders.h \
-    src/utils/download/scantrad/ScantradDownloader.h \
+    src/utils/download/QDownload.h \
+    src/utils/download/QDownloader.h \
+    src/utils/scandl/AbstractScansDownloader.h \
+    src/utils/scandl/scansDownloaders.h \
+    src/utils/scandl/scantrad/ScantradDownloader.h \
     src/utils/html/QSgml.h \
     src/utils/html/QSgmlTag.h \
     src/utils/notifications/NotificationLayout.h \

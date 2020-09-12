@@ -3,7 +3,7 @@
 ScantradDownloader::ScantradDownloader(QObject *parent)
     : AbstractScansDownloader(parent)
 {
-    baseUrl = QUrl(constants::scantradBaseUrl);
+    m_baseUrl = QUrl(constants::scantradBaseUrl);
 
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
     QString dirName = constants::scantradHTMLDir;
@@ -11,35 +11,45 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
     if (!localDataLocation.mkpath(dirName))
         qDebug() << "Failed to create path" << dirName;
 
-    htmlDir = QDir(QStandardPaths::locate(QStandardPaths::AppLocalDataLocation, dirName, QStandardPaths::LocateDirectory));
+    m_htmlDir = QDir(QStandardPaths::locate(QStandardPaths::AppLocalDataLocation, dirName, QStandardPaths::LocateDirectory));
 
-    connect(downloader, SIGNAL(fileDownloaded(QUrl,QFile&)),
-            this, SLOT(downloadFinished(QUrl,QFile&)));
+    connect(m_downloader, &QDownloader::downloadTerminated,
+            this, &ScantradDownloader::downloadFinished);
 }
 
-//void ScantradDownloader::downloadChapters(const QString &mangaName) {
-//    QDir mangaAuxDir(htmlDir.absoluteFilePath(mangaName));
-//    QUrl mangaUrl(baseUrl.resolved(QUrl(mangaName)));
-//    QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
+void ScantradDownloader::downloadChapters(const QString &mangaName) {
+    QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaName));
+    QUrl mangaUrl(m_baseUrl.resolved(QUrl(mangaName)));
+    QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
 
-//    if (!mangaAuxDir.mkpath("."))
-//        qDebug() << "Failed to create dir" << mangaAuxDir;
+    if (!mangaAuxDir.mkpath("."))
+        qDebug() << "Failed to create dir" << mangaAuxDir;
 
-//    // eventually download html
-//    if (htmlFile.exists())
-//        emit downloader->fileDownloaded(mangaUrl, htmlFile);
-//    else
-//        downloader->download(mangaUrl, htmlFile);
-//}
+    // eventually download html
+    if (htmlFile.exists())
+        extractChaptersFromHtml(mangaUrl, htmlFile);
+    else
+        m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML);
+}
 
-void ScantradDownloader::downloadFinished(QUrl url, QFile &file) {
-    QString fname = QFileInfo(file).fileName();
+void ScantradDownloader::downloadFinished(QDownload *download) {
+    if (!download->success()) {
+        qDebug() << "Failed to download" << download->targetFile() << ":" << download->error();
+        return;
+    }
 
-    if (fname.startsWith("main"))
-        extractChaptersFromHtml(url, file);
+    QFile targetFile(download->targetFile());
 
-    else if (fname.startsWith("chapter"))
-        extractImagesFromChapter(file);
+    switch (download->kind()) {
+        case FileType::MangaHTML:
+            extractChaptersFromHtml(download->targetUrl(), targetFile);
+            break;
+        case FileType::ChapterHTML:
+            extractImagesFromChapter(targetFile);
+            break;
+        default:
+            break;
+    }
 }
 
 void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) {
@@ -133,19 +143,19 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
         if (imageFile.exists())
             continue;
 
-        downloader->download(baseUrl.resolved(imageUrlList.at(i)), imageFile);
+        m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image);
     }
 }
 
 void ScantradDownloader::downloadChapter(const QDir &dir, const Chapter &chapter) {
     qDebug() << chapter;
 
-    QFile chapterHtml(dir.absoluteFilePath("chapter_" + QString::number(chapter.number) + ".html"));
+    QFile chapterHtml(dir.absoluteFilePath("chapter_" + QString::number(chapter.number) + ".html")); // TODO use QStringBuilder
 
     chapterMetadata.insert(chapterHtml.fileName(), chapter);
 
     if (chapterHtml.exists())
-        emit downloader->fileDownloaded(chapter.url, chapterHtml);
+        extractImagesFromChapter(chapterHtml);
     else
-        downloader->download(chapter.url, chapterHtml);
+        m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML);
 }

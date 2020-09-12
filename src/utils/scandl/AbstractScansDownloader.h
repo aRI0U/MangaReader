@@ -4,9 +4,13 @@
 #include <QDir>
 
 #include "constants.h"
+#include "utils/download/QDownloader.h"
 
-#include "FileDownloader.h"
-
+enum FileType {
+    MangaHTML,
+    ChapterHTML,
+    Image
+};
 
 struct Chapter {
     unsigned int number;
@@ -25,14 +29,15 @@ class AbstractScansDownloader : public QObject
 public:
     explicit AbstractScansDownloader(QObject *parent = nullptr);
 
-//    virtual void downloadChapters(const QString &mangaName);
+    virtual void downloadChapters(const QString &mangaName);
 
 signals:
 
 protected:
-    QDir htmlDir;
-    QUrl baseUrl;
-    FileDownloader* downloader;
+    QDir m_htmlDir;
+    QUrl m_baseUrl;
+
+    QDownloader *m_downloader;
 };
 
 #endif // ABSTRACTSCANSDOWNLOADER_H
