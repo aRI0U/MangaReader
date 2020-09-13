@@ -5,14 +5,44 @@ DatabaseConnection::DatabaseConnection(QObject *parent) : QObject(parent)
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
     QString dbPath(localDataLocation.absoluteFilePath(constants::dbFilename));
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
 
-    createDatabase(db);
+    createDatabase();
 }
 
 
-bool DatabaseConnection::createDatabase(QSqlDatabase &db) {
+bool DatabaseConnection::addWebsiteToDatabase(const int id,
+                                              const QString &name,
+                                              const QString &baseUrl,
+                                              const QString &allMangasUrl,
+                                              const QString &mangaUrlFormat,
+                                              const QString &chapterUrlFormat) {
+    QSqlQuery query(db);
+    // check if the website has already been inserted
+    query.prepare("SELECT ID FROM Websites WHERE ID = :ID");
+    query.bindValue(":ID", id);
+    query.exec();
+
+    if (query.next())
+        return true;
+
+    // insert the website in the tab
+    query.prepare("INSERT INTO Websites (ID, Name, BaseUrl, AllMangasUrl, MangaUrlFormat, ChapterUrlFormat)"
+                  "VALUES (:ID, :Name, :BaseUrl, :AllMangasUrl, :MangaUrlFormat, :ChapterUrlFormat)");
+    query.bindValue(":ID", id);
+    query.bindValue(":Name", name);
+    query.bindValue(":BaseUrl", baseUrl);
+    query.bindValue(":AllMangasUrl", allMangasUrl);
+    query.bindValue(":MangaUrlFormat", mangaUrlFormat);
+    query.bindValue(":ChapterUrlFormat", chapterUrlFormat);
+    query.exec();
+
+    return (db.transaction() && db.commit());
+}
+
+
+bool DatabaseConnection::createDatabase() {
     qDebug() << "creating database at" << db.databaseName();
 
     if (!db.open())
@@ -30,7 +60,6 @@ bool DatabaseConnection::createDatabase(QSqlDatabase &db) {
 "                    PRIMARY KEY (ID)                                           "
 "                );                                                             "
     );
-        qDebug() << query.isActive() << query.lastError().text();
     query.exec(
 "                CREATE TABLE IF NOT EXISTS Authors (                           "
 "                    ID             UNSIGNED INT	NOT NULL,                   "
@@ -39,7 +68,6 @@ bool DatabaseConnection::createDatabase(QSqlDatabase &db) {
 "                    PRIMARY KEY (ID)                                           "
 "                );                                                             "
     );
-        qDebug() << query.isActive() << query.lastError().text();
     query.exec(
 "                CREATE TABLE IF NOT EXISTS Mangas (                            "
 "                    ID             UNSIGNED INT	NOT NULL,                   "
@@ -54,7 +82,6 @@ bool DatabaseConnection::createDatabase(QSqlDatabase &db) {
 "                    FOREIGN KEY (Author)  REFERENCES Authors(ID)               "
 "                );                                                             "
     );
-        qDebug() << query.isActive() << query.lastError().text();
     query.exec(
 "                CREATE TABLE IF NOT EXISTS Chapters (                          "
 "                    ID             UNSIGNED INT	NOT NULL,                   "
@@ -67,10 +94,5 @@ bool DatabaseConnection::createDatabase(QSqlDatabase &db) {
 "                    FOREIGN KEY (Manga) REFERENCES Mangas(ID)                  "
 "                );                                                             "
     );
-    qDebug() << query.isActive() << query.lastError().text();
-    db.transaction();
-    db.commit();
-    qDebug() << db.lastError().text();
-    db.close();
-    return true;
+    return (db.transaction() && db.commit());
 }

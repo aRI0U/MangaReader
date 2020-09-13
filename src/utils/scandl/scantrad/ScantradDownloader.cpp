@@ -3,10 +3,12 @@
 ScantradDownloader::ScantradDownloader(QObject *parent)
     : AbstractScansDownloader(parent)
 {
+    addWebsiteToDatabase();  // TODO put this in base class
+
     m_baseUrl = QUrl(constants::scantradBaseUrl);
 
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
-    QString dirName = constants::scantradHTMLDir;
+    QString dirName = "html_" + constants::scantradName;
 
     if (!localDataLocation.mkpath(dirName))
         qDebug() << "Failed to create path" << dirName;
@@ -160,4 +162,15 @@ void ScantradDownloader::downloadChapter(const QDir &dir, const Chapter &chapter
         extractImagesFromChapter(chapterHtml);
     else
         m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML);
+}
+
+
+bool ScantradDownloader::addWebsiteToDatabase() {
+    qDebug() << "pouet";
+    return m_database->addWebsiteToDatabase(constants::scantradId,
+                                            constants::scantradName,
+                                            constants::scantradBaseUrl,
+                                            constants::scantradAllMangasUrl,
+                                            constants::scantradMangaUrlFormat,
+                                            constants::scantradChapterUrlFormat);
 }

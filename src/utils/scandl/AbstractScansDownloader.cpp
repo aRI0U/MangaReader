@@ -18,5 +18,4 @@ AbstractScansDownloader::AbstractScansDownloader(QObject *parent)
       m_database(new DatabaseConnection(this)),
       m_downloader(new QDownloader(this))
 {
-
 }

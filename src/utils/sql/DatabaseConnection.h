@@ -15,10 +15,19 @@ class DatabaseConnection : public QObject
 public:
     explicit DatabaseConnection(QObject *parent = nullptr);
 
+    bool addWebsiteToDatabase(const int id,
+                              const QString &name,
+                              const QString &baseUrl,
+                              const QString &allMangasUrl,
+                              const QString &mangaUrlFormat,
+                              const QString &chapterUrlFormat);
+
 signals:
 
 private:
-    bool createDatabase(QSqlDatabase &db);
+    bool createDatabase();
+
+    QSqlDatabase db;
 };
 
 #endif // DATABASECONNECTION_H

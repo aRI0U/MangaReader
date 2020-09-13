@@ -36,6 +36,8 @@ public:
 signals:
 
 protected:
+    virtual bool addWebsiteToDatabase() {}
+
     QDir m_htmlDir;
     QUrl m_baseUrl;
 

@@ -28,6 +28,8 @@ private slots:
     void downloadChapter(const QDir &dir, const Chapter &chapter);
 
 private:
+    bool addWebsiteToDatabase() override;
+
     QHash<QString, Chapter> chapterMetadata;
 };
 
