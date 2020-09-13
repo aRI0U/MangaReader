@@ -5,6 +5,7 @@
 
 #include "constants.h"
 #include "utils/download/QDownloader.h"
+#include "utils/sql/DatabaseConnection.h"
 
 enum FileType {
     MangaHTML,
@@ -29,13 +30,16 @@ class AbstractScansDownloader : public QObject
 public:
     explicit AbstractScansDownloader(QObject *parent = nullptr);
 
-    virtual void downloadChapters(const QString &mangaName);
+    virtual void lookForNewChapters() {}
+    virtual void downloadChapters(const QString &mangaName) {}
 
 signals:
 
 protected:
     QDir m_htmlDir;
     QUrl m_baseUrl;
+
+    DatabaseConnection *m_database;
 
     QDownloader *m_downloader;
 };

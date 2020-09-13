@@ -4,8 +4,6 @@
 #include "constants.h"
 #include "ui/MainWindow.h"
 
-#include "utils/scandl/scansDownloaders.h"
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

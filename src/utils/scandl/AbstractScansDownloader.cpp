@@ -15,9 +15,8 @@ QDebug operator<<(QDebug debug, const Chapter &chapter) {
 
 AbstractScansDownloader::AbstractScansDownloader(QObject *parent)
     : QObject(parent),
+      m_database(new DatabaseConnection(this)),
       m_downloader(new QDownloader(this))
 {
 
 }
-
-void AbstractScansDownloader::downloadChapters(const QString &mangaName) {}

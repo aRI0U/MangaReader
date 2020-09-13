@@ -3,6 +3,7 @@
 
 #include <QFont>
 #include <QSize>
+#include <QStandardPaths>
 #include <QString>
 
 namespace constants {
@@ -21,6 +22,12 @@ namespace constants {
 
     // Fonts
     const QFont MangaTitleFont = QFont("Arial", 20, QFont::Bold);
+
+    // where data is stored
+//    const QString localDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+
+    // database
+    const QString dbFilename = "database.db";
 
     // Scantrad constants
     const QString scantradHTMLDir = "html_scantrad";

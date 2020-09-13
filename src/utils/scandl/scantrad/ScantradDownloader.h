@@ -15,6 +15,7 @@ class ScantradDownloader : public AbstractScansDownloader
 public:
     explicit ScantradDownloader(QObject *parent = nullptr);
 
+    void lookForNewChapters() override;
     void downloadChapters(const QString &mangaName) override;
 
 signals:

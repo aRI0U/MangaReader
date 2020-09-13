@@ -9,12 +9,13 @@ MainWindow::MainWindow(QWidget* parent)
     createStatusBar();
     createCentralWidget();
     createActions();
+
     initializeNotificationsManager();
-//    initializeDownloaders();
+    initializeDownloaders();
 
     readSettings();
 
-//    updateLibrary();
+    updateLibrary();
 }
 
 void MainWindow::createCentralWidget() {
@@ -91,8 +92,8 @@ void MainWindow::initializeNotificationsManager() {
 }
 
 void MainWindow::initializeDownloaders() {
-//    downloaders.clear();
-//    downloaders << new ScantradDownloader(this);
+    m_scanDownloaders.clear();
+    m_scanDownloaders << new ScantradDownloader(this);
 }
 
 // SLOTS
@@ -129,24 +130,25 @@ void MainWindow::showFullScreenOrMaximized(bool checked) {
 }
 
 void MainWindow::updateLibrary() {
-//    const QHash<QString, Downloader> followedMangas = {
-//        {"one-piece", Scantrad},
-//        {"hunter-x-hunter", Scantrad},
-//    };  // TODO: retrieve this from SQL db or sth...
+    const QHash<QString, Downloader> followedMangas = {
+        {"one-piece", Scantrad},
+        {"hunter-x-hunter", Scantrad},
+    };  // TODO: retrieve this from SQL db or sth...
 
-//    QSettings settings;
+    QSettings settings;
 
-//    settings.beginGroup("Download");
+    settings.beginGroup("Download");
 
-//    if (!settings.value("autoCheck", false).toBool())
-//        return;
+    if (!settings.value("autoCheck", false).toBool())
+        return;
 
-//    for (const QString &manga : followedMangas.keys()) {  // TODO: use iterator
-//        AbstractScansDownloader *downloader = downloaders.at(followedMangas.value(manga));
-////        downloader->downloadChapters(manga);
-//    }
+    for (const QString &manga : followedMangas.keys()) {  // TODO: use iterator
+        qDebug() << manga;
+        AbstractScansDownloader *downloader = m_scanDownloaders.at(followedMangas.value(manga));
+        downloader->downloadChapters(manga);
+    }
 
-//    settings.endGroup();
+    settings.endGroup();
 }
 
 void MainWindow::readSettings() {

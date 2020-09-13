@@ -17,6 +17,11 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
             this, &ScantradDownloader::downloadFinished);
 }
 
+
+void ScantradDownloader::lookForNewChapters() {
+
+}
+
 void ScantradDownloader::downloadChapters(const QString &mangaName) {
     QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaName));
     QUrl mangaUrl(m_baseUrl.resolved(QUrl(mangaName)));
@@ -117,7 +122,6 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
 
     QDir chapterDir(libraryDir.absoluteFilePath(mangaName + "/" + chapterName));
 
-    qDebug() << chapterDir;
     chapterDir.mkpath(".");
 
     QList<QUrl> imageUrlList;
@@ -130,14 +134,12 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
                 continue;
 
             QString imageUrl(image->getArgValue("data-src"));
-            qDebug() << imageUrl;
             if (imageUrl.startsWith("lel"))
                 imageUrlList.append(QUrl(imageUrl));
         }
     }
 
     for (int i = 0; i < imageUrlList.size(); ++i) {
-        qDebug() << imageUrlList.at(i);
         QFile imageFile(chapterDir.absoluteFilePath(QString::number(i+1).rightJustified(2, '0') + ".png"));
 
         if (imageFile.exists())

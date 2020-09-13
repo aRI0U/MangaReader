@@ -19,9 +19,9 @@
 #include "tabs/maintab/MainTab.h"
 #include "settings/SettingsWindow.h"
 
-//#include "utils/download/scansDownloaders.h"
 #include "utils/notifications/NotificationLayout.h"
 #include "utils/notifications/NotificationManager.h"
+#include "utils/scandl/scansDownloaders.h"
 
 class MainWindow : public QMainWindow
 {
@@ -59,7 +59,7 @@ private:
 
     NotificationLayout* notificationLayout;
 
-//    QList<AbstractScansDownloader *> downloaders;
+    QList<AbstractScansDownloader *> m_scanDownloaders;
 
     SettingsWindow *settingsWindow;
 
