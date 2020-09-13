@@ -7,7 +7,12 @@
 #include "utils/download/QDownloader.h"
 #include "utils/sql/DatabaseConnection.h"
 
+enum Downloader {
+    Scantrad
+};
+
 enum FileType {
+    ListHTML,
     MangaHTML,
     ChapterHTML,
     Image
@@ -30,16 +35,23 @@ class AbstractScansDownloader : public QObject
 public:
     explicit AbstractScansDownloader(QObject *parent = nullptr);
 
-    virtual void lookForNewChapters() {}
-    virtual void downloadChapters(const QString &mangaName) {}
+    void lookForNewChapters();
+
+    virtual void downloadChapters(const QString &mangaName) { return; }
 
 signals:
 
 protected:
-    virtual bool addWebsiteToDatabase() {}
+    void downloadMangaList();
+
+    virtual bool addWebsiteToDatabase() { return false; }
+    virtual void generateMangaList(const QString &htmlFile) { return; }
+
+    int m_id;
 
     QDir m_htmlDir;
     QUrl m_baseUrl;
+    QUrl m_listUrl;
 
     DatabaseConnection *m_database;
 

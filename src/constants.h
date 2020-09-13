@@ -30,7 +30,6 @@ namespace constants {
     const QString dbFilename = "database.db";
 
     // Scantrad constants
-    const int scantradId = 0;
     const QString scantradName = "scantrad";
     const QString scantradBaseUrl = "https://scantrad.net";
     const QString scantradAllMangasUrl = scantradBaseUrl + "/mangas";

@@ -130,11 +130,6 @@ void MainWindow::showFullScreenOrMaximized(bool checked) {
 }
 
 void MainWindow::updateLibrary() {
-    const QHash<QString, Downloader> followedMangas = {
-        {"one-piece", Scantrad},
-        {"hunter-x-hunter", Scantrad},
-    };  // TODO: retrieve this from SQL db or sth...
-
     QSettings settings;
 
     settings.beginGroup("Download");
@@ -142,11 +137,9 @@ void MainWindow::updateLibrary() {
     if (!settings.value("autoCheck", false).toBool())
         return;
 
-    for (const QString &manga : followedMangas.keys()) {  // TODO: use iterator
-        qDebug() << manga;
-        AbstractScansDownloader *downloader = m_scanDownloaders.at(followedMangas.value(manga));
-        downloader->downloadChapters(manga);
-    }
+    for (AbstractScansDownloader *downloader : m_scanDownloaders) {
+        downloader->lookForNewChapters();
+    };
 
     settings.endGroup();
 }

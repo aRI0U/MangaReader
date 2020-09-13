@@ -19,3 +19,22 @@ AbstractScansDownloader::AbstractScansDownloader(QObject *parent)
       m_downloader(new QDownloader(this))
 {
 }
+
+void AbstractScansDownloader::lookForNewChapters() {
+    QSqlQuery *query = m_database->followedMangas(m_id);
+
+    while (query->next()) {
+        QMap<QString, QVariant> manga(query->boundValues());
+        qDebug() << manga.value("FullName") << manga.value("urlName");
+    }
+}
+
+
+void AbstractScansDownloader::downloadMangaList() {
+    QString htmlFile = m_htmlDir.absoluteFilePath("list.html");
+
+    if (QFile::exists(htmlFile))
+        generateMangaList(htmlFile);
+    else
+        m_downloader->download(m_listUrl, htmlFile, FileType::ListHTML);
+}

@@ -2,10 +2,15 @@
 
 ScantradDownloader::ScantradDownloader(QObject *parent)
     : AbstractScansDownloader(parent)
+//      m_baseUrl(constants::scantradBaseUrl),
+//      m_listUrl(constants::scantradAllMangasUrl)
 {
+    m_id = Downloader::Scantrad;
+
     addWebsiteToDatabase();  // TODO put this in base class
 
     m_baseUrl = QUrl(constants::scantradBaseUrl);
+    m_listUrl = QUrl(constants::scantradAllMangasUrl);
 
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
     QString dirName = "html_" + constants::scantradName;
@@ -17,16 +22,14 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 
     connect(m_downloader, &QDownloader::downloadTerminated,
             this, &ScantradDownloader::downloadFinished);
+
+    downloadMangaList();
 }
 
-
-void ScantradDownloader::lookForNewChapters() {
-
-}
 
 void ScantradDownloader::downloadChapters(const QString &mangaName) {
     QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaName));
-    QUrl mangaUrl(m_baseUrl.resolved(QUrl(mangaName)));
+    QUrl mangaUrl(constants::scantradMangaUrlFormat.arg(mangaName));
     QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
 
     if (!mangaAuxDir.mkpath("."))
@@ -48,6 +51,9 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
     QFile targetFile(download->targetFile());
 
     switch (download->kind()) {
+        case FileType::ListHTML:
+            generateMangaList(download->targetFile());
+            break;
         case FileType::MangaHTML:
             extractChaptersFromHtml(download->targetUrl(), targetFile);
             break;
@@ -166,11 +172,31 @@ void ScantradDownloader::downloadChapter(const QDir &dir, const Chapter &chapter
 
 
 bool ScantradDownloader::addWebsiteToDatabase() {
-    qDebug() << "pouet";
-    return m_database->addWebsiteToDatabase(constants::scantradId,
+    return m_database->addWebsiteToDatabase(m_id,
                                             constants::scantradName,
                                             constants::scantradBaseUrl,
                                             constants::scantradAllMangasUrl,
                                             constants::scantradMangaUrlFormat,
                                             constants::scantradChapterUrlFormat);
+}
+
+void ScantradDownloader::generateMangaList(const QString &htmlFile) {
+    QSgml html(htmlFile);
+
+    QList<QSgmlTag *> elements;
+
+    html.getElementsByAttribute("class", "home-manga", &elements);
+    qDebug() << htmlFile << elements;
+
+    for (QSgmlTag *elem : elements)
+        qDebug() << elem->find("div", "class", "hmi-titre")->getText();
+
+    QStringList names = {"One Piece", "Hunter x Hunter", "The Seven Deadly Sins"};
+    QStringList hrefs = {"/one-piece", "/hunter-x-hunter", "/seven-deadly-sins"};
+
+    for (int i=0; i<names.count(); ++i) {
+        QUrl url = m_baseUrl.resolved(hrefs.at(i));
+        QString name = names.at(i);
+        m_database->insertManga(url.url(), name, m_id);
+    }
 }

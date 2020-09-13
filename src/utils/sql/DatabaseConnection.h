@@ -22,6 +22,9 @@ public:
                               const QString &mangaUrlFormat,
                               const QString &chapterUrlFormat);
 
+    QSqlQuery *followedMangas(const int website) const;
+    bool insertManga(const QString &url, const QString &name, const int website);
+
 signals:
 
 private:
