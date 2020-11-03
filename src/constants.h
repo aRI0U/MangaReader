@@ -33,8 +33,6 @@ namespace constants {
     const QString scantradName = "scantrad";
     const QString scantradBaseUrl = "https://scantrad.net";
     const QString scantradAllMangasUrl = scantradBaseUrl + "/mangas";
-    const QString scantradMangaUrlFormat = scantradBaseUrl + "/%1";
-    const QString scantradChapterUrlFormat = scantradBaseUrl + "/mangas/%1/%2";
 
     // Manga name mappings (TEMP)
     const QHash<QString, QString> mappings = {

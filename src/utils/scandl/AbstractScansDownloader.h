@@ -37,7 +37,7 @@ public:
 
     void lookForNewChapters();
 
-    virtual void downloadChapters(const QString &mangaName) { return; }
+    virtual void downloadChapters(const QString &mangaName, const QUrl &mangaUrl) { return; }
 
 signals:
 

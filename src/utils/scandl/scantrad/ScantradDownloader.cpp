@@ -27,9 +27,8 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 }
 
 
-void ScantradDownloader::downloadChapters(const QString &mangaName) {
+void ScantradDownloader::downloadChapters(const QString &mangaName, const QUrl &mangaUrl) {
     QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaName));
-    QUrl mangaUrl(constants::scantradMangaUrlFormat.arg(mangaName));
     QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
 
     if (!mangaAuxDir.mkpath("."))
@@ -175,9 +174,7 @@ bool ScantradDownloader::addWebsiteToDatabase() {
     return m_database->addWebsiteToDatabase(m_id,
                                             constants::scantradName,
                                             constants::scantradBaseUrl,
-                                            constants::scantradAllMangasUrl,
-                                            constants::scantradMangaUrlFormat,
-                                            constants::scantradChapterUrlFormat);
+                                            constants::scantradAllMangasUrl);
 }
 
 void ScantradDownloader::generateMangaList(const QString &htmlFile) {

@@ -15,35 +15,32 @@ DatabaseConnection::DatabaseConnection(QObject *parent) : QObject(parent)
 bool DatabaseConnection::addWebsiteToDatabase(const int id,
                                               const QString &name,
                                               const QString &baseUrl,
-                                              const QString &allMangasUrl,
-                                              const QString &mangaUrlFormat,
-                                              const QString &chapterUrlFormat) {
+                                              const QString &allMangasUrl) {
     QSqlQuery query(db);
-    query.prepare("INSERT OR IGNORE INTO Websites (ID, Name, BaseUrl, AllMangasUrl, MangaUrlFormat, ChapterUrlFormat)"
-                  "VALUES (:ID, :Name, :BaseUrl, :AllMangasUrl, :MangaUrlFormat, :ChapterUrlFormat)");
+    query.prepare("INSERT OR IGNORE INTO Websites (ID, Name, BaseUrl, AllMangasUrl)"
+                  "VALUES (:ID, :Name, :BaseUrl, :AllMangasUrl)");
     query.bindValue(":ID", id);
     query.bindValue(":Name", name);
     query.bindValue(":BaseUrl", baseUrl);
     query.bindValue(":AllMangasUrl", allMangasUrl);
-    query.bindValue(":MangaUrlFormat", mangaUrlFormat);
-    query.bindValue(":ChapterUrlFormat", chapterUrlFormat);
     query.exec();
 
     return (db.transaction() && db.commit());
 }
 
 QSqlQuery *DatabaseConnection::followedMangas(const int website) const {
-    QSqlQuery *query = new QSqlQuery();
-    query->prepare("SELECT FullName, UrlName, LastDownload FROM Mangas"
-                  "WHERE Website = :website");
+    QSqlQuery *query = new QSqlQuery(db);
+    qDebug() << db.isOpen() << db.isValid() << db.lastError();
+    query->prepare("SELECT Name FROM Websites");
+                  // "WHERE Website = :website");
     query->bindValue(":website", website);
-    query->exec();
-
+    qDebug() << query->isActive() << query->isValid() << query->boundValue(0).toString();
+    qDebug() << query->lastError();
     return query;
 }
 
 bool DatabaseConnection::insertManga(const QString &url, const QString &name, const int website) {
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("INSERT OR IGNORE INTO Mangas (Name, Url, Website)"
                   "VALUES (:name, :url, :website)");
     query.bindValue(":name", name);
@@ -68,8 +65,6 @@ bool DatabaseConnection::createDatabase() {
 "                    Name           VARCHAR(32)     NOT NULL,                   "
 "                    BaseUrl		VARCHAR(256)	NOT NULL,                   "
 "                    AllMangasUrl	VARCHAR(256)	NOT NULL,                   "
-"                    MangaUrlFormat	VARCHAR(256)	NOT NULL,                   "
-"                    ChapterUrlFormat VARCHAR(256)	NOT NULL,                   "
 "                    PRIMARY KEY (ID)                                           "
 "                    UNIQUE(Name)                                               "
 "                );                                                             "
@@ -105,7 +100,9 @@ bool DatabaseConnection::createDatabase() {
 "                    Manga          UNSIGNED INT	NOT NULL,                   "
 "                    No             UNSIGNED INT	NOT NULL,                   "
 "                    Title          VARCHAR(256),                               "
+"                    Url            VARCHAR(256),                               "
 "                    Complete       BOOL            DEFAULT false,              "
+"                    Read           BOOL            DEFAULT false,              "
 "                    DownloadDate	DATETIME        DEFAULT CURRENT_TIMESTAMP,  "
 "                    PRIMARY KEY (ID),                                          "
 "                    FOREIGN KEY (Manga) REFERENCES Mangas(ID)                  "
