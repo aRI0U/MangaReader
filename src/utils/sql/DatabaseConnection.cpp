@@ -4,7 +4,6 @@ DatabaseConnection::DatabaseConnection(QObject *parent) : QObject(parent)
 {
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
     QString dbPath(localDataLocation.absoluteFilePath(constants::dbFilename));
-
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
 
@@ -17,7 +16,7 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
                                               const QString &baseUrl,
                                               const QString &allMangasUrl) {
     QSqlQuery query(db);
-    query.prepare("INSERT OR IGNORE INTO Websites (ID, Name, BaseUrl, AllMangasUrl)"
+    query.prepare("INSERT OR IGNORE INTO Websites (ID, Name, BaseUrl, AllMangasUrl) "
                   "VALUES (:ID, :Name, :BaseUrl, :AllMangasUrl)");
     query.bindValue(":ID", id);
     query.bindValue(":Name", name);
@@ -30,18 +29,17 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
 
 QSqlQuery *DatabaseConnection::followedMangas(const int website) const {
     QSqlQuery *query = new QSqlQuery(db);
-    qDebug() << db.isOpen() << db.isValid() << db.lastError();
-    query->prepare("SELECT Name FROM Websites");
-                  // "WHERE Website = :website");
+    query->prepare("SELECT ID, Name, Url FROM Mangas "
+                   "WHERE Website = :website "
+                   "AND FOLLOW = true");
     query->bindValue(":website", website);
-    qDebug() << query->isActive() << query->isValid() << query->boundValue(0).toString();
-    qDebug() << query->lastError();
+    query->exec();
     return query;
 }
 
 bool DatabaseConnection::insertManga(const QString &url, const QString &name, const int website) {
     QSqlQuery query(db);
-    query.prepare("INSERT OR IGNORE INTO Mangas (Name, Url, Website)"
+    query.prepare("INSERT OR IGNORE INTO Mangas (Name, Url, Website) "
                   "VALUES (:name, :url, :website)");
     query.bindValue(":name", name);
     query.bindValue(":url", url);

@@ -24,8 +24,7 @@ void AbstractScansDownloader::lookForNewChapters() {
     QSqlQuery *query = m_database->followedMangas(m_id);
     qDebug() << "look" << m_id;
     while (query->next()) {
-        QMap<QString, QVariant> manga(query->boundValues());
-        qDebug() << manga.value("FullName") << manga.value("urlName");
+        qDebug() << query->value("ID") << query->value("Name") << query->value("Url");
     }
 }
 
