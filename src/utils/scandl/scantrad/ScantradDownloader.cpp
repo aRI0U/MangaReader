@@ -28,17 +28,7 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 
 
 void ScantradDownloader::downloadChapters(const QString &mangaName, const QUrl &mangaUrl) {
-    QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaName));
-    QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
-
-    if (!mangaAuxDir.mkpath("."))
-        qDebug() << "Failed to create dir" << mangaAuxDir;
-
-    // eventually download html
-    if (htmlFile.exists())
-        extractChaptersFromHtml(mangaUrl, htmlFile);
-    else
-        m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML);
+    qDebug() << "TODO: not implemented";
 }
 
 void ScantradDownloader::downloadFinished(QDownload *download) {
@@ -101,7 +91,7 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &ht
 
         else {
             chapter.url = mangaUrl.resolved(QUrl(urlElement->getArgValue("href")));
-            downloadChapter(parentDir, chapter);
+            addChapterToDatabase(mangaUrl, chapter);
         }
     }
 }
@@ -178,6 +168,7 @@ bool ScantradDownloader::addWebsiteToDatabase() {
 }
 
 void ScantradDownloader::generateMangaList(const QString &htmlFile) {
+    // TODO: make it clean
     QSgml html(htmlFile);
 
     QList<QSgmlTag *> elements;

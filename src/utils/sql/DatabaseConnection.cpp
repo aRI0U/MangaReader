@@ -29,7 +29,7 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
 
 QSqlQuery *DatabaseConnection::followedMangas(const int website) const {
     QSqlQuery *query = new QSqlQuery(db);
-    query->prepare("SELECT ID, Name, Url FROM Mangas "
+    query->prepare("SELECT Name, Url FROM Mangas "
                    "WHERE Website = :website "
                    "AND FOLLOW = true");
     query->bindValue(":website", website);
@@ -47,6 +47,29 @@ bool DatabaseConnection::insertManga(const QString &url, const QString &name, co
     query.exec();
 
     return (db.transaction() && db.commit());
+}
+
+bool DatabaseConnection::addChapterToDatabase(const int manga, const int number, const QString &name, const QUrl &url) {
+    QSqlQuery query(db);
+    query.prepare("INSERT OR IGNORE INTO Chapters (Manga, No, Title, Url) "
+                  "VALUES (:manga, :number, :name, :url)");
+    query.bindValue(":manga", manga);
+    query.bindValue(":number", number);
+    query.bindValue(":name", name);
+    query.bindValue(":url", url.url());
+    query.exec();
+
+    return (db.transaction() && db.commit());
+}
+
+int DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
+    QSqlQuery query(db);
+    query.prepare("SELECT DISTINCT ID FROM Mangas "
+                  "WHERE Url = :url");
+    query.bindValue(":url", mangaUrl.url());
+    query.exec();
+    query.next();
+    return query.value("ID").toInt();
 }
 
 

@@ -6,6 +6,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QUrl>
 
 #include "constants.h"
 
@@ -22,6 +23,10 @@ public:
 
     QSqlQuery *followedMangas(const int website) const;
     bool insertManga(const QString &url, const QString &name, const int website);
+    bool addChapterToDatabase(const int manga, const int number, const QString &name, const QUrl &url);
+
+    int getMangaId(const QUrl &mangaUrl) const;
+
 
 signals:
 
