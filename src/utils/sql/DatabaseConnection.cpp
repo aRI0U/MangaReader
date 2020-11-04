@@ -127,6 +127,7 @@ bool DatabaseConnection::createDatabase() {
 "                    DownloadDate	DATETIME        DEFAULT CURRENT_TIMESTAMP,  "
 "                    PRIMARY KEY (ID),                                          "
 "                    FOREIGN KEY (Manga) REFERENCES Mangas(ID)                  "
+"                    UNIQUE (No, Title, Url)                                    "
 "                );                                                             "
     );
     return (db.transaction() && db.commit());

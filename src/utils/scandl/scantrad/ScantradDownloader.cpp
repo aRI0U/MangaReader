@@ -27,7 +27,7 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 }
 
 
-void ScantradDownloader::downloadChapters(const QString &mangaName, const QUrl &mangaUrl) {
+void ScantradDownloader::downloadNewChapters() {
     qDebug() << "TODO: not implemented";
 }
 

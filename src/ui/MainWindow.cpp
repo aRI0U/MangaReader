@@ -141,6 +141,13 @@ void MainWindow::updateLibrary() {
         downloader->lookForNewChapters();
     };
 
+    if (!settings.value("autoDownload", true).toBool())
+        return;
+
+    for (AbstractScansDownloader *downloader : m_scanDownloaders) {
+        downloader->downloadNewChapters();
+    }
+
     settings.endGroup();
 }
 
