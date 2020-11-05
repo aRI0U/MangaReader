@@ -29,13 +29,23 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
 
 QSqlQuery *DatabaseConnection::followedMangas(const int website) const {
     QSqlQuery *query = new QSqlQuery(db);
-    query->prepare("SELECT Name, Url FROM Mangas "
+    query->prepare("SELECT ID, Name, Url FROM Mangas "
                    "WHERE Website = :website "
-                   "AND FOLLOW = true");
+                   "AND Follow");
     query->bindValue(":website", website);
     query->exec();
     return query;
 }
+
+QSqlQuery *DatabaseConnection::chaptersToDownload() const {
+    QSqlQuery *query = new QSqlQuery(db);
+    query->prepare("SELECT Chapters.ID, Chapters.Manga, Mangas.Name, No, Title, Chapters.Url FROM Chapters "
+                   "JOIN Mangas ON Mangas.ID = Chapters.Manga "
+                   "WHERE NOT Complete");
+    query->exec();
+    return query;
+}
+
 
 bool DatabaseConnection::insertManga(const QString &url, const QString &name, const int website) {
     QSqlQuery query(db);
@@ -64,12 +74,34 @@ bool DatabaseConnection::addChapterToDatabase(const int manga, const int number,
 
 int DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     QSqlQuery query(db);
-    query.prepare("SELECT DISTINCT ID FROM Mangas "
+    query.prepare("SELECT ID FROM Mangas "
                   "WHERE Url = :url");
     query.bindValue(":url", mangaUrl.url());
     query.exec();
     query.next();
     return query.value("ID").toInt();
+}
+
+bool DatabaseConnection::markAsComplete(const uint chapterId) {
+    QSqlQuery query(db);
+    query.prepare("UPDATE Chapters "
+                  "SET Complete = True, "
+                  "    DownloadDate = DATETIME() "
+                  "WHERE ID = :id");
+    query.bindValue(":id", chapterId);
+    query.exec();
+
+    query.prepare("UPDATE Mangas "
+                  "SET LastDownload = DATETIME() "
+                  "WHERE EXISTS ("
+                  "    SELECT Manga FROM Chapters "
+                  "    WHERE Chapters.Manga = Mangas.ID "
+                  "    AND Chapters.ID = :id"
+                  ")");
+    query.bindValue(":id", chapterId);
+    query.exec();
+    qDebug() << query.lastError();
+    return (db.transaction() && db.commit());
 }
 
 
@@ -124,7 +156,8 @@ bool DatabaseConnection::createDatabase() {
 "                    Url            VARCHAR(256),                               "
 "                    Complete       BOOL            DEFAULT false,              "
 "                    Read           BOOL            DEFAULT false,              "
-"                    DownloadDate	DATETIME        DEFAULT CURRENT_TIMESTAMP,  "
+"                    ReleaseDate	DATETIME        DEFAULT CURRENT_TIMESTAMP,  "
+"                    DownloadDate   DATETIME,                                   "
 "                    PRIMARY KEY (ID),                                          "
 "                    FOREIGN KEY (Manga) REFERENCES Mangas(ID)                  "
 "                    UNIQUE (No, Title, Url)                                    "

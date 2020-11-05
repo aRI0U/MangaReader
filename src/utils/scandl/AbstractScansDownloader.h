@@ -21,6 +21,7 @@ enum FileType {
 struct Chapter {
     unsigned int number;
     QString name;
+    QString manga;
     QUrl url;
 };
 
@@ -37,15 +38,16 @@ public:
 
     void lookForNewChapters();
 
-    virtual void downloadNewChapters() { return; }
+    void downloadNewChapters();
 
 signals:
 
 protected slots:
     virtual void downloadFinished(QDownload *download) { return; }
-    virtual void downloadChapter(const QDir &dir, const Chapter &chapter) { return; }
+    virtual void downloadChapter(const QString &file, const Chapter &chapter) { return; }
     virtual void extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) { return; }
     virtual void extractImagesFromChapter(QFile &chapterFile) { return; }
+    void imageDownloaded(uint chapterId);
 
 protected:
     void downloadMangaList();
@@ -66,6 +68,13 @@ protected:
     DatabaseConnection *m_database;
 
     QDownloader *m_downloader;
+
+    // mappings
+    QHash<QString, uint> m_dirnameToChapterId;
+    QHash<QString, uint> m_htmlToChapterId;
+
+    QHash<uint, uint> m_nbImagesToDownload;
+    QHash<uint, Chapter> m_chaptersList;
 };
 
 #endif // ABSTRACTSCANSDOWNLOADER_H

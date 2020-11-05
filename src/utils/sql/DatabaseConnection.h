@@ -22,10 +22,13 @@ public:
                               const QString &allMangasUrl);
 
     QSqlQuery *followedMangas(const int website) const;
+    QSqlQuery *chaptersToDownload() const;
+
     bool insertManga(const QString &url, const QString &name, const int website);
     bool addChapterToDatabase(const int manga, const int number, const QString &name, const QUrl &url);
 
     int getMangaId(const QUrl &mangaUrl) const;
+    bool markAsComplete(const uint chapterId);
 
 
 signals:

@@ -22,14 +22,14 @@ AbstractScansDownloader::AbstractScansDownloader(QObject *parent)
 
 void AbstractScansDownloader::lookForNewChapters() {
     QSqlQuery *query = m_database->followedMangas(m_id);
-    qDebug() << "look" << m_id;
     while (query->next()) {
+        qDebug() << "Looking for new chapters of " << query->value("Name").toString();
         // retrieve relevant information from database
-        QString mangaName(query->value("Name").toString());
+        QString mangaId(query->value("ID").toString());
         QUrl mangaUrl(query->value("Url").toString());
 
         // look for html file
-        QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaName));
+        QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaId));
         QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
 
         if (!mangaAuxDir.mkpath("."))
@@ -40,6 +40,39 @@ void AbstractScansDownloader::lookForNewChapters() {
             extractChaptersFromHtml(mangaUrl, htmlFile);
         else
             m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML);
+    }
+}
+
+void AbstractScansDownloader::downloadNewChapters() {
+    QSqlQuery *query = m_database->chaptersToDownload();
+
+    while (query->next()) {
+        uint chapterId = query->value("ID").toUInt();
+        // get chapter metadata
+        Chapter chapter;
+        chapter.number = query->value("No").toInt();
+        chapter.name = query->value("Title").toString();
+        chapter.manga = query->value("Name").toString();
+        chapter.url = QUrl(query->value("Url").toString());
+
+        // choose a file to store html
+        QDir mangaHtmlDir(m_htmlDir.absoluteFilePath(query->value("Manga").toString()));
+        QString html(mangaHtmlDir.absoluteFilePath(query->value("ID").toString() + ".html"));
+
+        // add chapter to mappings
+        m_chaptersList.insert(chapterId, chapter);
+        m_htmlToChapterId.insert(html, chapterId);
+
+        // download
+        downloadChapter(html, chapter);
+    }
+}
+
+
+void AbstractScansDownloader::imageDownloaded(uint chapterId) {
+    if (--m_nbImagesToDownload[chapterId] == 0) {
+        m_nbImagesToDownload.remove(chapterId);
+        m_database->markAsComplete(chapterId);
     }
 }
 
