@@ -36,7 +36,6 @@ void AbstractScansDownloader::lookForNewChapters() {
             qDebug() << "Failed to create dir" << mangaAuxDir;
 
         // download main.html
-        qDebug() << mangaId;
         m_htmlToMangaId.insert(htmlFile.fileName(), mangaId.toInt());
         m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML);
     }

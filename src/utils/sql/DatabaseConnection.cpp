@@ -34,12 +34,13 @@ QSqlQuery *DatabaseConnection::followedMangas(const uint website, const uint del
     QSqlQuery *query = new QSqlQuery(db);
     query->prepare("SELECT ID, Name, Url FROM Mangas "
                    "WHERE Website = :website "
-                   "AND Follow" + delayCondition);
+                   "AND Follow "
+                   "AND LastDownload IS NULL "
+                   "    OR STRFTIME('%s', 'now') - strftime('%s', LastDownload) > :delay");
     query->bindValue(":website", website);
-    if (delay > 0)
-        query->bindValue(":delay", delay);
+    query->bindValue(":delay", delay);
     query->exec();
-    qDebug() << query->lastError();
+
     return query;
 }
 
@@ -88,15 +89,6 @@ int DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     return query.value("ID").toInt();
 }
 
-bool DatabaseConnection::isUpToDate(const uint mangaId) {
-    QSqlQuery query(db);
-    query.prepare("SELECT ID FROM Mangas "
-                  "WHERE ID = :id "
-                  "AND LastDownload");
-    return true;
-}
-
-
 bool DatabaseConnection::markAsComplete(const uint chapterId) {
     QSqlQuery query(db);
     query.prepare("UPDATE Chapters "
@@ -117,7 +109,6 @@ bool DatabaseConnection::updateLastDownloadDatetime(const uint mangaId) {
                   "WHERE ID = :id");
     query.bindValue(":id", mangaId);
     query.exec();
-    qDebug() << query.lastError();
 
     return (db.transaction() && db.commit());
 }

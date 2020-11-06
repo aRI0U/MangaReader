@@ -28,7 +28,6 @@ public:
     bool addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
 
     int getMangaId(const QUrl &mangaUrl) const;
-    bool isUpToDate(const uint mangaId);
     bool markAsComplete(const uint chapterId);
     bool updateLastDownloadDatetime(const uint mangaId);
 
