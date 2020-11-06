@@ -86,5 +86,5 @@ void AbstractScansDownloader::downloadMangaList() {
 
 bool AbstractScansDownloader::addChapterToDatabase(const QUrl &mangaUrl, const Chapter &chapter) {
     int mangaId = m_database->getMangaId(mangaUrl);
-    m_database->addChapterToDatabase(mangaId, chapter.number, chapter.name, chapter.url);
+    return m_database->addChapterToDatabase(mangaId, chapter.number, chapter.name, chapter.url);
 }

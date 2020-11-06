@@ -43,10 +43,10 @@ public:
 signals:
 
 protected slots:
-    virtual void downloadFinished(QDownload *download) { return; }
-    virtual void downloadChapter(const QString &file, const Chapter &chapter) { return; }
-    virtual void extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) { return; }
-    virtual void extractImagesFromChapter(QFile &chapterFile) { return; }
+    virtual void downloadFinished(QDownload*) { }
+    virtual void downloadChapter(const QString&, const Chapter&) { }
+    virtual void extractChaptersFromHtml(const QUrl&, QFile&) { }
+    virtual void extractImagesFromChapter(QFile&) { }
     void imageDownloaded(uint chapterId);
 
 protected:
@@ -56,7 +56,7 @@ protected:
 
     virtual bool addWebsiteToDatabase() { return false; }
 
-    virtual void generateMangaList(const QString &htmlFile) { return; }
+    virtual void generateMangaList(const QString&) {}
 
 
     int m_id;
