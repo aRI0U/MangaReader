@@ -21,14 +21,16 @@ public:
                               const QString &baseUrl,
                               const QString &allMangasUrl);
 
-    QSqlQuery *followedMangas(const int website) const;
+    QSqlQuery *followedMangas(const uint website, const uint delay = 0) const;
     QSqlQuery *chaptersToDownload() const;
 
     bool insertManga(const QString &url, const QString &name, const int website);
-    bool addChapterToDatabase(const int manga, const int number, const QString &name, const QUrl &url);
+    bool addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
 
     int getMangaId(const QUrl &mangaUrl) const;
+    bool isUpToDate(const uint mangaId);
     bool markAsComplete(const uint chapterId);
+    bool updateLastDownloadDatetime(const uint mangaId);
 
 
 signals:

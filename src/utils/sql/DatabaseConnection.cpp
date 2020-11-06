@@ -27,13 +27,19 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
     return (db.transaction() && db.commit());
 }
 
-QSqlQuery *DatabaseConnection::followedMangas(const int website) const {
+QSqlQuery *DatabaseConnection::followedMangas(const uint website, const uint delay) const {
+    QString delayCondition = (delay > 0)
+            ? " AND LastDownload IS NULL OR STRFTIME('%s', 'now') - strftime('%s', LastDownload) > :delay"
+            : "";
     QSqlQuery *query = new QSqlQuery(db);
     query->prepare("SELECT ID, Name, Url FROM Mangas "
                    "WHERE Website = :website "
-                   "AND Follow");
+                   "AND Follow" + delayCondition);
     query->bindValue(":website", website);
+    if (delay > 0)
+        query->bindValue(":delay", delay);
     query->exec();
+    qDebug() << query->lastError();
     return query;
 }
 
@@ -59,7 +65,7 @@ bool DatabaseConnection::insertManga(const QString &url, const QString &name, co
     return (db.transaction() && db.commit());
 }
 
-bool DatabaseConnection::addChapterToDatabase(const int manga, const int number, const QString &name, const QUrl &url) {
+bool DatabaseConnection::addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url) {
     QSqlQuery query(db);
     query.prepare("INSERT OR IGNORE INTO Chapters (Manga, No, Title, Url) "
                   "VALUES (:manga, :number, :name, :url)");
@@ -82,6 +88,15 @@ int DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     return query.value("ID").toInt();
 }
 
+bool DatabaseConnection::isUpToDate(const uint mangaId) {
+    QSqlQuery query(db);
+    query.prepare("SELECT ID FROM Mangas "
+                  "WHERE ID = :id "
+                  "AND LastDownload");
+    return true;
+}
+
+
 bool DatabaseConnection::markAsComplete(const uint chapterId) {
     QSqlQuery query(db);
     query.prepare("UPDATE Chapters "
@@ -91,16 +106,19 @@ bool DatabaseConnection::markAsComplete(const uint chapterId) {
     query.bindValue(":id", chapterId);
     query.exec();
 
+    return (db.transaction() && db.commit());
+}
+
+bool DatabaseConnection::updateLastDownloadDatetime(const uint mangaId) {
+    QSqlQuery query(db);
+
     query.prepare("UPDATE Mangas "
                   "SET LastDownload = DATETIME() "
-                  "WHERE EXISTS ("
-                  "    SELECT Manga FROM Chapters "
-                  "    WHERE Chapters.Manga = Mangas.ID "
-                  "    AND Chapters.ID = :id"
-                  ")");
-    query.bindValue(":id", chapterId);
+                  "WHERE ID = :id");
+    query.bindValue(":id", mangaId);
     query.exec();
     qDebug() << query.lastError();
+
     return (db.transaction() && db.commit());
 }
 

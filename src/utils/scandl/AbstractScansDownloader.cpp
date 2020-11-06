@@ -21,7 +21,7 @@ AbstractScansDownloader::AbstractScansDownloader(QObject *parent)
 }
 
 void AbstractScansDownloader::lookForNewChapters() {
-    QSqlQuery *query = m_database->followedMangas(m_id);
+    QSqlQuery *query = m_database->followedMangas(m_id, constants::refreshPeriod);
     while (query->next()) {
         qDebug() << "Looking for new chapters of " << query->value("Name").toString();
         // retrieve relevant information from database
@@ -35,11 +35,10 @@ void AbstractScansDownloader::lookForNewChapters() {
         if (!mangaAuxDir.mkpath("."))
             qDebug() << "Failed to create dir" << mangaAuxDir;
 
-        // TODO: find condition for redownloading
-        if (htmlFile.exists())
-            extractChaptersFromHtml(mangaUrl, htmlFile);
-        else
-            m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML);
+        // download main.html
+        qDebug() << mangaId;
+        m_htmlToMangaId.insert(htmlFile.fileName(), mangaId.toInt());
+        m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML);
     }
 }
 

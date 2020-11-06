@@ -37,14 +37,16 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
             generateMangaList(download->targetFile());
             break;
         case FileType::MangaHTML:
+            m_database->updateLastDownloadDatetime(m_htmlToMangaId.take(targetFile.fileName()));
             extractChaptersFromHtml(download->targetUrl(), targetFile);
             break;
         case FileType::ChapterHTML:
             extractImagesFromChapter(targetFile);
             break;
         case FileType::Image:
-            uint chapterId = m_dirnameToChapterId.value(QFileInfo(targetFile).absolutePath());
-            imageDownloaded(chapterId);
+            imageDownloaded(m_dirnameToChapterId.value(QFileInfo(targetFile).absolutePath()));
+            break;
+        default:
             break;
     }
 }

@@ -23,11 +23,12 @@ namespace constants {
     // Fonts
     const QFont MangaTitleFont = QFont("Arial", 20, QFont::Bold);
 
-    // where data is stored
-//    const QString localDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-
     // database
     const QString dbFilename = "database.db";
+
+    /* SCAN DOWNLOADING */
+
+    const int refreshPeriod = 6*3600;  // 6 hours
 
     // Scantrad constants
     const QString scantradName = "scantrad";
