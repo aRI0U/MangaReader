@@ -99,10 +99,7 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
 
     // TODO use QStringBuilder + format language
 
-    QString chapterName = tr("Chapitre ")
-            + QString::number(chapter.number)
-            + tr(" : ")
-            + chapter.name;
+    QString chapterName = constants::chapterFolderTemplate.arg(chapter.number).arg(chapter.name);
 
     QSettings settings;
     QDir libraryDir(settings.value("Library/scansPath").toString());
