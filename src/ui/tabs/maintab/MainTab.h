@@ -18,14 +18,17 @@ public:
     explicit MainTab(QTabWidget* parent = nullptr);
 
 public slots:
-    void openLibrary(QDir scansPath);
     void clickedManga(QDir mangaDir);
+    void openLibrary(QDir scansPath);
+    void refreshLibrary(const QDir &scansPath);
 
 signals:
     void reportLibraryOpen(QString message);
 
 private:
-    QTabWidget* parent;
+    QTabWidget *parent;
+    MangaList *m_mangaList;
+    QStringList m_foldersList;
 };
 
 #endif // MAINTAB_H

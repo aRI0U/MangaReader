@@ -16,9 +16,7 @@ MangaList::MangaList(int margin, int hSpacing, int vSpacing)
 
 MangaList::~MangaList()
 {
-    QLayoutItem *item;
-    while ((item = takeAt(0)))
-        delete item;
+    clean();
 }
 
 void MangaList::addItem(QLayoutItem *item)
@@ -146,5 +144,14 @@ int MangaList::smartSpacing(QStyle::PixelMetric pm) const
         return pw->style()->pixelMetric(pm, nullptr, pw);
     } else {
         return static_cast<QLayout *>(parent)->spacing();
+    }
+}
+
+
+void MangaList::clean() {
+    QLayoutItem *item;
+    while ((item = takeAt(0))) {
+        removeItem(item);
+        delete item;
     }
 }

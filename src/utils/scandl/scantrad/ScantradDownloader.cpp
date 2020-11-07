@@ -99,16 +99,14 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
 
     // TODO use QStringBuilder + format language
 
-    QString chapterName = tr("Chapitre ")
-            + QString::number(chapter.number)
-            + tr(" : ")
-            + chapter.name;
+    QString chapterName = constants::chapterFolderTemplate.arg(chapter.number).arg(chapter.name);
 
     QSettings settings;
     QDir libraryDir(settings.value("Library/scansPath").toString());
-    QDir chapterDir(libraryDir.absoluteFilePath(chapter.manga + "/" + chapterName));
+    QDir chapterDir(QDir(libraryDir.absoluteFilePath(chapter.manga)).absoluteFilePath(chapterName));
 
-    chapterDir.mkpath(".");
+    if (!chapterDir.mkpath("."))
+        qDebug() << "Failed to create folder" << chapterDir.absolutePath();
 
     // add mapping
     m_dirnameToChapterId.insert(chapterDir.absolutePath(), chapterId);
@@ -145,6 +143,8 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
 
         m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image);
     }
+    qDebug() << "signal";
+    emit chapterDownloaded();
 }
 
 void ScantradDownloader::downloadChapter(const QString &file, const Chapter &chapter) {

@@ -23,6 +23,12 @@ namespace constants {
     // Fonts
     const QFont MangaTitleFont = QFont("Arial", 20, QFont::Bold);
 
+    /* SCAN STORING */
+    // folder name template
+    const QString chapterFolderTemplate = QSysInfo::productType() == "windows"
+            ? "Chapitre %1_ %2"
+            : "Chapitre %1 : %2";
+
     // database
     const QString dbFilename = "database.db";
 

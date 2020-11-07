@@ -1,24 +1,34 @@
 #include "MainTab.h"
 
 MainTab::MainTab(QTabWidget* parent) :
-    parent(parent)
+    parent(parent),
+    m_mangaList(new MangaList(this))
 {
+    setLayout(m_mangaList);
 }
 
 void MainTab::openLibrary(const QDir scansPath) {
-    MangaList *mangaList = new MangaList;
-    for (const auto &dir : scansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        MangaEntry *mangaEntry = new MangaEntry(QDir(scansPath.filePath(dir)));
-        mangaList->addWidget(mangaEntry);
-        connect(mangaEntry, SIGNAL(clicked(QDir)),
-                this, SLOT(clickedManga(QDir)));
-    }
+    m_mangaList->clean();
+    m_foldersList = QStringList();
+    refreshLibrary(scansPath);
 
     setStyleSheet("background-color: lightblue;");
-    setLayout(mangaList);
     emit reportLibraryOpen(tr("Successfully opened library located at ") + scansPath.absolutePath());
 //    emit libraryOpen(scansPath.absolutePath());
 }
+
+void MainTab::refreshLibrary(const QDir &scansPath) {
+    for (const QString &dir : scansPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        if (m_foldersList.contains(dir))
+            continue;
+        m_foldersList.append(dir);
+        MangaEntry *mangaEntry = new MangaEntry(QDir(scansPath.filePath(dir)));
+        m_mangaList->addWidget(mangaEntry);
+        connect(mangaEntry, SIGNAL(clicked(QDir)),
+                this, SLOT(clickedManga(QDir)));
+    }
+}
+
 
 void MainTab::clickedManga(QDir mangaDir)
 {

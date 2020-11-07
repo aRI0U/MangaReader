@@ -27,6 +27,8 @@ public:
     QSize sizeHint() const override;
     QLayoutItem *takeAt(int index) override;
 
+    void clean();
+
 private:
     int doLayout(const QRect &rect, bool testOnly) const;
     int smartSpacing(QStyle::PixelMetric pm) const;

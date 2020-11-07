@@ -16,7 +16,6 @@ public:
     explicit ScantradDownloader(QObject *parent = nullptr);
 
 signals:
-    void chapterDownloaded(QString &chapterName);
 
 private slots:
     void downloadFinished(QDownload *download) override;
