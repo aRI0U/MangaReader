@@ -1,6 +1,10 @@
 # MangaReader
 
+## Notes
 
+### Windows installation
+
+- One need to install openSSL and put the dll in system32 directory. Look at [this link](https://stackoverflow.com/questions/20351155/how-can-i-enable-ssl-in-qt-windows-application) for more details.
 
 ## TODOs
 

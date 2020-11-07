@@ -42,9 +42,10 @@ void MainWindow::createCentralWidget() {
     connect(mainTab, SIGNAL(reportLibraryOpen(QString)),
             statusBar(), SLOT(showMessage(QString)));
 
-    // eventually open library
     QVariant scansPath = settings.value("Library/scansPath");
-    if (!scansPath.isNull())
+    if (scansPath.isNull())
+        openLibrary();
+    else
         mainTab->openLibrary(QDir(scansPath.toString()));
 }
 
@@ -94,7 +95,14 @@ void MainWindow::initializeNotificationsManager() {
 void MainWindow::initializeDownloaders() {
     m_scanDownloaders.clear();
     m_scanDownloaders << new ScantradDownloader(this);
+
+    // TODO: refresh library after downloading
+    for (int i=0; i<m_scanDownloaders.size(); ++i) {
+        connect(m_scanDownloaders.at(i), &AbstractScansDownloader::chapterDownloaded,
+                this, &MainWindow::refreshLibrary);
+    }
 }
+
 
 // SLOTS
 
@@ -102,6 +110,15 @@ void MainWindow::closeTab(int index) {
     if (index > 0)
         centralTabs->removeTab(index);
 }
+
+void MainWindow::refreshLibrary() {
+    QSettings settings;
+    // eventually open library
+    qDebug() << "refresh";
+    QString scansPath = settings.value("Library/scansPath").toString();
+    mainTab->refreshLibrary(QDir(scansPath));
+}
+
 
 void MainWindow::openLibrary() {
     // Let user select a folder
