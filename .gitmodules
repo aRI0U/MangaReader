@@ -1,0 +1,3 @@
+[submodule "src/utils/QPath"]
+	path = src/utils/QPath
+	url = https://github.com/aRI0U/QPath.git
