@@ -1,10 +1,9 @@
 #ifndef ABSTRACTSCANSDOWNLOADER_H
 #define ABSTRACTSCANSDOWNLOADER_H
 
-#include <QDir>
-
 #include "constants.h"
 #include "utils/download/QDownloader.h"
+#include "utils/QPath/QPath.h"
 #include "utils/sql/DatabaseConnection.h"
 
 enum Downloader {
@@ -62,7 +61,7 @@ protected:
 
     int m_id;
 
-    QDir m_htmlDir;
+    QPath m_htmlDir;
     QUrl m_baseUrl;
     QUrl m_listUrl;
 

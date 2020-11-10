@@ -1,3 +1,6 @@
-[submodule "src/utils/QPath"]
-	path = src/utils/QPath
+[submodule "src/libs/QDownload"]
+	path = src/libs/QDownload
+	url = https://github.com/aRI0U/QDownload.git
+[submodule "src/libs/QPath"]
+	path = src/libs/QPath
 	url = https://github.com/aRI0U/QPath.git

@@ -29,10 +29,11 @@ void AbstractScansDownloader::lookForNewChapters() {
         QUrl mangaUrl(query->value("Url").toString());
 
         // look for html file
-        QDir mangaAuxDir(m_htmlDir.absoluteFilePath(mangaId));
-        QFile htmlFile(mangaAuxDir.absoluteFilePath("main.html"));
+        QPath mangaAuxDir = m_htmlDir / mangaId;
+        qDebug() << mangaId;
+        QFile htmlFile(mangaAuxDir / "main.html");
 
-        if (!mangaAuxDir.mkpath("."))
+        if (!mangaAuxDir.mkdir())
             qDebug() << "Failed to create dir" << mangaAuxDir;
 
         // download main.html
@@ -54,8 +55,7 @@ void AbstractScansDownloader::downloadNewChapters() {
         chapter.url = QUrl(query->value("Url").toString());
 
         // choose a file to store html
-        QDir mangaHtmlDir(m_htmlDir.absoluteFilePath(query->value("Manga").toString()));
-        QString html(mangaHtmlDir.absoluteFilePath(query->value("ID").toString() + ".html"));
+        QPath html = m_htmlDir / query->value("Manga").toString() / (query->value("ID").toString() + ".html");
 
         // add chapter to mappings
         m_chaptersList.insert(chapterId, chapter);
@@ -76,7 +76,7 @@ void AbstractScansDownloader::imageDownloaded(uint chapterId) {
 
 
 void AbstractScansDownloader::downloadMangaList() {
-    QString htmlFile = m_htmlDir.absoluteFilePath("list.html");
+    QString htmlFile = m_htmlDir / "list.html";
 
     if (QFile::exists(htmlFile))
         generateMangaList(htmlFile);

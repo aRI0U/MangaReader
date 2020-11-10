@@ -16,6 +16,9 @@ DEFINES += QT_DEPRECATED_WARNINGS QT_USE_QSTRINGBUILDER
 INCLUDEPATH += $$PWD/src
 
 SOURCES += \
+    src/libs/QDownload/QDownload.cpp \
+    src/libs/QDownload/QDownloader.cpp \
+    src/libs/QPath/QPath.cpp \
     src/main.cpp \
     src/ui/MainWindow.cpp \
     src/ui/settings/SettingsWindow.cpp \
@@ -27,6 +30,7 @@ SOURCES += \
     src/ui/tabs/mangatab/MangaTab.cpp \
     src/ui/tabs/mangatab/PixmapLabel.cpp \
     src/ui/tabs/mangatab/Reader.cpp \
+    src/utils/QPath/QPath.cpp \
     src/utils/download/QDownload.cpp \
     src/utils/download/QDownloader.cpp \
     src/utils/scandl/AbstractScansDownloader.cpp \
@@ -41,6 +45,9 @@ SOURCES += \
 
 HEADERS += \
     src/constants.h \
+    src/libs/QDownload/QDownload.h \
+    src/libs/QDownload/QDownloader.h \
+    src/libs/QPath/QPath.h \
     src/ui/MainWindow.h \
     src/ui/settings/SettingsWindow.h \
     src/ui/tabs/Tab.h \
@@ -51,6 +58,7 @@ HEADERS += \
     src/ui/tabs/mangatab/MangaTab.h \
     src/ui/tabs/mangatab/PixmapLabel.h \
     src/ui/tabs/mangatab/Reader.h \
+    src/utils/QPath/QPath.h \
     src/utils/download/QDownload.h \
     src/utils/download/QDownloader.h \
     src/utils/scandl/AbstractScansDownloader.h \

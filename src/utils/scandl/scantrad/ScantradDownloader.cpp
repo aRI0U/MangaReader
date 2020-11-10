@@ -16,7 +16,7 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
     if (!localDataLocation.mkpath(dirName))
         qDebug() << "Failed to create path" << dirName;
 
-    m_htmlDir = QDir(QStandardPaths::locate(QStandardPaths::AppLocalDataLocation, dirName, QStandardPaths::LocateDirectory));
+    m_htmlDir = QPath(QStandardPaths::locate(QStandardPaths::AppLocalDataLocation, dirName, QStandardPaths::LocateDirectory));
 
     connect(m_downloader, &QDownloader::downloadTerminated,
             this, &ScantradDownloader::downloadFinished);
