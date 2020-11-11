@@ -77,7 +77,8 @@ void SettingsWindow::openDownloadSettings() {
     internalLayout->addWidget(view, 2, 0, 1, -1, Qt::AlignLeft);
 
     view->setModel(model);
-
+    view->horizontalHeader()->setStretchLastSection(true);
+    view->resizeColumnsToContents();
     view->show();
 
     // automatic download of last chapters
