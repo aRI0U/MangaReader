@@ -9,7 +9,9 @@
 class MangaSqlModel : public QSqlTableModel
 {
 public:
-    MangaSqlModel(QObject *parent = nullptr);
+    MangaSqlModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
+
+    static QSqlDatabase mangaDatabase();
 };
 
 #endif // MANGASQLMODEL_H

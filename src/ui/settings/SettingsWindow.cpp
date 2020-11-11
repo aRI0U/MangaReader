@@ -1,5 +1,6 @@
 #include "SettingsWindow.h"
 
+
 SettingsWindow::SettingsWindow(QWidget *parent)
     : QWidget(parent, Qt::Window),
       layout(new QHBoxLayout(this))
@@ -70,11 +71,12 @@ void SettingsWindow::openDownloadSettings() {
     internalLayout->addWidget(new QLabel(tr("Followed series:")), 0, 0, Qt::AlignLeft);
     internalLayout->addWidget(new QLabel("Available series:"), 1, 0, 1, -1, Qt::AlignLeft);
 
-    QTableView *view = new QTableView(this);
+    MangaSqlModel *model = new MangaSqlModel(this, MangaSqlModel::mangaDatabase());
 
-    view->horizontalHeader()->setStretchLastSection(true);
-    internalLayout->addWidget(view, 2, 0, 1, -1, Qt::AlignJustify);
-    view->setModel(new MangaSqlModel(this));
+    QTableView *view = new QTableView;
+    internalLayout->addWidget(view, 2, 0, 1, -1, Qt::AlignLeft);
+
+    view->setModel(model);
 
     view->show();
 
