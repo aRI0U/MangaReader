@@ -11,11 +11,11 @@ MainWindow::MainWindow(QWidget* parent)
     createActions();
 
     initializeNotificationsManager();
-    initializeDownloaders();
+//    initializeDownloaders();
 
     readSettings();
 
-    updateLibrary();
+//    updateLibrary();
 }
 
 void MainWindow::createCentralWidget() {

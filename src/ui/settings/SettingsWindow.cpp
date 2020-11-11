@@ -70,11 +70,13 @@ void SettingsWindow::openDownloadSettings() {
     internalLayout->addWidget(new QLabel(tr("Followed series:")), 0, 0, Qt::AlignLeft);
     internalLayout->addWidget(new QLabel("Available series:"), 1, 0, 1, -1, Qt::AlignLeft);
 
-    QTableView *tableView = new QTableView(this);
-    tableView->setModel(new MangaSqlModel(this));
+    QTableView *view = new QTableView(this);
 
-    tableView->horizontalHeader()->setStretchLastSection(true);
-    internalLayout->addWidget(tableView, 2, 0, 1, -1, Qt::AlignJustify);
+    view->horizontalHeader()->setStretchLastSection(true);
+    internalLayout->addWidget(view, 2, 0, 1, -1, Qt::AlignJustify);
+    view->setModel(new MangaSqlModel(this));
+
+    view->show();
 
     // automatic download of last chapters
     QCheckBox *checkCheckBox = new QCheckBox(tr("Automatically check for new chapters"));
