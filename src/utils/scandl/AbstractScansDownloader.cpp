@@ -30,7 +30,6 @@ void AbstractScansDownloader::lookForNewChapters() {
 
         // look for html file
         QPath mangaAuxDir = m_htmlDir / mangaId;
-        qDebug() << mangaId;
         QFile htmlFile(mangaAuxDir / "main.html");
 
         if (!mangaAuxDir.mkdir())

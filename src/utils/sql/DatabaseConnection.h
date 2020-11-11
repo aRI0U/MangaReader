@@ -1,7 +1,6 @@
 #ifndef DATABASECONNECTION_H
 #define DATABASECONNECTION_H
 
-#include <QDir>
 #include <QDebug>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -9,6 +8,7 @@
 #include <QUrl>
 
 #include "constants.h"
+#include "libs/QPath/QPath.h"
 
 class DatabaseConnection : public QObject
 {

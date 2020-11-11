@@ -30,9 +30,6 @@ SOURCES += \
     src/ui/tabs/mangatab/MangaTab.cpp \
     src/ui/tabs/mangatab/PixmapLabel.cpp \
     src/ui/tabs/mangatab/Reader.cpp \
-    src/utils/QPath/QPath.cpp \
-    src/utils/download/QDownload.cpp \
-    src/utils/download/QDownloader.cpp \
     src/utils/scandl/AbstractScansDownloader.cpp \
     src/utils/scandl/scantrad/ScantradDownloader.cpp \
     src/utils/html/QSgml.cpp \
@@ -58,9 +55,6 @@ HEADERS += \
     src/ui/tabs/mangatab/MangaTab.h \
     src/ui/tabs/mangatab/PixmapLabel.h \
     src/ui/tabs/mangatab/Reader.h \
-    src/utils/QPath/QPath.h \
-    src/utils/download/QDownload.h \
-    src/utils/download/QDownloader.h \
     src/utils/scandl/AbstractScansDownloader.h \
     src/utils/scandl/scansDownloaders.h \
     src/utils/scandl/scantrad/ScantradDownloader.h \

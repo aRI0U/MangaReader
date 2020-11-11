@@ -4,7 +4,6 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDebug>
-#include <QDir>
 #include <QGroupBox>
 #include <QLabel>
 #include <QMenu>
@@ -16,6 +15,7 @@
 #include <QWidget>
 
 #include "constants.h"
+#include "libs/QPath/QPath.h"
 
 class SettingsWindow : public QWidget
 {

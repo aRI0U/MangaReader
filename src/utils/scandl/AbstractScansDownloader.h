@@ -2,8 +2,8 @@
 #define ABSTRACTSCANSDOWNLOADER_H
 
 #include "constants.h"
-#include "utils/download/QDownloader.h"
-#include "utils/QPath/QPath.h"
+#include "libs/QDownload/QDownloader.h"
+#include "libs/QPath/QPath.h"
 #include "utils/sql/DatabaseConnection.h"
 
 enum Downloader {

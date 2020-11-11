@@ -113,9 +113,9 @@ void SettingsWindow::openLanguageSettings() {
     internalLayout->addWidget(new QLabel(tr("Application language:")), 0, 0, Qt::AlignRight);
 
     languageChoices = new QComboBox(this);
-    QDir translationsDir(constants::translationsPath);
+    QPath translationsDir(constants::translationsPath);
     QRegularExpression translationRegex(constants::applicationName + "_*.qm");
-    for (const QString &translationFile : translationsDir.entryList({translationRegex.pattern()}, QDir::Files | QDir::NoDotAndDotDot)) {
+    for (const QString &translationFile : translationsDir.iter(QStringList() << translationRegex.pattern(), QPath::Files | QPath::NoDotAndDotDot)) {
         QString languageString = translationFile.split('_').at(1).split('.').at(0);  // TODO: do this properly with regex or sth...
         QLocale::Language language = QLocale(languageString).language();
         languageChoices->addItem(QLocale::languageToString(language), languageString);

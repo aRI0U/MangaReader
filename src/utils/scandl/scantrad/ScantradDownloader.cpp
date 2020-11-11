@@ -53,7 +53,7 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
 
 void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) {
     QSgml *html = new QSgml(htmlFile);
-    QDir parentDir(QFileInfo(htmlFile).dir());
+//    QDir parentDir(QFileInfo(htmlFile).dir());
 
     QList<QSgmlTag*> elements;
     QRegularExpression numberRegex("\\d+");
@@ -102,14 +102,13 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
     QString chapterName = constants::chapterFolderTemplate.arg(chapter.number).arg(chapter.name);
 
     QSettings settings;
-    QDir libraryDir(settings.value("Library/scansPath").toString());
-    QDir chapterDir(QDir(libraryDir.absoluteFilePath(chapter.manga)).absoluteFilePath(chapterName));
+    QPath chapterDir = QPath(settings.value("Library/scansPath").toString()) / chapter.manga / chapterName;
 
-    if (!chapterDir.mkpath("."))
-        qDebug() << "Failed to create folder" << chapterDir.absolutePath();
+    if (!chapterDir.mkdir())
+        qDebug() << "Failed to create folder" << chapterDir;
 
     // add mapping
-    m_dirnameToChapterId.insert(chapterDir.absolutePath(), chapterId);
+    m_dirnameToChapterId.insert(chapterDir, chapterId);
 
     QSgml html(chapterFile);
 
@@ -134,7 +133,7 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
     m_nbImagesToDownload.insert(chapterId, imageUrlList.size());
 
     for (int i = 0; i < imageUrlList.size(); ++i) {
-        QFile imageFile(chapterDir.absoluteFilePath(QString::number(i+1).rightJustified(2, '0') + ".png"));
+        QFile imageFile(chapterDir / (QString::number(i+1).rightJustified(2, '0') + ".png"));
 
         if (imageFile.exists()) {
             imageDownloaded(chapterId);

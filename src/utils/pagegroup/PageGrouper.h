@@ -2,7 +2,7 @@
 #define PAGEGROUPER_H
 
 #include <QDebug>
-#include <QDir>
+#include <QFile>
 #include <QImageReader>
 #include <QObject>
 #include <QPixmap>

@@ -2,8 +2,8 @@
 
 DatabaseConnection::DatabaseConnection(QObject *parent) : QObject(parent)
 {
-    QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
-    QString dbPath(localDataLocation.absoluteFilePath(constants::dbFilename));
+    QPath localDataLocation = QPath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
+    QPath dbPath(localDataLocation / constants::dbFilename);
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
 
