@@ -21,6 +21,7 @@ SOURCES += \
     src/libs/QPath/QPath.cpp \
     src/main.cpp \
     src/ui/MainWindow.cpp \
+    src/ui/settings/MangaSqlModel.cpp \
     src/ui/settings/SettingsWindow.cpp \
     src/ui/tabs/Tab.cpp \
     src/ui/tabs/maintab/MainTab.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     src/libs/QDownload/QDownloader.h \
     src/libs/QPath/QPath.h \
     src/ui/MainWindow.h \
+    src/ui/settings/MangaSqlModel.h \
     src/ui/settings/SettingsWindow.h \
     src/ui/tabs/Tab.h \
     src/ui/tabs/maintab/MainTab.h \

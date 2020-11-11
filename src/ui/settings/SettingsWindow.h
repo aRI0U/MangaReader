@@ -5,17 +5,21 @@
 #include <QComboBox>
 #include <QDebug>
 #include <QGroupBox>
+#include <QHeaderView>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QSettings>
+#include <QTableView>
 #include <QVBoxLayout>
 #include <QWidget>
 
 #include "constants.h"
 #include "libs/QPath/QPath.h"
+
+#include "MangaSqlModel.h"
 
 class SettingsWindow : public QWidget
 {

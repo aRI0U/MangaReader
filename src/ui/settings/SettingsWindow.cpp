@@ -68,22 +68,28 @@ void SettingsWindow::openDownloadSettings() {
 
 
     internalLayout->addWidget(new QLabel(tr("Followed series:")), 0, 0, Qt::AlignLeft);
-    internalLayout->addWidget(new QLabel("TODO: list of available series"), 1, 0, 1, -1, Qt::AlignLeft);
+    internalLayout->addWidget(new QLabel("Available series:"), 1, 0, 1, -1, Qt::AlignLeft);
+
+    QTableView *tableView = new QTableView(this);
+    tableView->setModel(new MangaSqlModel(this));
+
+    tableView->horizontalHeader()->setStretchLastSection(true);
+    internalLayout->addWidget(tableView, 2, 0, 1, -1, Qt::AlignJustify);
 
     // automatic download of last chapters
     QCheckBox *checkCheckBox = new QCheckBox(tr("Automatically check for new chapters"));
-    internalLayout->addWidget(checkCheckBox, 2, 0);
+    internalLayout->addWidget(checkCheckBox, 4, 0);
     connect(checkCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(setAutomaticCheckState(bool)));
 
     // automatic download of last chapters
     QCheckBox *downloadCheckBox = new QCheckBox(tr("Automatically download new chapters"));
-    internalLayout->addWidget(downloadCheckBox, 3, 0);
+    internalLayout->addWidget(downloadCheckBox, 5, 0);
     connect(downloadCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(setAutomaticDownloadState(bool)));
 
     QPushButton *downloadButton = new QPushButton(tr("Download"));
-    internalLayout->addWidget(downloadButton, 3, 1, Qt::AlignRight);
+    internalLayout->addWidget(downloadButton, 5, 1, Qt::AlignRight);
 
     // enable download only when automatic checking is activated
     connect(checkCheckBox, SIGNAL(toggled(bool)),
