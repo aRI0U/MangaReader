@@ -69,12 +69,19 @@ void SettingsWindow::openDownloadSettings() {
 
 
     internalLayout->addWidget(new QLabel(tr("Followed series:")), 0, 0, Qt::AlignLeft);
-    internalLayout->addWidget(new QLabel("Available series:"), 1, 0, 1, -1, Qt::AlignLeft);
+
+    internalLayout->addWidget(new QLabel("Available series:"), 2, 0, 1, 1, Qt::AlignLeft);
+
+    QPushButton *applyButton = new QPushButton(tr("Apply changes"));
+    internalLayout->addWidget(applyButton, 2, 1, 1, 1, Qt::AlignJustify);
 
     MangaSqlModel *model = new MangaSqlModel(this, MangaSqlModel::mangaDatabase());
 
+    connect(applyButton, &QPushButton::clicked,
+            model, &MangaSqlModel::submitAll);
+
     QTableView *view = new QTableView;
-    internalLayout->addWidget(view, 2, 0, 1, -1, Qt::AlignLeft);
+    internalLayout->addWidget(view, 3, 0, 1, -1, Qt::AlignLeft);
 
     view->setModel(model);
     view->horizontalHeader()->setStretchLastSection(true);

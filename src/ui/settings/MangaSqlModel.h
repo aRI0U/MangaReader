@@ -19,6 +19,9 @@ public:
     QVariant data(const QModelIndex &idx, int role) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
+public slots:
+    bool submitAll();
+
     static QSqlDatabase mangaDatabase();
 };
 
