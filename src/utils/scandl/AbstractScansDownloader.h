@@ -44,15 +44,15 @@ signals:
 
 protected slots:
     virtual void downloadFinished(QDownload*) { }
-    virtual void downloadChapter(const QString&, const Chapter&) { }
-    virtual void extractChaptersFromHtml(const QUrl&, QFile&) { }
-    virtual void extractImagesFromChapter(QFile&) { }
+    virtual void downloadChapter(const uint, const uint, const Chapter&) { }
+    virtual void extractChaptersFromHtml(const QUrl&, QPath&) { }
+    virtual void extractImagesFromChapter(QPath&) { }
     void imageDownloaded(uint chapterId);
 
 protected:
     void downloadMangaList();
 
-    bool addChapterToDatabase(const QUrl &mangaUrl, const Chapter &chapter);
+    int addChapterToDatabase(const QUrl &mangaUrl, const Chapter &chapter);
 
     virtual bool addWebsiteToDatabase() { return false; }
 
