@@ -53,7 +53,8 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
 
 void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile) {
     qDebug() << htmlFile;
-    QSgml *html = new QSgml(htmlFile);
+    QFile f(htmlFile);
+    QSgml *html = new QSgml(f);
 
     QList<QSgmlTag*> elements;
     QRegularExpression numberRegex("\\d+");
@@ -94,6 +95,9 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
             chapter.url = mangaUrl.resolved(QUrl(urlElement->getArgValue("href")));
             int chapterId = addChapterToDatabase(mangaUrl, chapter);
             qDebug() << "chapter" << chapterId << "added to the database";
+            if (m_database->isComplete(chapterId))
+                continue;
+
             QSettings settings;
             if (settings.value("Download/autoDownload", false).toBool())
                 downloadChapter(mangaId, chapterId, chapter);
@@ -157,7 +161,7 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile) {
 void ScantradDownloader::downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) {
     qDebug() << chapter;
 
-    QPath chapterHtml = m_htmlDir / chapter.manga / (QString::number(chapterId) + ".html");
+    QPath chapterHtml = m_htmlDir / QString::number(mangaId) / (QString::number(chapterId) + ".html");
     m_htmlToChapterId.insert(chapterHtml, chapterId);
 
     if (chapterHtml.exists())

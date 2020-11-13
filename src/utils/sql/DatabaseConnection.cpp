@@ -79,14 +79,16 @@ int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number
         qDebug() << "Failed to add chapter" << number << ":" << name << "to database";
 
     query.prepare("SELECT ID FROM Chapters "
-                  "WHERE Manga = :manga AND Number = :number AND Title = :name AND Url = :url");
+                  "WHERE Manga = :manga AND No = :number AND Title = :name AND Url = :url");
     query.bindValue(":manga", manga);
     query.bindValue(":number", number);
     query.bindValue(":name", name);
     query.bindValue(":url", url.url());
     query.exec();
     query.next();
-    return query.value("ID").toInt();
+    qDebug() << manga << number << name << url;
+        qDebug() << query.lastError().text();
+    return query.value(0).toInt();
 }
 
 uint DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
@@ -111,7 +113,7 @@ QString DatabaseConnection::getMangaName(const uint &mangaId) const {
 
 bool DatabaseConnection::isComplete(const uint chapterId) const {
     QSqlQuery query(db);
-    query.prepare("SELECT Complete FROM Mangas "
+    query.prepare("SELECT Complete FROM Chapters "
                   "WHERE ID = :id");
     query.bindValue(":id", chapterId);
     query.exec();
