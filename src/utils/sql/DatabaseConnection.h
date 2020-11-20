@@ -25,9 +25,11 @@ public:
     QSqlQuery *chaptersToDownload() const;
 
     bool insertManga(const QString &url, const QString &name, const int website);
-    bool addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
+    int addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
 
-    int getMangaId(const QUrl &mangaUrl) const;
+    uint getMangaId(const QUrl &mangaUrl) const;
+    QString getMangaName(const uint &mangaId) const;
+    bool isComplete(const uint chapterId) const;
     bool markAsComplete(const uint chapterId);
     bool updateLastDownloadDatetime(const uint mangaId);
 

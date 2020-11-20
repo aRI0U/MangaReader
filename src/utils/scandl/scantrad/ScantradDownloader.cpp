@@ -30,38 +30,42 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
         return;
     }
 
-    QFile targetFile(download->targetFile());
+    QPath targetFile(download->targetFile());
+    uint id = download->metadata("id", 0).toUInt();
 
     switch (download->kind()) {
         case FileType::ListHTML:
-            generateMangaList(download->targetFile());
+            generateMangaList(targetFile);
             break;
         case FileType::MangaHTML:
-            m_database->updateLastDownloadDatetime(m_htmlToMangaId.take(targetFile.fileName()));
-            extractChaptersFromHtml(download->targetUrl(), targetFile);
+            m_database->updateLastDownloadDatetime(id);
+            extractChaptersFromHtml(download->targetUrl(), targetFile, id);
             break;
         case FileType::ChapterHTML:
-            extractImagesFromChapter(targetFile);
+            extractImagesFromChapter(targetFile, id);
             break;
         case FileType::Image:
-            imageDownloaded(m_dirnameToChapterId.value(QFileInfo(targetFile).absolutePath()));
+            imageDownloaded(id);
             break;
         default:
             break;
     }
 }
 
-void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) {
-    QSgml *html = new QSgml(htmlFile);
-//    QDir parentDir(QFileInfo(htmlFile).dir());
+void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile, uint mangaId) {
+    QFile f(htmlFile);
+    QSgml *html = new QSgml(f);
 
     QList<QSgmlTag*> elements;
     QRegularExpression numberRegex("\\d+");
     QRegularExpressionMatch reMatch;
 
     html->getElementsByAttribute("class", "chapitre", &elements);
+
     for (QSgmlTag *elem : elements) {
         Chapter chapter;
+        chapter.manga = m_database->getMangaName(mangaId);
+        qDebug() << chapter.manga;
 
         QSgmlTag *numberElement = elem->find("span", "class", "chl-num");
         if (numberElement == nullptr)
@@ -88,17 +92,22 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QFile &ht
 
         else {
             chapter.url = mangaUrl.resolved(QUrl(urlElement->getArgValue("href")));
-            addChapterToDatabase(mangaUrl, chapter);
+            int chapterId = addChapterToDatabase(mangaUrl, chapter);
+            qDebug() << "chapter" << chapterId << "added to the database";
+            if (m_database->isComplete(chapterId))
+                continue;
+
+            QSettings settings;
+            if (settings.value("Download/autoDownload", false).toBool())
+                downloadChapter(mangaId, chapterId, chapter);
         }
     }
 }
 
-void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
-    int chapterId = m_htmlToChapterId.take(chapterFile.fileName());
+void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapterId) {
     Chapter chapter = m_chaptersList.value(chapterId);
 
     // TODO use QStringBuilder + format language
-
     QString chapterName = constants::chapterFolderTemplate.arg(chapter.number).arg(chapter.name);
 
     QSettings settings;
@@ -107,10 +116,8 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
     if (!chapterDir.mkdir())
         qDebug() << "Failed to create folder" << chapterDir;
 
-    // add mapping
-    m_dirnameToChapterId.insert(chapterDir, chapterId);
-
-    QSgml html(chapterFile);
+    QFile f(chapterFile);
+    QSgml html(f);
 
     QList<QSgmlTag*> elements;
 
@@ -135,26 +142,23 @@ void ScantradDownloader::extractImagesFromChapter(QFile &chapterFile) {
     for (int i = 0; i < imageUrlList.size(); ++i) {
         QFile imageFile(chapterDir / (QString::number(i+1).rightJustified(2, '0') + ".png"));
 
-        if (imageFile.exists()) {
-            imageDownloaded(chapterId);
-            continue;
-        }
-
-        m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image);
+//        QHash<QString, QVariant> metadata;
+//        metadata.insert("id", chapterId);
+        qDebug() << imageFile;
+        m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image, {{"id", chapterId}});
     }
     qDebug() << "signal";
     emit chapterDownloaded();
 }
 
-void ScantradDownloader::downloadChapter(const QString &file, const Chapter &chapter) {
+void ScantradDownloader::downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) {
     qDebug() << chapter;
 
-    QFile chapterHtml(file);
+    QPath chapterHtml = m_htmlDir / QString::number(mangaId) / (QString::number(chapterId) + ".html");
 
-    if (chapterHtml.exists())
-        extractImagesFromChapter(chapterHtml);
-    else
-        m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML);
+    QHash<QString,QVariant> metadata;
+    metadata.insert("id", chapterId);
+    m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML, metadata);
 }
 
 

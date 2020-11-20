@@ -44,15 +44,15 @@ signals:
 
 protected slots:
     virtual void downloadFinished(QDownload*) { }
-    virtual void downloadChapter(const QString&, const Chapter&) { }
-    virtual void extractChaptersFromHtml(const QUrl&, QFile&) { }
-    virtual void extractImagesFromChapter(QFile&) { }
+    virtual void downloadChapter(const uint, const uint, const Chapter&) { }
+    virtual void extractChaptersFromHtml(const QUrl&, QPath&, uint) { }
+    virtual void extractImagesFromChapter(QPath&, uint) { }
     void imageDownloaded(uint chapterId);
 
 protected:
     void downloadMangaList();
 
-    bool addChapterToDatabase(const QUrl &mangaUrl, const Chapter &chapter);
+    int addChapterToDatabase(const QUrl &mangaUrl, const Chapter &chapter);
 
     virtual bool addWebsiteToDatabase() { return false; }
 
@@ -70,10 +70,6 @@ protected:
     QDownloader *m_downloader;
 
     // mappings
-    QHash<QString, uint> m_dirnameToChapterId;
-    QHash<QString, uint> m_htmlToChapterId;
-    QHash<QString, uint> m_htmlToMangaId;
-
     QHash<uint, uint> m_nbImagesToDownload;
     QHash<uint, Chapter> m_chaptersList;
 };

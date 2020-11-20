@@ -19,9 +19,9 @@ signals:
 
 private slots:
     void downloadFinished(QDownload *download) override;
-    void downloadChapter(const QString &file, const Chapter &chapter) override;
-    void extractChaptersFromHtml(const QUrl &mangaUrl, QFile &htmlFile) override;
-    void extractImagesFromChapter(QFile &chapterFile) override;
+    void downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) override;
+    void extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile, uint mangaId) override;
+    void extractImagesFromChapter(QPath &chapterFile, uint chapterId) override;
 
 private:
     bool addWebsiteToDatabase() override;

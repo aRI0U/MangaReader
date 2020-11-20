@@ -27,9 +27,6 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
 }
 
 QSqlQuery *DatabaseConnection::followedMangas(const uint website, const uint delay) const {
-    QString delayCondition = (delay > 0)
-            ? " AND LastDownload IS NULL OR STRFTIME('%s', 'now') - strftime('%s', LastDownload) > :delay"
-            : "";
     QSqlQuery *query = new QSqlQuery(db);
     query->prepare("SELECT ID, Name, Url FROM Mangas "
                    "WHERE Website = :website "
@@ -65,7 +62,7 @@ bool DatabaseConnection::insertManga(const QString &url, const QString &name, co
     return (db.transaction() && db.commit());
 }
 
-bool DatabaseConnection::addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url) {
+int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url) {
     QSqlQuery query(db);
     query.prepare("INSERT OR IGNORE INTO Chapters (Manga, No, Title, Url) "
                   "VALUES (:manga, :number, :name, :url)");
@@ -75,10 +72,23 @@ bool DatabaseConnection::addChapterToDatabase(const uint manga, const uint numbe
     query.bindValue(":url", url.url());
     query.exec();
 
-    return (db.transaction() && db.commit());
+    if (!(db.transaction() && db.commit()))
+        qDebug() << "Failed to add chapter" << number << ":" << name << "to database";
+
+    query.prepare("SELECT ID FROM Chapters "
+                  "WHERE Manga = :manga AND No = :number AND Title = :name AND Url = :url");
+    query.bindValue(":manga", manga);
+    query.bindValue(":number", number);
+    query.bindValue(":name", name);
+    query.bindValue(":url", url.url());
+    query.exec();
+    query.next();
+    qDebug() << manga << number << name << url;
+        qDebug() << query.lastError().text();
+    return query.value(0).toInt();
 }
 
-int DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
+uint DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     QSqlQuery query(db);
     query.prepare("SELECT ID FROM Mangas "
                   "WHERE Url = :url");
@@ -86,6 +96,26 @@ int DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     query.exec();
     query.next();
     return query.value("ID").toInt();
+}
+
+QString DatabaseConnection::getMangaName(const uint &mangaId) const {
+    QSqlQuery query(db);
+    query.prepare("SELECT Name FROM Mangas "
+                  "WHERE ID = :id");
+    query.bindValue(":id", mangaId);
+    query.exec();
+    query.next();
+    return query.value("Name").toString();
+}
+
+bool DatabaseConnection::isComplete(const uint chapterId) const {
+    QSqlQuery query(db);
+    query.prepare("SELECT Complete FROM Chapters "
+                  "WHERE ID = :id");
+    query.bindValue(":id", chapterId);
+    query.exec();
+    query.next();
+    return query.value("Complete").toBool();
 }
 
 bool DatabaseConnection::markAsComplete(const uint chapterId) {
