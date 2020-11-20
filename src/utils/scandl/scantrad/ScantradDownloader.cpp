@@ -31,28 +31,28 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
     }
 
     QPath targetFile(download->targetFile());
+    uint id = download->metadata("id", 0).toUInt();
 
     switch (download->kind()) {
         case FileType::ListHTML:
             generateMangaList(targetFile);
             break;
         case FileType::MangaHTML:
-            m_database->updateLastDownloadDatetime(m_htmlToMangaId.take(targetFile));
-            extractChaptersFromHtml(download->targetUrl(), targetFile);
+            m_database->updateLastDownloadDatetime(id);
+            extractChaptersFromHtml(download->targetUrl(), targetFile, id);
             break;
         case FileType::ChapterHTML:
-            extractImagesFromChapter(targetFile);
+            extractImagesFromChapter(targetFile, id);
             break;
         case FileType::Image:
-            imageDownloaded(m_dirnameToChapterId.value(QFileInfo(targetFile).absolutePath()));
+            imageDownloaded(id);
             break;
         default:
             break;
     }
 }
 
-void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile) {
-    qDebug() << htmlFile;
+void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile, uint mangaId) {
     QFile f(htmlFile);
     QSgml *html = new QSgml(f);
 
@@ -61,10 +61,9 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
     QRegularExpressionMatch reMatch;
 
     html->getElementsByAttribute("class", "chapitre", &elements);
-    qDebug() << elements.size();
+
     for (QSgmlTag *elem : elements) {
         Chapter chapter;
-        uint mangaId = htmlFile.parent().name().toInt();
         chapter.manga = m_database->getMangaName(mangaId);
         qDebug() << chapter.manga;
 
@@ -105,12 +104,10 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
     }
 }
 
-void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile) {
-    int chapterId = m_htmlToChapterId.take(chapterFile);
+void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapterId) {
     Chapter chapter = m_chaptersList.value(chapterId);
 
     // TODO use QStringBuilder + format language
-
     QString chapterName = constants::chapterFolderTemplate.arg(chapter.number).arg(chapter.name);
 
     QSettings settings;
@@ -119,10 +116,8 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile) {
     if (!chapterDir.mkdir())
         qDebug() << "Failed to create folder" << chapterDir;
 
-    // add mapping
-    m_dirnameToChapterId.insert(chapterDir, chapterId);
-
-    QSgml html(chapterFile);
+    QFile f(chapterFile);
+    QSgml html(f);
 
     QList<QSgmlTag*> elements;
 
@@ -147,12 +142,10 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile) {
     for (int i = 0; i < imageUrlList.size(); ++i) {
         QFile imageFile(chapterDir / (QString::number(i+1).rightJustified(2, '0') + ".png"));
 
-        if (imageFile.exists()) {
-            imageDownloaded(chapterId);
-            continue;
-        }
-
-        m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image);
+//        QHash<QString, QVariant> metadata;
+//        metadata.insert("id", chapterId);
+        qDebug() << imageFile;
+        m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image, {{"id", chapterId}});
     }
     qDebug() << "signal";
     emit chapterDownloaded();
@@ -162,12 +155,10 @@ void ScantradDownloader::downloadChapter(const uint mangaId, const uint chapterI
     qDebug() << chapter;
 
     QPath chapterHtml = m_htmlDir / QString::number(mangaId) / (QString::number(chapterId) + ".html");
-    m_htmlToChapterId.insert(chapterHtml, chapterId);
 
-    if (chapterHtml.exists())
-        extractImagesFromChapter(chapterHtml);
-    else
-        m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML);
+    QHash<QString,QVariant> metadata;
+    metadata.insert("id", chapterId);
+    m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML, metadata);
 }
 
 

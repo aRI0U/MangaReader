@@ -18,6 +18,7 @@ AbstractScansDownloader::AbstractScansDownloader(QObject *parent)
       m_database(new DatabaseConnection(this)),
       m_downloader(new QDownloader(this))
 {
+    m_downloader->setDefaultPolicy(QOverwritePolicy::NoOverwrite);
 }
 
 void AbstractScansDownloader::lookForNewChapters() {
@@ -37,14 +38,7 @@ void AbstractScansDownloader::lookForNewChapters() {
         if (!mangaAuxDir.mkdir())
             qDebug() << "Failed to create dir" << mangaAuxDir;
 
-        // download main.html
-        m_htmlToMangaId.insert(htmlFile, mangaId.toInt());
-
-        // TMP
-        if (htmlFile.exists())
-            extractChaptersFromHtml(mangaUrl, htmlFile);
-        else
-            m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML);
+        m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML, {{"id", mangaId}}, QOverwritePolicy::Overwrite);
     }
 }
 

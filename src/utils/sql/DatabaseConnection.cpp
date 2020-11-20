@@ -27,9 +27,6 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
 }
 
 QSqlQuery *DatabaseConnection::followedMangas(const uint website, const uint delay) const {
-    QString delayCondition = (delay > 0)
-            ? " AND LastDownload IS NULL OR STRFTIME('%s', 'now') - strftime('%s', LastDownload) > :delay"
-            : "";
     QSqlQuery *query = new QSqlQuery(db);
     query->prepare("SELECT ID, Name, Url FROM Mangas "
                    "WHERE Website = :website "
