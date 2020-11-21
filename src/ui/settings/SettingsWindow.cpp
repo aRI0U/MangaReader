@@ -1,5 +1,6 @@
 #include "SettingsWindow.h"
 
+
 SettingsWindow::SettingsWindow(QWidget *parent)
     : QWidget(parent, Qt::Window),
       layout(new QHBoxLayout(this))
@@ -61,6 +62,10 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     layout->setAlignment(scrollArea, Qt::AlignLeft);
 }
 
+SettingsWindow::~SettingsWindow() {
+    qDebug() << "pi";
+}
+
 
 void SettingsWindow::openDownloadSettings() {
     QGroupBox *settingsWidget = new QGroupBox(tr("Download"), this);
@@ -68,13 +73,26 @@ void SettingsWindow::openDownloadSettings() {
 
 
     internalLayout->addWidget(new QLabel(tr("Followed series:")), 0, 0, Qt::AlignLeft);
-    internalLayout->addWidget(new QLabel("Available series:"), 1, 0, 1, -1, Qt::AlignLeft);
 
-    QTableView *tableView = new QTableView(this);
-    tableView->setModel(new MangaSqlModel(this));
+    internalLayout->addWidget(new QLabel("Available series:"), 2, 0, 1, 1, Qt::AlignLeft);
 
-    tableView->horizontalHeader()->setStretchLastSection(true);
-    internalLayout->addWidget(tableView, 2, 0, 1, -1, Qt::AlignJustify);
+    QPushButton *applyButton = new QPushButton(tr("Apply changes"));
+    internalLayout->addWidget(applyButton, 2, 1, 1, 1, Qt::AlignJustify);
+
+    MangaSqlModel *model = new MangaSqlModel(this, MangaSqlModel::mangaDatabase());
+
+    connect(applyButton, &QPushButton::clicked,
+            model, &MangaSqlModel::submitAll);
+
+    QTableView *view = new QTableView;
+    internalLayout->addWidget(view, 3, 0, 1, -1, Qt::AlignLeft);
+
+    view->setModel(model);
+    for (int column : {0, 1, 2, 4, 6, 7, 8, 9})
+        view->hideColumn(column);
+    view->horizontalHeader()->setStretchLastSection(true);
+    view->resizeColumnsToContents();
+    view->show();
 
     // automatic download of last chapters
     QCheckBox *checkCheckBox = new QCheckBox(tr("Automatically check for new chapters"));
@@ -157,4 +175,10 @@ void SettingsWindow::setLanguage(int index) {
     QMessageBox msgBox;
     msgBox.setText(tr("Language settings have been modified. Changes will be effective next time you open the app."));
     msgBox.exec();
+}
+
+
+void SettingsWindow::closeEvent(QCloseEvent *event) {
+    deleteLater();
+    event->accept();
 }
