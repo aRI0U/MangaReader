@@ -84,6 +84,8 @@ void SettingsWindow::openDownloadSettings() {
     internalLayout->addWidget(view, 3, 0, 1, -1, Qt::AlignLeft);
 
     view->setModel(model);
+    for (int column : {0, 1, 2, 4, 6, 7, 8, 9})
+        view->hideColumn(column);
     view->horizontalHeader()->setStretchLastSection(true);
     view->resizeColumnsToContents();
     view->show();

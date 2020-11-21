@@ -16,13 +16,15 @@ public:
     MangaSqlModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-//    QVariant data(const QModelIndex &idx, int role) const override;
-//    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-
-public slots:
-    bool submitAll();
+    QVariant data(const QModelIndex &idx, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     static QSqlDatabase mangaDatabase();
+
+public slots:
+
+private:
+    const int followColumn = 5;
 };
 
 #endif // MANGASQLMODEL_H
