@@ -14,6 +14,10 @@ MangaSqlModel::MangaSqlModel(QObject *parent, QSqlDatabase db)
     select();
 }
 
+MangaSqlModel::~MangaSqlModel() {
+    QSqlDatabase::removeDatabase("QSQLITE");
+}
+
 
 Qt::ItemFlags MangaSqlModel::flags(const QModelIndex &index) const {
     // Column 1 always records the mark variable (our boolean).

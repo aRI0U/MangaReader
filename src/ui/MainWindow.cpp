@@ -70,8 +70,8 @@ void MainWindow::createActions() {
     QAction *settingsAction = editMenu->addAction(tr("&Settings"));
     settingsAction->setShortcut(Qt::CTRL | Qt::ALT | Qt::Key_S);
     settingsAction->setStatusTip("Open the settings");
-    connect(settingsAction, SIGNAL(triggered()),
-            this, SLOT(openSettingsWindow()));
+    connect(settingsAction, &QAction::triggered,
+            this, &MainWindow::openSettingsWindow);
 
     QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
 

@@ -2,6 +2,7 @@
 #define SETTINGSWINDOW_H
 
 #include <QCheckBox>
+#include <QCloseEvent>
 #include <QComboBox>
 #include <QDebug>
 #include <QGroupBox>
@@ -26,6 +27,7 @@ class SettingsWindow : public QWidget
     Q_OBJECT
 public:
     explicit SettingsWindow(QWidget *parent = nullptr);
+    ~SettingsWindow();
 
 public slots:
     void openDownloadSettings();
@@ -43,6 +45,9 @@ private:
 
     // language settings
     QComboBox *languageChoices;
+
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // SETTINGSWINDOW_H

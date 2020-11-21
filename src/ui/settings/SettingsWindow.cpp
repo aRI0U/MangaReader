@@ -62,6 +62,10 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     layout->setAlignment(scrollArea, Qt::AlignLeft);
 }
 
+SettingsWindow::~SettingsWindow() {
+    qDebug() << "pi";
+}
+
 
 void SettingsWindow::openDownloadSettings() {
     QGroupBox *settingsWidget = new QGroupBox(tr("Download"), this);
@@ -171,4 +175,10 @@ void SettingsWindow::setLanguage(int index) {
     QMessageBox msgBox;
     msgBox.setText(tr("Language settings have been modified. Changes will be effective next time you open the app."));
     msgBox.exec();
+}
+
+
+void SettingsWindow::closeEvent(QCloseEvent *event) {
+    deleteLater();
+    event->accept();
 }
