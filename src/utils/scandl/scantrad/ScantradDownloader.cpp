@@ -167,19 +167,24 @@ bool ScantradDownloader::addWebsiteToDatabase() {
 }
 
 void ScantradDownloader::generateMangaList(const QString &htmlFile) {
-    // TODO: make it clean
-    QSgml html(htmlFile);
+    QFile f(htmlFile);
+    QSgml html(f);
+
+    QStringList names;
+    QStringList hrefs;
 
     QList<QSgmlTag *> elements;
 
     html.getElementsByAttribute("class", "home-manga", &elements);
-    qDebug() << htmlFile << elements;
 
-    for (QSgmlTag *elem : elements)
-        qDebug() << elem->find("div", "class", "hmi-titre")->getText();
-
-    QStringList names = {"One Piece", "Hunter x Hunter", "The Seven Deadly Sins"};
-    QStringList hrefs = {"/one-piece", "/hunter-x-hunter", "/seven-deadly-sins"};
+    QSgmlTag *titleElement;
+    for (QSgmlTag *elem : elements) {
+        titleElement = elem->find("div", "class", "hmi-titre");
+        if (titleElement == nullptr)
+            continue;
+        names.append(elem->find("div", "class", "hmi-titre")->getText());
+        hrefs.append(elem->getArgValue("href"));
+    }
 
     for (int i=0; i<names.count(); ++i) {
         QUrl url = m_baseUrl.resolved(hrefs.at(i));
