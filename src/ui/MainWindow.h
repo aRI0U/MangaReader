@@ -42,7 +42,7 @@ signals:
 
 private slots:
     void closeTab(int index);
-    void refreshLibrary();
+    void refreshLibrary(Chapter &chapter);
 
 private:
     void createCentralWidget();

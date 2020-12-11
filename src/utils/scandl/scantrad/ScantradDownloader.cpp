@@ -147,7 +147,7 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapt
         m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image, {{"id", chapterId}});
     }
     qDebug() << "signal";
-    emit chapterDownloaded();
+    emit chapterDownloaded(chapter);
 }
 
 void ScantradDownloader::downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) {

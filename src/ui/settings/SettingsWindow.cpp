@@ -85,7 +85,7 @@ void SettingsWindow::openDownloadSettings() {
             model, &MangaSqlModel::submitAll);
 
     QTableView *view = new QTableView;
-    internalLayout->addWidget(view, 3, 0, 1, -1, Qt::AlignLeft);
+    internalLayout->addWidget(view, 3, 0, 1, 2, Qt::AlignLeft);
 
     view->setModel(model);
     for (int column : {0, 1, 2, 4, 6, 7, 8, 9})
@@ -126,6 +126,7 @@ void SettingsWindow::openDownloadSettings() {
     if (old != nullptr)
         delete old->widget();
 
+    settingsWidget->setLayout(internalLayout);
     layout->addWidget(settingsWidget);
 }
 

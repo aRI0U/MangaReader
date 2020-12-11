@@ -111,7 +111,8 @@ void MainWindow::closeTab(int index) {
         centralTabs->removeTab(index);
 }
 
-void MainWindow::refreshLibrary() {
+void MainWindow::refreshLibrary(Chapter &chapter) {
+    notifications.send(chapter.manga + tr(": New chapter"), QString("#%1 : %2").arg(chapter.number).arg(chapter.name));
     QSettings settings;
     // eventually open library
     qDebug() << "refresh";

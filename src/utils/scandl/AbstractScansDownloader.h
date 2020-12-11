@@ -40,7 +40,7 @@ public:
     void downloadNewChapters();
 
 signals:
-    void chapterDownloaded();
+    void chapterDownloaded(Chapter &chapter);
 
 protected slots:
     virtual void downloadFinished(QDownload*) { }
