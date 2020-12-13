@@ -40,12 +40,6 @@ namespace constants {
     const QString scantradName = "scantrad";
     const QString scantradBaseUrl = "https://scantrad.net";
     const QString scantradAllMangasUrl = scantradBaseUrl + "/mangas";
-
-    // Manga name mappings (TEMP)
-    const QHash<QString, QString> mappings = {
-        {"hunter-x-hunter", "Hunter x Hunter"},
-        {"one-piece", "One Piece"}
-    };
 }
 
 #endif // CONSTANTS_H

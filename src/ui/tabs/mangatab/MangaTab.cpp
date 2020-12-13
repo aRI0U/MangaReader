@@ -107,7 +107,6 @@ void MangaTab::openNextChapter() {
             QTreeWidgetItem* nextChapterItem = parent->child(index);
             currentChapterItem->setSelected(false);
             nextChapterItem->setSelected(true);
-            notifications.send(nextChapterItem->text(0), nextChapterItem->text(1));
             openChapter(nextChapterItem, 0);
         }
     }
