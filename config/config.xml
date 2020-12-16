@@ -7,8 +7,9 @@
     <StartMenuDir>MangaReader</StartMenuDir>
     <TargetDir>@ApplicationsDir@/MangaReader</TargetDir>
     <RemoteRepositories>
+        <Preselected>true</Preselected>
         <Repository>
-            <Url></Url>
+            <Url>https://raw.githubusercontent.com/aRI0U/MangaReader/master/release</Url>
             <Enabled>1</Enabled>
         </Repository>
     </RemoteRepositories>
