@@ -10,7 +10,7 @@ namespace constants {
     // settings
     const QString organizationName("aRI0U-nathanlct");
     const QString applicationName("MangaReader");
-    const QString translationsPath("../" + applicationName + "/translations");
+    const QString translationsPath("translations");
 
     // Sizes
     const QSize MangaCoverSize = QSize(210, 297);

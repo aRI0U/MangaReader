@@ -4,7 +4,7 @@
 <context>
     <name>MainTab</name>
     <message>
-        <location filename="../src/ui/tabs/maintab/MainTab.cpp" line="19"/>
+        <location filename="../src/ui/tabs/maintab/MainTab.cpp" line="16"/>
         <source>Successfully opened library located at </source>
         <translation>Successfully opened library located at </translation>
     </message>
@@ -12,32 +12,37 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="34"/>
+        <location filename="../src/ui/MainWindow.cpp" line="37"/>
         <source>Library</source>
         <translation>Library</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="49"/>
+        <location filename="../src/ui/MainWindow.cpp" line="53"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="50"/>
+        <location filename="../src/ui/MainWindow.cpp" line="54"/>
         <source>&amp;Open...</source>
         <translation>&amp;Open...</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="58"/>
+        <location filename="../src/ui/MainWindow.cpp" line="62"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="101"/>
+        <location filename="../src/ui/MainWindow.cpp" line="115"/>
+        <source>: New chapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/MainWindow.cpp" line="127"/>
         <source>Open Library</source>
         <translation>Open Library</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="52"/>
+        <location filename="../src/ui/MainWindow.cpp" line="56"/>
         <source>Open a library of mangas</source>
         <translation>Open a library of mangas</translation>
     </message>
@@ -46,27 +51,27 @@
         <translation type="vanished">Quit</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="60"/>
+        <location filename="../src/ui/MainWindow.cpp" line="64"/>
         <source>Quit the application</source>
         <translation>Quit the application</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="64"/>
+        <location filename="../src/ui/MainWindow.cpp" line="68"/>
         <source>&amp;Edit</source>
         <translation>&amp;Edit</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="66"/>
+        <location filename="../src/ui/MainWindow.cpp" line="70"/>
         <source>&amp;Settings</source>
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="72"/>
+        <location filename="../src/ui/MainWindow.cpp" line="76"/>
         <source>&amp;View</source>
         <translation>&amp;View</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="75"/>
+        <location filename="../src/ui/MainWindow.cpp" line="79"/>
         <source>Full Screen</source>
         <translation>Full Screen</translation>
     </message>
@@ -82,53 +87,65 @@
 <context>
     <name>ScantradDownloader</name>
     <message>
-        <location filename="../src/utils/download/scantrad/ScantradDownloader.cpp" line="113"/>
         <source>Chapitre </source>
-        <translation>Chapter </translation>
+        <translation type="vanished">Chapter </translation>
     </message>
     <message>
-        <location filename="../src/utils/download/scantrad/ScantradDownloader.cpp" line="115"/>
         <source> : </source>
-        <translation>: </translation>
+        <translation type="vanished">: </translation>
     </message>
 </context>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="7"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="8"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="19"/>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="66"/>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="83"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="20"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="71"/>
         <source>Download</source>
         <translation>Download</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="25"/>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="96"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="26"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="132"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="74"/>
+        <source>Followed series:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="76"/>
+        <source>Available series:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="78"/>
+        <source>Apply changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="98"/>
         <source>Automatically check for new chapters</source>
         <translation>Automatically check for new chapters</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="78"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="104"/>
         <source>Automatically download new chapters</source>
         <translation>Automatically download new chapters</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="100"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="136"/>
         <source>Application language:</source>
         <translation>Application language:</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="134"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="176"/>
         <source>Language settings have been modified. Changes will be effective next time you open the app.</source>
         <translation>Language settings have been modified. Changes will be effective next time you open the app.</translation>
     </message>
