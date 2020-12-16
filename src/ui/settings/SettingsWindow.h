@@ -27,7 +27,6 @@ class SettingsWindow : public QWidget
     Q_OBJECT
 public:
     explicit SettingsWindow(QWidget *parent = nullptr);
-    ~SettingsWindow();
 
 public slots:
     void openDownloadSettings();
