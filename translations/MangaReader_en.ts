@@ -37,7 +37,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="127"/>
+        <location filename="../src/ui/MainWindow.cpp" line="126"/>
         <source>Open Library</source>
         <translation>Open Library</translation>
     </message>
@@ -104,48 +104,48 @@
     </message>
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="20"/>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="71"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="67"/>
         <source>Download</source>
         <translation>Download</translation>
     </message>
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="26"/>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="132"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="128"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="74"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="70"/>
         <source>Followed series:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="76"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="72"/>
         <source>Available series:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="78"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="74"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="98"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="94"/>
         <source>Automatically check for new chapters</source>
         <translation>Automatically check for new chapters</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="104"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="100"/>
         <source>Automatically download new chapters</source>
         <translation>Automatically download new chapters</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="136"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="132"/>
         <source>Application language:</source>
         <translation>Application language:</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="176"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="172"/>
         <source>Language settings have been modified. Changes will be effective next time you open the app.</source>
         <translation>Language settings have been modified. Changes will be effective next time you open the app.</translation>
     </message>

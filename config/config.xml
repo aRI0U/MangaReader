@@ -6,4 +6,10 @@
     <Publisher>aRI0U-nathanlct</Publisher>
     <StartMenuDir>MangaReader</StartMenuDir>
     <TargetDir>@ApplicationsDir@/MangaReader</TargetDir>
+    <RemoteRepositories>
+        <Repository>
+            <Url></Url>
+            <Enabled>1</Enabled>
+        </Repository>
+    </RemoteRepositories>
 </Installer>
