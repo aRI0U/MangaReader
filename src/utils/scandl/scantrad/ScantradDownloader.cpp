@@ -65,7 +65,6 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
     for (QSgmlTag *elem : elements) {
         Chapter chapter;
         chapter.manga = m_database->getMangaName(mangaId);
-        qDebug() << chapter.manga;
 
         QSgmlTag *numberElement = elem->find("span", "class", "chl-num");
         if (numberElement == nullptr)
@@ -93,7 +92,6 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
         else {
             chapter.url = mangaUrl.resolved(QUrl(urlElement->getArgValue("href")));
             int chapterId = addChapterToDatabase(mangaUrl, chapter);
-            qDebug() << "chapter" << chapterId << "added to the database";
             if (m_database->isComplete(chapterId))
                 continue;
 
@@ -146,13 +144,10 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapt
 
         m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image, {{"id", chapterId}});
     }
-    qDebug() << "signal";
     emit chapterDownloaded(chapter);
 }
 
 void ScantradDownloader::downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) {
-    qDebug() << chapter;
-
     QPath chapterHtml = m_htmlDir / QString::number(mangaId) / (QString::number(chapterId) + ".html");
 
     m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML, {{"id", chapterId}});

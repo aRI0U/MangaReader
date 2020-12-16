@@ -83,8 +83,6 @@ int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number
     query.bindValue(":url", url.url());
     query.exec();
     query.next();
-    qDebug() << manga << number << name << url;
-        qDebug() << query.lastError().text();
     return query.value(0).toInt();
 }
 
@@ -144,7 +142,7 @@ bool DatabaseConnection::updateLastDownloadDatetime(const uint mangaId) {
 
 
 bool DatabaseConnection::createDatabase() {
-    qDebug() << "creating database at" << db.databaseName();
+    qDebug() << "Creating database at" << db.databaseName();
 
     if (!db.open())
         return false;

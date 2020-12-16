@@ -36,13 +36,13 @@ public slots:
     void openNextChapter();
 
 private:
-    QTreeWidgetItem* currentChapterItem;
+    QTabWidget *parent;
     QDir mangaDir;
-    QTabWidget* parent;
-    QHBoxLayout* pageLayout;
-    QTreeWidget* treeWidget;
+    QHBoxLayout *pageLayout;
+    QTreeWidget *treeWidget;
+    QTreeWidgetItem *currentChapterItem;
 
-    Reader* reader;
+    Reader *reader;
 };
 
 #endif // MANGATAB_H

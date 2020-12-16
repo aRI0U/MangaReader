@@ -62,10 +62,6 @@ SettingsWindow::SettingsWindow(QWidget *parent)
     layout->setAlignment(scrollArea, Qt::AlignLeft);
 }
 
-SettingsWindow::~SettingsWindow() {
-    qDebug() << "pi";
-}
-
 
 void SettingsWindow::openDownloadSettings() {
     QGroupBox *settingsWidget = new QGroupBox(tr("Download"), this);

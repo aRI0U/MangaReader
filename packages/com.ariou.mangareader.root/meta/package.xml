@@ -3,9 +3,9 @@
     <DisplayName>MangaReader</DisplayName>
     <Description>Main application</Description>
     <Version>0.1.0</Version>
-    <ReleaseDate>2020-07-23</ReleaseDate>
+    <ReleaseDate>2020-12-16</ReleaseDate>
     <Licenses>
-        <License name="GNU General Public Licence v3" file="LICENCE" />
+        <License name="GNU Lesser General Public Licence v3" file="LICENSE.md" />
     </Licenses>
     <Default>true</Default>
     <Script>installscript.qs</Script>
