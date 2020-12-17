@@ -1,6 +1,24 @@
 # MangaReader
 
-## Notes
+## Notes for myself
+
+### Generating the Windows installer
+
+1. Build the project in Release mode (static build)
+
+**The following commands should be executed from the main folder**
+
+2. Update the version and release dates in `config\config.xml` and `packages\com.ariou.mangareader.root\meta\package.xml`.
+
+3. Generate the archive containing the executable and `.o` files
+  ```
+  C:\Qt\QtIFW-4.0.1\bin\archivegen.exe packages\com.ariou.mangareader.root\data\MangaReader.7z ..\build-MangaReader-Stat
+  ```
+
+4. Generate the repository
+  ```
+  
+  ```
 
 ### Windows installation
 

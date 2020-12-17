@@ -70,3 +70,6 @@ Thumbs.db
 # --------
 *.dll
 *.exe
+
+# packages data
+packages/data/MangaReader.7z
