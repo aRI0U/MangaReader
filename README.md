@@ -12,17 +12,18 @@
 
 3. Generate the archive containing the executable and `.o` files
   ```
-  C:\Qt\QtIFW-4.0.1\bin\archivegen.exe packages\com.ariou.mangareader.root\data\MangaReader.7z ..\build-MangaReader-Stat
+  C:\Qt\QtIFW-4.0.1\bin\archivegen.exe packages\com.ariou.mangareader.root\data\MangaReader.7z ..\build-MangaReader-Static_Qt-Release\release
   ```
 
 4. Generate the repository
   ```
-  
+  C:\Qt\QtIFW-4.0.1\bin\repogen.exe --update -p packages release
   ```
 
-### Windows installation
-
-- One need to install openSSL and put the dll in system32 directory. Look at [this link](https://stackoverflow.com/questions/20351155/how-can-i-enable-ssl-in-qt-windows-application) for more details.
+5. Generate the online installer
+  ```
+  C:\Qt\QtIFW-4.0.1\bin\binarycreator.exe -n -c config\config.xml -p packages MangaReader-setup.exe
+  ```
 
 ## TODOs
 
