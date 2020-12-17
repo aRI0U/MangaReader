@@ -3,7 +3,7 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
-    setWindowTitle("MangaReader");
+    setWindowTitle(constants::applicationName + " v" + constants::currentVersion);
     setMinimumSize(constants::mainWindowMinimumSize);
 
     createStatusBar();
