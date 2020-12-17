@@ -125,7 +125,10 @@ void MainWindow::refreshLibrary(Chapter &chapter) {
 }
 
 void MainWindow::newVersionWarning(QString version) {
-    qDebug() << "new version:" << version;
+    QMessageBox::information(this,
+                             tr("New version available"),
+                             tr("You are currently using MangaReader version %1 but version %2 is available. "
+                                "Use the maintenance tool to download it.").arg(constants::currentVersion).arg(version));
 }
 
 
