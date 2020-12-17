@@ -1,7 +1,8 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),
+      m_versionChecker(new VersionChecker(this))
 {
     setWindowTitle("MangaReader");
     setMinimumSize(constants::mainWindowMinimumSize);
@@ -16,6 +17,10 @@ MainWindow::MainWindow(QWidget* parent)
     readSettings();
 
     updateLibrary();
+
+    connect(m_versionChecker, &VersionChecker::existsNewVersion,
+            this, &MainWindow::newVersionWarning);
+    m_versionChecker->checkVersion();
 }
 
 void MainWindow::createCentralWidget() {
@@ -117,6 +122,10 @@ void MainWindow::refreshLibrary(Chapter &chapter) {
     // eventually open library
     QString scansPath = settings.value("Library/scansPath").toString();
     mainTab->refreshLibrary(QDir(scansPath));
+}
+
+void MainWindow::newVersionWarning(QString version) {
+    qDebug() << "new version:" << version;
 }
 
 
