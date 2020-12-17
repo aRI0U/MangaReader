@@ -1,4 +1,4 @@
-QT       += core gui network sql widgets
+QT       += core gui network sql widgets xml
 
 CONFIG += c++11
 
@@ -39,7 +39,8 @@ SOURCES += \
     src/utils/notifications/NotificationManager.cpp \
     src/utils/notifications/NotificationWidget.cpp \
     src/utils/pagegroup/PageGrouper.cpp \
-    src/utils/sql/DatabaseConnection.cpp
+    src/utils/sql/DatabaseConnection.cpp \
+    src/utils/versionchecker/VersionChecker.cpp
 
 HEADERS += \
     src/constants.h \
@@ -66,7 +67,8 @@ HEADERS += \
     src/utils/notifications/NotificationManager.h \
     src/utils/notifications/NotificationWidget.h \
     src/utils/pagegroup/PageGrouper.h \
-    src/utils/sql/DatabaseConnection.h
+    src/utils/sql/DatabaseConnection.h \
+    src/utils/versionchecker/VersionChecker.h
 
 TRANSLATIONS += \
     translations/MangaReader_en.ts \

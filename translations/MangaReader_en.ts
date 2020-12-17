@@ -12,37 +12,47 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="37"/>
+        <location filename="../src/ui/MainWindow.cpp" line="42"/>
         <source>Library</source>
         <translation>Library</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="53"/>
+        <location filename="../src/ui/MainWindow.cpp" line="58"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="54"/>
+        <location filename="../src/ui/MainWindow.cpp" line="59"/>
         <source>&amp;Open...</source>
         <translation>&amp;Open...</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="62"/>
+        <location filename="../src/ui/MainWindow.cpp" line="67"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="115"/>
+        <location filename="../src/ui/MainWindow.cpp" line="120"/>
         <source>: New chapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="126"/>
+        <location filename="../src/ui/MainWindow.cpp" line="129"/>
+        <source>New version available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/MainWindow.cpp" line="130"/>
+        <source>You are currently using MangaReader version %1 but version %2 is available. Use the maintenance tool to download it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/MainWindow.cpp" line="138"/>
         <source>Open Library</source>
         <translation>Open Library</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="56"/>
+        <location filename="../src/ui/MainWindow.cpp" line="61"/>
         <source>Open a library of mangas</source>
         <translation>Open a library of mangas</translation>
     </message>
@@ -51,27 +61,27 @@
         <translation type="vanished">Quit</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="64"/>
+        <location filename="../src/ui/MainWindow.cpp" line="69"/>
         <source>Quit the application</source>
         <translation>Quit the application</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="68"/>
+        <location filename="../src/ui/MainWindow.cpp" line="73"/>
         <source>&amp;Edit</source>
         <translation>&amp;Edit</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="70"/>
+        <location filename="../src/ui/MainWindow.cpp" line="75"/>
         <source>&amp;Settings</source>
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="76"/>
+        <location filename="../src/ui/MainWindow.cpp" line="81"/>
         <source>&amp;View</source>
         <translation>&amp;View</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="79"/>
+        <location filename="../src/ui/MainWindow.cpp" line="84"/>
         <source>Full Screen</source>
         <translation>Full Screen</translation>
     </message>

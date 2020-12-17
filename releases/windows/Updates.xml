@@ -1,0 +1,22 @@
+<Updates>
+ <ApplicationName>{AnyApplication}</ApplicationName>
+ <ApplicationVersion>1.0.0</ApplicationVersion>
+ <Checksum>true</Checksum>
+ <PackageUpdate>
+  <Name>com.ariou.mangareader.root</Name>
+  <DisplayName>MangaReader</DisplayName>
+  <Description>Main application</Description>
+  <Version>0.1.0</Version>
+  <ReleaseDate>2020-12-17</ReleaseDate>
+  <Default>true</Default>
+  <Script>installscript.qs</Script>
+  <UpdateFile UncompressedSize="16764626" CompressedSize="5523347" OS="Any"/>
+  <DownloadableArchives>MangaReader.7z</DownloadableArchives>
+  <Licenses>
+   <License name="GNU Lesser General Public Licence v3" file="LICENSE.md"/>
+  </Licenses>
+  <SHA1>2cc9f2fe8e09eef37b5944ce1eec7bd951890aa3</SHA1>
+ </PackageUpdate>
+ <SHA1>2cc9f2fe8e09eef37b5944ce1eec7bd951890aa3</SHA1>
+ <MetadataName>2020-12-17-0246_meta.7z</MetadataName>
+</Updates>

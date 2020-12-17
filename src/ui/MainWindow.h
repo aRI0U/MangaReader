@@ -19,6 +19,7 @@
 #include "tabs/maintab/MainTab.h"
 #include "settings/SettingsWindow.h"
 
+#include "utils/versionchecker/VersionChecker.h"
 #include "utils/notifications/NotificationLayout.h"
 #include "utils/notifications/NotificationManager.h"
 #include "utils/scandl/scansDownloaders.h"
@@ -43,6 +44,7 @@ signals:
 private slots:
     void closeTab(int index);
     void refreshLibrary(Chapter &chapter);
+    void newVersionWarning(QString version);
 
 private:
     void createCentralWidget();
@@ -61,6 +63,7 @@ private:
     NotificationLayout* notificationLayout;
 
     QList<AbstractScansDownloader *> m_scanDownloaders;
+    VersionChecker *m_versionChecker;
 
     SettingsWindow *settingsWindow;
 
