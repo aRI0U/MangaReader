@@ -71,4 +71,4 @@ Thumbs.db
 *.dll
 
 # packages data
-packages/data/MangaReader.7z
+packages/com.ariou.mangareader.root/data/MangaReader.7z
