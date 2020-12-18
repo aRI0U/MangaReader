@@ -15,9 +15,11 @@ void VersionChecker::checkVersion() {
 }
 
 void VersionChecker::parseVersion(QDownload *dl) {
-    qDebug() << dl->error();
-    if (!dl->success())
-        return;
+    if (!dl->success()) {
+        QMessageBox::information(nullptr,
+                                 dl->error(),
+                                 dl->targetFile() + dl->targetUrl().url());
+    }
     QFile *file = new QFile(dl->targetFile());
     QDomDocument doc("my document");
     doc.setContent(file);
