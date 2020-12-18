@@ -12,7 +12,7 @@ ECHO "This script will create the MangaReader installer for %currentOS%."
 PAUSE
 
 cd ..
-rm archiveFile
+rm %archiveFile%
 %QtIFWDir%\archivegen.exe %archiveFile% %binariesDir%
 %QtIFWDir%\repogen.exe --update -p %packagesDir% %repoDir%
 %QtIFWDir%\binarycreator.exe -n -c %configFile% -p %packagesDir% %installerDir%\MangaReader-%currentOS%-setup.exe

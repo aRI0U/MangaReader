@@ -10,13 +10,13 @@
   <ReleaseDate>2020-12-18</ReleaseDate>
   <Default>true</Default>
   <Script>installscript.qs</Script>
-  <UpdateFile UncompressedSize="16969291" OS="Any" CompressedSize="5563250"/>
+  <UpdateFile UncompressedSize="16969291" CompressedSize="5563250" OS="Any"/>
   <DownloadableArchives>MangaReader.7z</DownloadableArchives>
   <Licenses>
    <License name="GNU Lesser General Public Licence v3" file="LICENSE.md"/>
   </Licenses>
-  <SHA1>7d6061ea7c5252e0dc8f4d5c815cec0515a19578</SHA1>
+  <SHA1>0169e30a15f65315a60cf4f8554b79404753dcf7</SHA1>
  </PackageUpdate>
- <SHA1>7d6061ea7c5252e0dc8f4d5c815cec0515a19578</SHA1>
- <MetadataName>2020-12-18-1215_meta.7z</MetadataName>
+ <SHA1>0169e30a15f65315a60cf4f8554b79404753dcf7</SHA1>
+ <MetadataName>2020-12-18-1216_meta.7z</MetadataName>
 </Updates>
