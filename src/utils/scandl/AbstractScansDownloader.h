@@ -64,6 +64,7 @@ protected:
     QPath m_htmlDir;
     QUrl m_baseUrl;
     QUrl m_listUrl;
+    QUrl m_imagesUrl;
 
     DatabaseConnection *m_database;
 

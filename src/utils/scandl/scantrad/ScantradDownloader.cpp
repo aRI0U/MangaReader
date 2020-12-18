@@ -9,6 +9,7 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 
     m_baseUrl = QUrl(constants::scantradBaseUrl);
     m_listUrl = QUrl(constants::scantradAllMangasUrl);
+    m_imagesUrl = QUrl(constants::scantradImagesUrl);
 
     QDir localDataLocation = QDir(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
     QString dirName = "html_" + constants::scantradName;
@@ -26,9 +27,6 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 
 void ScantradDownloader::downloadFinished(QDownload *download) {
     if (!download->success()) {
-        QMessageBox::critical(nullptr,
-                              download->targetFile(),
-                              download->targetUrl().url() + download->error());
         return;
     }
 
@@ -144,7 +142,7 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapt
     for (int i = 0; i < imageUrlList.size(); ++i) {
         QFile imageFile(chapterDir / (QString::number(i+1).rightJustified(2, '0') + ".png"));
 
-        m_downloader->download(m_baseUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image, {{"id", chapterId}});
+        m_downloader->download(m_imagesUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image, {{"id", chapterId}});
     }
     emit chapterDownloaded(chapter);
 }
