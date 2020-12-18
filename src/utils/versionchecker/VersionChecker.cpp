@@ -17,8 +17,8 @@ void VersionChecker::checkVersion() {
 void VersionChecker::parseVersion(QDownload *dl) {
     if (!dl->success()) {
         QMessageBox::information(nullptr,
-                                 dl->error(),
-                                 dl->targetFile() + dl->targetUrl().url());
+                                 dl->targetFile(),
+                                 dl->targetUrl().url() + dl->error());
     }
     QFile *file = new QFile(dl->targetFile());
     QDomDocument doc("my document");
