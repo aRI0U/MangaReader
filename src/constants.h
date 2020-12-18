@@ -41,6 +41,7 @@ namespace constants {
     const QString scantradName = "scantrad";
     const QString scantradBaseUrl = "https://scantrad.net";
     const QString scantradAllMangasUrl = scantradBaseUrl + "/mangas";
+    const QString scantradImagesUrl = "https://scan-trad.fr";
 }
 
 #endif // CONSTANTS_H
