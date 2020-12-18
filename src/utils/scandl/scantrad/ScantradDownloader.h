@@ -1,6 +1,7 @@
 #ifndef SCANTRADDOWNLOADER_H
 #define SCANTRADDOWNLOADER_H
 
+#include <QMessageBox>
 #include <QRegularExpression>
 #include <QSettings>
 #include <QStandardPaths>

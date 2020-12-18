@@ -27,7 +27,6 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 
 void ScantradDownloader::downloadFinished(QDownload *download) {
     if (!download->success()) {
-        qDebug() << "Failed to download" << download->targetFile() << "from" << download->targetUrl() << ":" << download->error();
         return;
     }
 

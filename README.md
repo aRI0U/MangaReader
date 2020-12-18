@@ -18,19 +18,19 @@ Feel free to contact me if you face bugs or issues.
 2. Update the version and release dates in `config\windows.xml` and `packages\com.ariou.mangareader.root\meta\package.xml`.
 
 3. Generate the archive containing the executable and `.o` files
-	```
+  ```
 C:\Qt\QtIFW-4.0.1\bin\archivegen.exe packages\com.ariou.mangareader.root\data\MangaReader.7z ..\build-MangaReader-Static_Qt-Release\release
-	```
+  ```
 
 4. Generate the repository
-	```
-C:\Qt\QtIFW-4.0.1\bin\repogen.exe --update -p packages releases\windows
-	```
+  ```
+C:\Qt\QtIFW-4.0.1\bin\repogen.exe --update -p packages release
+  ```
 
 5. Generate the online installer
-	```
-C:\Qt\QtIFW-4.0.1\bin\binarycreator.exe -n -c config\windows.xml -p packages setups\MangaReader-windows-setup.exe
-	```
+  ```
+C:\Qt\QtIFW-4.0.1\bin\binarycreator.exe -n -c config\config.xml -p packages MangaReader-setup.exe
+  ```
 
 ## TODOs
 

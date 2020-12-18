@@ -2,6 +2,7 @@
 #define VERSIONCHECKER_H
 
 #include <QDomDocument>
+#include <QMessageBox>
 #include <QObject>
 #include <QTemporaryFile>
 
