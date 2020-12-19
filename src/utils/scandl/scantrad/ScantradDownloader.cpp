@@ -111,7 +111,7 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapt
     QString chapterName = constants::chapterFolderTemplate.arg(chapter.number).arg(chapter.name);
 
     QSettings settings;
-    QPath chapterDir = QPath(settings.value("Library/scansPath").toString()) / chapter.manga / chapterName;
+    QPath chapterDir = (QPath(settings.value("Library/scansPath").toString()) / chapter.manga / chapterName).valid();
 
     if (!chapterDir.mkdir())
         qDebug() << "Failed to create folder" << chapterDir;
