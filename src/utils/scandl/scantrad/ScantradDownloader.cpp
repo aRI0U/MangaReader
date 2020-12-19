@@ -27,6 +27,9 @@ ScantradDownloader::ScantradDownloader(QObject *parent)
 
 void ScantradDownloader::downloadFinished(QDownload *download) {
     if (!download->success()) {
+        QMessageBox::warning(nullptr,
+                             download->targetFile(),
+                             download->targetUrl().url() + download->error());
         return;
     }
 
