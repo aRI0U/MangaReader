@@ -26,9 +26,7 @@ namespace constants {
 
     /* SCAN STORING */
     // folder name template
-    const QString chapterFolderTemplate = QSysInfo::productType() == "windows"
-            ? "Chapitre %1 - %2"
-            : "Chapitre %1 : %2";
+    const QString chapterFolderTemplate = "Chapitre %1 : %2";
 
     // database
     const QString dbFilename = "database.db";

@@ -34,17 +34,17 @@
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="120"/>
         <source>: New chapter</source>
-        <translation type="unfinished"></translation>
+        <translation>: New chapter</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="129"/>
         <source>New version available</source>
-        <translation type="unfinished"></translation>
+        <translation>New version available</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="130"/>
         <source>You are currently using MangaReader version %1 but version %2 is available. Use the maintenance tool to download it.</source>
-        <translation type="unfinished"></translation>
+        <translation>You are currently using MangaReader version %1 but version %2 is available. Use the maintenance tool to download it.</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="138"/>
@@ -95,6 +95,19 @@
     </message>
 </context>
 <context>
+    <name>QDownload</name>
+    <message>
+        <location filename="../src/libs/QDownload/QDownload.cpp" line="82"/>
+        <source>Connection error: </source>
+        <translation>Connection error: </translation>
+    </message>
+    <message>
+        <location filename="../src/libs/QDownload/QDownload.cpp" line="95"/>
+        <source>I/O error: </source>
+        <translation>I/O error: </translation>
+    </message>
+</context>
+<context>
     <name>ScantradDownloader</name>
     <message>
         <source>Chapitre </source>
@@ -127,17 +140,17 @@
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="70"/>
         <source>Followed series:</source>
-        <translation type="unfinished"></translation>
+        <translation>Followed series:</translation>
     </message>
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="72"/>
         <source>Available series:</source>
-        <translation type="unfinished"></translation>
+        <translation>Available series:</translation>
     </message>
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="74"/>
         <source>Apply changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Apply changes</translation>
     </message>
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="94"/>

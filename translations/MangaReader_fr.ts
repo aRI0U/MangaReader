@@ -49,7 +49,7 @@
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="138"/>
         <source>Open Library</source>
-        <translation>&amp;Ouvrir...</translation>
+        <translation>Ouvrir...</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="61"/>
@@ -92,6 +92,19 @@
         <location filename="../src/utils/notifications/NotificationWidget.cpp" line="74"/>
         <source>Close</source>
         <translation>Fermer</translation>
+    </message>
+</context>
+<context>
+    <name>QDownload</name>
+    <message>
+        <location filename="../src/libs/QDownload/QDownload.cpp" line="82"/>
+        <source>Connection error: </source>
+        <translation>Problème de connexion : </translation>
+    </message>
+    <message>
+        <location filename="../src/libs/QDownload/QDownload.cpp" line="95"/>
+        <source>I/O error: </source>
+        <translation>Erreur I/O : </translation>
     </message>
 </context>
 <context>
