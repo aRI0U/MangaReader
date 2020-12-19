@@ -2,12 +2,12 @@
 
 Reader::Reader(QWidget* parent, QString manga) :
     QWidget(parent),
-    layout(new QHBoxLayout),
-    label(nullptr),
+    m_layout(new QHBoxLayout),
+    m_label(nullptr),
     mangaName(manga)
 {
-    layout->setSpacing(0);
-    setLayout(layout);
+    m_layout->setSpacing(0);
+    setLayout(m_layout);
 
     QAction* leftAction = new QAction(this);
     QAction* rightAction = new QAction(this);
@@ -55,10 +55,10 @@ void Reader::setPagesDir(QDir value) {
         pagesList.append(pagesDir.absoluteFilePath(fname));
 
     if (!isActive()) {
-        label = new PixmapLabel;
-        label->setAlignment(Qt::AlignHCenter);
+        m_label = new PixmapLabel;
+        m_label->setAlignment(Qt::AlignHCenter);
 
-        layout->addWidget(label);
+        m_layout->addWidget(m_label);
     }
 
     // check if volume has already been opened
@@ -77,7 +77,7 @@ void Reader::setPagesDir(QDir value) {
 }
 
 bool Reader::isActive() const {
-    return (label != nullptr);
+    return (m_label != nullptr);
 }
 
 void Reader::initDoublePages() {
@@ -170,7 +170,7 @@ void Reader::displayPages(const int index) {
     QList<int> currentDoublePage = doublePages.at(index);
     switch (currentDoublePage.size()) {
         case 1:
-            label->updatePixmap(loadPage(currentDoublePage.at(0)));
+            m_label->updatePixmap(loadPage(currentDoublePage.at(0)));
             break;
 
         case 2:
@@ -200,7 +200,7 @@ void Reader::displayPages(const int index) {
             painter.drawPixmap(0, 0, leftPage.width(), leftPage.height(), leftPage);
             painter.drawPixmap(leftPage.width(), 0, rightPage.width(), rightPage.height(), rightPage);
 
-            label->updatePixmap(collage);
+            m_label->updatePixmap(collage);
             break;
         }
 

@@ -13,11 +13,8 @@ QPixmap PageGrouper::loadPage(const QString path,  const char* format, const Qt:
 }
 
 QString PageGrouper::loadCorruptedImage(QString path, QPixmap &image) {
-    QList<QByteArray> supportedFormats = QImageReader::supportedImageFormats();
-    supportedFormats.removeAt(4);
-    qDebug() << supportedFormats;
+    QList<QByteArray> supportedFormats = {"jpg", "png"};
     for (const char* format : supportedFormats) {
-        qDebug() << format;
         if (image.load(path, format)) {
             QPixmapCache::insert(path, image);
             return renameFile(path, format);
