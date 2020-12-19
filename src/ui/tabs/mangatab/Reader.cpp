@@ -2,8 +2,8 @@
 
 Reader::Reader(QWidget* parent, QString manga) :
     QWidget(parent),
-    m_layout(new QHBoxLayout),
     m_label(nullptr),
+    m_layout(new QHBoxLayout),
     mangaName(manga)
 {
     m_layout->setSpacing(0);
