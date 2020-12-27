@@ -15,6 +15,7 @@ class DatabaseConnection : public QObject
     Q_OBJECT
 public:
     explicit DatabaseConnection(QObject *parent = nullptr);
+    ~DatabaseConnection();
 
     bool addWebsiteToDatabase(const int id,
                               const QString &name,
@@ -24,11 +25,12 @@ public:
     QSqlQuery *followedMangas(const uint website, const uint delay = 0) const;
     QSqlQuery *chaptersToDownload() const;
 
-    bool insertManga(const QString &url, const QString &name, const int website);
+    bool insertManga(const int website, const QString &url, const QString &name, const QString &author = tr("Unknown author"), const QString &synopsis = "");
     int addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
 
     uint getMangaId(const QUrl &mangaUrl) const;
     QString getMangaName(const uint &mangaId) const;
+    uint getAuthorId(const QString &author);
     bool isComplete(const uint chapterId) const;
     bool markAsComplete(const uint chapterId);
     bool updateLastDownloadDatetime(const uint mangaId);

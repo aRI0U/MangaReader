@@ -25,7 +25,7 @@ public:
 public slots:
 
 private:
-    const int followColumn = 5;
+    const int followColumn = 3;
 };
 
 #endif // MANGASQLMODEL_H

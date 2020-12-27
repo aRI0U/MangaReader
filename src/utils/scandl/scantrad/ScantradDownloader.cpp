@@ -187,6 +187,6 @@ void ScantradDownloader::generateMangaList(const QString &htmlFile) {
     for (int i=0; i<names.count(); ++i) {
         QUrl url = m_baseUrl.resolved(hrefs.at(i));
         QString name = names.at(i);
-        m_database->insertManga(url.url(), name, m_id);
+        m_database->insertManga(m_id, url.url(), name);
     }
 }

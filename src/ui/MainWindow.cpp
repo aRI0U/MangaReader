@@ -100,6 +100,7 @@ void MainWindow::initializeNotificationsManager() {
 void MainWindow::initializeDownloaders() {
     m_scanDownloaders.clear();
     m_scanDownloaders << new ScantradDownloader(this);
+    m_scanDownloaders << new LelscanDownloader(this);
 
     // TODO: refresh library after downloading
     for (int i=0; i<m_scanDownloaders.size(); ++i) {

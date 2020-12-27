@@ -32,6 +32,7 @@ SOURCES += \
     src/ui/tabs/mangatab/PixmapLabel.cpp \
     src/ui/tabs/mangatab/Reader.cpp \
     src/utils/scandl/AbstractScansDownloader.cpp \
+    src/utils/scandl/lelscan/LelscanDownloader.cpp \
     src/utils/scandl/scantrad/ScantradDownloader.cpp \
     src/utils/html/QSgml.cpp \
     src/utils/html/QSgmlTag.cpp \
@@ -59,6 +60,7 @@ HEADERS += \
     src/ui/tabs/mangatab/PixmapLabel.h \
     src/ui/tabs/mangatab/Reader.h \
     src/utils/scandl/AbstractScansDownloader.h \
+    src/utils/scandl/lelscan/LelscanDownloader.h \
     src/utils/scandl/scansDownloaders.h \
     src/utils/scandl/scantrad/ScantradDownloader.h \
     src/utils/html/QSgml.h \

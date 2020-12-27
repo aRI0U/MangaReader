@@ -40,6 +40,10 @@ namespace constants {
     const QString scantradBaseUrl = "https://scantrad.net";
     const QString scantradAllMangasUrl = scantradBaseUrl + "/mangas";
     const QString scantradImagesUrl = "https://scan-trad.fr";
+
+    // Lelscan constants
+    const QString lelscanName = "lelscan";
+    const QString lelscanBaseUrl = "https://lelscans.net";
 }
 
 #endif // CONSTANTS_H

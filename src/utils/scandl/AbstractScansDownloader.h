@@ -7,7 +7,8 @@
 #include "utils/sql/DatabaseConnection.h"
 
 enum Downloader {
-    Scantrad
+    Scantrad,
+    Lelscan
 };
 
 enum FileType {

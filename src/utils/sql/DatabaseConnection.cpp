@@ -9,6 +9,10 @@ DatabaseConnection::DatabaseConnection(QObject *parent) : QObject(parent)
     createDatabase();
 }
 
+DatabaseConnection::~DatabaseConnection() {
+    db.close();
+}
+
 
 bool DatabaseConnection::addWebsiteToDatabase(const int id,
                                               const QString &name,
@@ -28,11 +32,12 @@ bool DatabaseConnection::addWebsiteToDatabase(const int id,
 
 QSqlQuery *DatabaseConnection::followedMangas(const uint website, const uint delay) const {
     QSqlQuery *query = new QSqlQuery(db);
-    query->prepare("SELECT ID, Name, Url FROM Mangas "
-                   "WHERE Website = :website "
-                   "AND Follow "
-                   "AND LastDownload IS NULL "
-                   "    OR STRFTIME('%s', 'now') - strftime('%s', LastDownload) > :delay");
+    query->prepare("SELECT Mangas.ID, Mangas.Name, Sources.Url FROM Mangas "
+                   "JOIN Sources ON Sources.Manga = Mangas.ID "
+                   "WHERE Sources.Website = :website "
+                   "AND Mangas.Follow "
+                   "AND Mangas.LastDownload IS NULL "
+                   "    OR STRFTIME('%s', 'now') - strftime('%s', Mangas.LastDownload) > :delay");
     query->bindValue(":website", website);
     query->bindValue(":delay", delay);
     query->exec();
@@ -50,13 +55,37 @@ QSqlQuery *DatabaseConnection::chaptersToDownload() const {
 }
 
 
-bool DatabaseConnection::insertManga(const QString &url, const QString &name, const int website) {
+bool DatabaseConnection::insertManga(const int website, const QString &url, const QString &name, const QString &author, const QString &synopsis) {
+    uint authorId = getAuthorId(author);
+
     QSqlQuery query(db);
-    query.prepare("INSERT OR IGNORE INTO Mangas (Name, Url, Website) "
-                  "VALUES (:name, :url, :website)");
+    query.prepare("INSERT OR IGNORE INTO Mangas (Name) "
+                  "VALUES (:name)");
     query.bindValue(":name", name);
-    query.bindValue(":url", url);
+    query.exec();
+
+    if (!(db.transaction() && db.commit()))
+        qDebug() << "Failed to add manga" << name << "to the database";
+
+    query.prepare("SELECT ID From Mangas "
+                  "WHERE Name = :name");
+    query.bindValue(":name", name);
+    query.exec();
+    query.next();
+    uint id = query.value("ID").toInt();
+
+    query.prepare("UPDATE Mangas "
+                  "SET Author = :author, Synopsis = :synopsis "
+                  "WHERE ID = :id");
+    query.bindValue(":id", id);
+    query.bindValue(":author", authorId);
+    query.bindValue(":synopsis", synopsis);
+
+    query.prepare("INSERT OR IGNORE INTO Sources (Manga, Website, Url) "
+                  "VALUES (:id, :website, :url)");
+    query.bindValue(":id", id);
     query.bindValue(":website", website);
+    query.bindValue(":url", url);
     query.exec();
 
     return (db.transaction() && db.commit());
@@ -88,12 +117,12 @@ int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number
 
 uint DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     QSqlQuery query(db);
-    query.prepare("SELECT ID FROM Mangas "
+    query.prepare("SELECT Manga FROM Sources "
                   "WHERE Url = :url");
     query.bindValue(":url", mangaUrl.url());
     query.exec();
     query.next();
-    return query.value("ID").toInt();
+    return query.value("Manga").toInt();
 }
 
 QString DatabaseConnection::getMangaName(const uint &mangaId) const {
@@ -104,6 +133,24 @@ QString DatabaseConnection::getMangaName(const uint &mangaId) const {
     query.exec();
     query.next();
     return query.value("Name").toString();
+}
+
+uint DatabaseConnection::getAuthorId(const QString &author) {
+    QSqlQuery query(db);
+    query.prepare("INSERT OR IGNORE INTO Authors (RomajiName) "
+                  "VALUES (:author)");
+    query.bindValue(":author", author);
+    query.exec();
+
+    if (!(db.transaction() && db.commit()))
+        qDebug() << "Failed to add author" << author;
+
+    query.prepare("SELECT ID FROM Authors "
+                  "WHERE RomajiName = :author");
+    query.bindValue(":author", author);
+    query.exec();
+    query.next();
+    return query.value("ID").toInt();
 }
 
 bool DatabaseConnection::isComplete(const uint chapterId) const {
@@ -170,17 +217,24 @@ bool DatabaseConnection::createDatabase() {
     query.exec(
 "                CREATE TABLE IF NOT EXISTS Mangas (                            "
 "                    ID             INTEGER         NOT NULL,                   "
-"                    Website		UNSIGNED INT	NOT NULL,                   "
 "                    Author         UNSIGNED INT,                               "
 "                    Name           VARCHAR(32)     NOT NULL,                   "
-"                    Url    		VARCHAR(32)     NOT NULL,                   "
 "                    Follow         BOOL            DEFAULT false,              "
 "                    Synopsis       TEXT,                                       "
 "                    LastDownload	DATETIME,                                   "
 "                    PRIMARY KEY(ID)                                            "
-"                    FOREIGN KEY (Website) REFERENCES Websites(ID),             "
 "                    FOREIGN KEY (Author)  REFERENCES Authors(ID)               "
-"                    UNIQUE(Name,Url)                                           "
+"                    UNIQUE(Name)                                               "
+"                );                                                             "
+    );
+    query.exec(
+"                CREATE TABLE IF NOT EXISTS Sources (                           "
+"                    Manga          INTEGER          NOT NULL,                  "
+"                    Website        INTEGER          NOT NULL,                  "
+"                    Url    		VARCHAR(32)      NOT NULL,                  "
+"                    FOREIGN KEY (Manga)     REFERENCES Mangas(ID)              "
+"                    FOREIGN KEY (Website)   REFERENCES Websites(ID)            "
+"                    UNIQUE (Url)                                               "
 "                );                                                             "
     );
     query.exec(
