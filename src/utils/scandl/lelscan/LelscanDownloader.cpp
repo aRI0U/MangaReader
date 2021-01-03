@@ -1,7 +1,7 @@
 #include "LelscanDownloader.h"
 
-LelscanDownloader::LelscanDownloader(QObject *parent)
-    : AbstractScansDownloader(parent)
+LelscanDownloader::LelscanDownloader(DatabaseConnection *database, QObject *parent)
+    : AbstractScansDownloader(database, parent)
 {
     m_id = Downloader::Lelscan;
 
@@ -56,6 +56,48 @@ void LelscanDownloader::downloadFinished(QDownload *download) {
 }
 
 
+void LelscanDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile, uint mangaId) {
+    QFile f(htmlFile);
+    QSgml html(f);
+
+    QList<QSgmlTag*> *forms = new QList<QSgmlTag *>();
+    html.getElementsByName("form", "action", "/lecture-en-ligne.php", forms);
+    if (forms->size() != 1) {
+        qDebug() << htmlFile << "doesn't have a lel form";
+        return;
+    }
+
+    QSgmlTag *select = forms->at(0)->getElementsByName("select").at(0);
+    QList<QSgmlTag *> elements = select->findAll("option");
+
+    qDebug() << "tag" << elements.size();
+    for (QSgmlTag *elem : elements) {
+        Chapter chapter;
+
+        chapter.manga = m_database->getMangaName(mangaId);
+
+        chapter.number = elem->getText().toUInt();
+
+        chapter.url = elem->getArgValue("value").split('"').at(0);
+
+        qDebug() << chapter.number << chapter.manga << chapter.url << m_database->chapterAlreadyRegistered(mangaId, chapter.number);
+
+        if (m_database->chapterAlreadyRegistered(mangaId, chapter.number))
+            continue;
+
+        int chapterId = addChapterToDatabase(mangaUrl, chapter);  // TODO: solve this
+        if (m_database->isComplete(chapterId))
+            continue;
+
+        QSettings settings;
+        if (settings.value("Download/autoDownload", false).toBool()) {
+            m_chaptersList.insert(chapterId, chapter);
+            downloadChapter(mangaId, chapterId, chapter);
+        }
+    }
+}
+
+
 void LelscanDownloader::generateMangaList(const QString &htmlFile) {
     QFile f(htmlFile);
     QSgml html(f);
@@ -68,10 +110,14 @@ void LelscanDownloader::generateMangaList(const QString &htmlFile) {
     html.getElementsByAttribute("class", "hot_manga_img", &elements);
 
     qDebug() << "lelscan" << elements.size();
+    for (QSgmlTag *elem : elements) {
+        names.append(elem->getArgValue("title").chopped(5));
+        hrefs.append(elem->getArgValue("href"));
+    }
 
     for (int i=0; i<names.count(); ++i) {
-        QUrl url = m_baseUrl.resolved(hrefs.at(i));
+        QString url = hrefs.at(i);
         QString name = names.at(i);
-        m_database->insertManga(m_id, url.url(), name);
+        m_database->insertManga(m_id, url, name);
     }
 }

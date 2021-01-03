@@ -10,12 +10,11 @@
 class LelscanDownloader : public AbstractScansDownloader
 {
 public:
-    LelscanDownloader(QObject *parent = nullptr);
+    LelscanDownloader(DatabaseConnection *database, QObject *parent = nullptr);
 
 private slots:
     void downloadFinished(QDownload *download) override;
-//    void downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) override;
-//    void extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile, uint mangaId) override;
+    void extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile, uint mangaId) override;
 //    void extractImagesFromChapter(QPath &chapterFile, uint chapterId) override;
 
 private:

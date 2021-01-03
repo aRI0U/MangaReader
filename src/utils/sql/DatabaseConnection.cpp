@@ -65,7 +65,7 @@ bool DatabaseConnection::insertManga(const int website, const QString &url, cons
     query.exec();
 
     if (!(db.transaction() && db.commit()))
-        qDebug() << "Failed to add manga" << name << "to the database";
+        qDebug() << "Failed to add manga" << name << "to the database:" << db.lastError();
 
     query.prepare("SELECT ID From Mangas "
                   "WHERE Name = :name");
@@ -81,11 +81,12 @@ bool DatabaseConnection::insertManga(const int website, const QString &url, cons
     query.bindValue(":author", authorId);
     query.bindValue(":synopsis", synopsis);
 
-    query.prepare("INSERT OR IGNORE INTO Sources (Manga, Website, Url) "
-                  "VALUES (:id, :website, :url)");
+    query.prepare("INSERT OR IGNORE INTO Sources (Manga, Website, Url, Name) "
+                  "VALUES (:id, :website, :url, :name)");
     query.bindValue(":id", id);
     query.bindValue(":website", website);
     query.bindValue(":url", url);
+    query.bindValue(":name", name);
     query.exec();
 
     return (db.transaction() && db.commit());
@@ -102,7 +103,7 @@ int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number
     query.exec();
 
     if (!(db.transaction() && db.commit()))
-        qDebug() << "Failed to add chapter" << number << ":" << name << "to database";
+        qDebug() << "Failed to add chapter" << number << ":" << name << "to database:" << db.lastError();
 
     query.prepare("SELECT ID FROM Chapters "
                   "WHERE Manga = :manga AND No = :number AND Title = :name AND Url = :url");
@@ -114,6 +115,17 @@ int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number
     query.next();
     return query.value(0).toInt();
 }
+
+bool DatabaseConnection::chapterAlreadyRegistered(const uint manga, const uint number) {
+    QSqlQuery query(db);
+    query.prepare("SELECT * FROM Chapters "
+                  "WHERE Manga = :manga AND No = :number");
+    query.bindValue(":manga", manga);
+    query.bindValue(":number", number);
+    query.exec();
+    return query.next();
+}
+
 
 uint DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     QSqlQuery query(db);
@@ -191,8 +203,10 @@ bool DatabaseConnection::updateLastDownloadDatetime(const uint mangaId) {
 bool DatabaseConnection::createDatabase() {
     qDebug() << "Creating database at" << db.databaseName();
 
-    if (!db.open())
+    if (!db.open()) {
+        qDebug() << db.lastError();
         return false;
+    }
 
     QSqlQuery query;
     query.exec(
@@ -232,6 +246,7 @@ bool DatabaseConnection::createDatabase() {
 "                    Manga          INTEGER          NOT NULL,                  "
 "                    Website        INTEGER          NOT NULL,                  "
 "                    Url    		VARCHAR(32)      NOT NULL,                  "
+"                    Name           VARCHAR(32)      NOT NULL,                  "
 "                    FOREIGN KEY (Manga)     REFERENCES Mangas(ID)              "
 "                    FOREIGN KEY (Website)   REFERENCES Websites(ID)            "
 "                    UNIQUE (Url)                                               "
@@ -250,7 +265,7 @@ bool DatabaseConnection::createDatabase() {
 "                    DownloadDate   DATETIME,                                   "
 "                    PRIMARY KEY (ID),                                          "
 "                    FOREIGN KEY (Manga) REFERENCES Mangas(ID)                  "
-"                    UNIQUE (No, Title, Url)                                    "
+"                    UNIQUE (Manga, No, Title, Url)                             "
 "                );                                                             "
     );
     return (db.transaction() && db.commit());

@@ -33,7 +33,7 @@ namespace constants {
 
     /* SCAN DOWNLOADING */
 
-    const int refreshPeriod = 12*3600;  // 12 hours
+    const int refreshPeriod = 10; //12*3600;  // 12 hours
 
     // Scantrad constants
     const QString scantradName = "scantrad";
@@ -43,7 +43,7 @@ namespace constants {
 
     // Lelscan constants
     const QString lelscanName = "lelscan";
-    const QString lelscanBaseUrl = "https://lelscans.net";
+    const QString lelscanBaseUrl = "https://lelscans.net/lecture-ligne-one-piece.php";
 }
 
 #endif // CONSTANTS_H

@@ -13,10 +13,10 @@ QDebug operator<<(QDebug debug, const Chapter &chapter) {
     return debug;
 }
 
-AbstractScansDownloader::AbstractScansDownloader(QObject *parent)
+AbstractScansDownloader::AbstractScansDownloader(DatabaseConnection *database, QObject *parent)
     : QObject(parent),
-      m_database(new DatabaseConnection(this)),
-      m_downloader(new QDownloader(this))
+      m_downloader(new QDownloader(this)),
+      m_database(database)
 {
     m_downloader->setDefaultPolicy(QOverwritePolicy::NoOverwrite);
 }
@@ -63,6 +63,11 @@ void AbstractScansDownloader::downloadNewChapters() {
     }
 }
 
+void AbstractScansDownloader::downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) {
+    QPath chapterHtml = m_htmlDir / QString::number(mangaId) / (QString::number(chapterId) + ".html");
+
+    m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML, {{"id", chapterId}});
+}
 
 void AbstractScansDownloader::imageDownloaded(uint chapterId) {
     if (--m_nbImagesToDownload[chapterId] == 0) {

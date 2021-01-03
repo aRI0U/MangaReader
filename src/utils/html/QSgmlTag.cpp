@@ -359,6 +359,18 @@ QSgmlTag* QSgmlTag::find(const QString name, const QString attrName, const QStri
     return elem;
 }
 
+QList<QSgmlTag*> QSgmlTag::findAll(const QString name) {
+    QList<QSgmlTag*> elements;
+
+    if (Name == name)
+        elements.append(this);
+
+    for (QSgmlTag* child : Children)
+        elements.append(child->findAll(name));
+
+    return elements;
+}
+
 // constructor
 QSgmlTag::QSgmlTag(void)
 {

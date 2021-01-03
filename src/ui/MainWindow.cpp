@@ -98,9 +98,10 @@ void MainWindow::initializeNotificationsManager() {
 }
 
 void MainWindow::initializeDownloaders() {
+    DatabaseConnection *db = new DatabaseConnection(this);
     m_scanDownloaders.clear();
-    m_scanDownloaders << new ScantradDownloader(this);
-    m_scanDownloaders << new LelscanDownloader(this);
+    m_scanDownloaders << new ScantradDownloader(db, this);
+//    m_scanDownloaders << new LelscanDownloader(db, this);
 
     // TODO: refresh library after downloading
     for (int i=0; i<m_scanDownloaders.size(); ++i) {
@@ -174,9 +175,9 @@ void MainWindow::updateLibrary() {
     if (!settings.value("autoDownload", false).toBool())
         return;
 
-    for (AbstractScansDownloader *downloader : m_scanDownloaders) {
-        downloader->downloadNewChapters();
-    }
+//    for (AbstractScansDownloader *downloader : m_scanDownloaders) {
+//        downloader->downloadNewChapters();
+//    }
 
     settings.endGroup();
 }

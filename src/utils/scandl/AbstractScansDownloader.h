@@ -1,6 +1,8 @@
 #ifndef ABSTRACTSCANSDOWNLOADER_H
 #define ABSTRACTSCANSDOWNLOADER_H
 
+#include <QSettings>
+
 #include "constants.h"
 #include "libs/QDownload/QDownloader.h"
 #include "libs/QPath/QPath.h"
@@ -34,7 +36,7 @@ class AbstractScansDownloader : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractScansDownloader(QObject *parent = nullptr);
+    explicit AbstractScansDownloader(DatabaseConnection *database, QObject *parent = nullptr);
 
     void lookForNewChapters();
 
@@ -45,9 +47,9 @@ signals:
 
 protected slots:
     virtual void downloadFinished(QDownload*) { }
-    virtual void downloadChapter(const uint, const uint, const Chapter&) { }
     virtual void extractChaptersFromHtml(const QUrl&, QPath&, uint) { }
     virtual void extractImagesFromChapter(QPath&, uint) { }
+    void downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter);
     void imageDownloaded(uint chapterId);
 
 protected:

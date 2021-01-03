@@ -1,7 +1,7 @@
 #include "ScantradDownloader.h"
 
-ScantradDownloader::ScantradDownloader(QObject *parent)
-    : AbstractScansDownloader(parent)
+ScantradDownloader::ScantradDownloader(DatabaseConnection *database, QObject *parent)
+    : AbstractScansDownloader(database, parent)
 {
     m_id = Downloader::Scantrad;
 
@@ -67,6 +67,7 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
 
     for (QSgmlTag *elem : elements) {
         Chapter chapter;
+
         chapter.manga = m_database->getMangaName(mangaId);
 
         QSgmlTag *numberElement = elem->find("span", "class", "chl-num");
@@ -148,12 +149,6 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapt
         m_downloader->download(m_imagesUrl.resolved(imageUrlList.at(i)), imageFile, FileType::Image, {{"id", chapterId}});
     }
     emit chapterDownloaded(chapter);
-}
-
-void ScantradDownloader::downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter) {
-    QPath chapterHtml = m_htmlDir / QString::number(mangaId) / (QString::number(chapterId) + ".html");
-
-    m_downloader->download(chapter.url, chapterHtml, FileType::ChapterHTML, {{"id", chapterId}});
 }
 
 

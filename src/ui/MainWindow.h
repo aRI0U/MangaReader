@@ -23,6 +23,7 @@
 #include "utils/notifications/NotificationLayout.h"
 #include "utils/notifications/NotificationManager.h"
 #include "utils/scandl/scansDownloaders.h"
+#include "utils/sql/DatabaseConnection.h"
 
 class MainWindow : public QMainWindow
 {

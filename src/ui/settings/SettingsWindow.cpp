@@ -88,6 +88,7 @@ void SettingsWindow::openDownloadSettings() {
         view->hideColumn(column);
     view->horizontalHeader()->setStretchLastSection(true);
     view->resizeColumnsToContents();
+    view->sortByColumn(2, Qt::AscendingOrder);
     view->show();
 
     // automatic download of last chapters
