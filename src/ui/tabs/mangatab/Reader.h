@@ -57,12 +57,12 @@ signals:
 
 private:
     // attributes
-    QHBoxLayout* layout;
+    PixmapLabel* m_label;
+
+    QHBoxLayout* m_layout;
     QString mangaName;
     QDir pagesDir;
     QStringList pagesList;
-
-    PixmapLabel* label;
 
     QList<QList<int>> doublePages;
     int nDoublePages;

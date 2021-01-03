@@ -11,7 +11,7 @@ namespace constants {
     const QString organizationName("aRI0U-nathanlct");
     const QString applicationName("MangaReader");
     const QString translationsPath("translations");
-    const QString currentVersion("0.1.1");
+    const QString currentVersion("0.1.0");
 
     // Sizes
     const QSize MangaCoverSize = QSize(210, 297);

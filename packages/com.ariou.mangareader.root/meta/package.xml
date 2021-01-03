@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>MangaReader</DisplayName>
     <Description>Main application</Description>
-    <Version>0.1.1</Version>
-    <ReleaseDate>2020-12-18</ReleaseDate>
+    <Version>0.1.0</Version>
+    <ReleaseDate>2020-12-19</ReleaseDate>
     <Licenses>
         <License name="GNU Lesser General Public Licence v3" file="LICENSE.md" />
     </Licenses>
