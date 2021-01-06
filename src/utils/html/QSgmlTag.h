@@ -67,6 +67,9 @@ public:
    ~QSgmlTag(void);
    QString getText() const;
    QSgmlTaglist getElementsByName(const QString name);
+
+
+   QSgmlTag* find(const QString name);
    QSgmlTag* find(const QString name, const QString attrName, const QString attrValue);
 
    QSgmlTaglist findAll(const QString name);

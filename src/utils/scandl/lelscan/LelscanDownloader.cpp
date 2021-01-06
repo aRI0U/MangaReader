@@ -47,6 +47,10 @@ void LelscanDownloader::downloadFinished(QDownload *download) {
         case FileType::ChapterHTML:
             extractImagesFromChapter(targetFile, id);
             break;
+        case FileType::PageHTML:
+            qDebug() << targetFile << download->error();
+            downloadImage(targetFile, download->metadata("dir").toString(), id, download->metadata("page").toUInt());
+            break;
         case FileType::Image:
             imageDownloaded(id);
             break;
@@ -80,23 +84,81 @@ void LelscanDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htm
 
         chapter.url = elem->getArgValue("value").split('"').at(0);
 
-        qDebug() << chapter.number << chapter.manga << chapter.url << m_database->chapterAlreadyRegistered(mangaId, chapter.number);
+        uint chapterId = m_database->chapterAlreadyRegistered(mangaId, chapter.number)
+                ? m_database->getChapterId(mangaId, chapter.number)
+                : addChapterToDatabase(mangaUrl, chapter);
 
-        if (m_database->chapterAlreadyRegistered(mangaId, chapter.number))
-            continue;
-
-        int chapterId = addChapterToDatabase(mangaUrl, chapter);  // TODO: solve this
         if (m_database->isComplete(chapterId))
             continue;
+
+        qDebug() << chapter.manga << chapter.number << chapter.url << chapterId;
 
         QSettings settings;
         if (settings.value("Download/autoDownload", false).toBool()) {
             m_chaptersList.insert(chapterId, chapter);
             downloadChapter(mangaId, chapterId, chapter);
+
         }
+        break;
     }
 }
 
+void LelscanDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapterId) {
+    Chapter chapter = m_chaptersList.value(chapterId);
+
+    // TODO use QStringBuilder + format language
+    QString chapterName = constants::chapterFolderTemplate.arg(chapter.number).arg(chapter.name);
+
+    QSettings settings;
+    QPath chapterDir = (QPath(settings.value("Library/scansPath").toString()) / chapter.manga / chapterName).valid();
+
+    if (!chapterDir.mkdir())
+        qDebug() << "Failed to create folder" << chapterDir;
+
+    QFile f(chapterFile);
+    QSgml html(f);
+
+    QList<QSgmlTag*> elements;
+
+    html.getElementsByAttribute("id", "navigation", &elements);
+
+    if (elements.size() != 1) {
+        qDebug() << chapterFile << "contains" << elements.size() << "tags with id 'navigation'";
+        return;
+    }
+    QList<QSgmlTag *> pagesTags = elements.at(0)->findAll("a");
+
+    m_nbImagesToDownload.insert(chapterId, pagesTags.size()-1);
+
+    for (QSgmlTag *page : pagesTags) {
+        QString pageUrl = page->getArgValue("href");
+        uint pageNumber = pageUrl.split('/').last().toInt();
+
+        QPath path = QPath("/tmp") / (QString::number(chapterId) + '-' + QString::number(pageNumber));
+
+        m_downloader->download(pageUrl, path, FileType::PageHTML, {{"dir", chapterDir}, {"id", chapterId},{"page", pageNumber}});
+    }
+}
+
+
+void LelscanDownloader::downloadImage(const QString &pageHtml, const QString chapterDir, const uint chapterId, const uint page) {
+    QFile f(pageHtml);
+    QSgml html(f);
+
+    QList<QSgmlTag *> elements;
+    html.getElementsByName("div", "id", "image", &elements);
+
+    if (elements.size() != 1) {
+        qDebug() << pageHtml << "has" << elements.size() << "div tags with id 'image'";
+        return;
+    }
+
+    QUrl srcUrl = m_baseUrl.resolved(elements.at(0)->find("img")->getArgValue("src"));
+
+    QPath imageFile = QPath(chapterDir) / (QString::number(page).rightJustified(2, '0') + ".png");
+    qDebug() << srcUrl << imageFile;
+    m_downloader->download(srcUrl, imageFile, FileType::Image, {{"id", chapterId}});
+}
 
 void LelscanDownloader::generateMangaList(const QString &htmlFile) {
     QFile f(htmlFile);
@@ -109,7 +171,6 @@ void LelscanDownloader::generateMangaList(const QString &htmlFile) {
 
     html.getElementsByAttribute("class", "hot_manga_img", &elements);
 
-    qDebug() << "lelscan" << elements.size();
     for (QSgmlTag *elem : elements) {
         names.append(elem->getArgValue("title").chopped(5));
         hrefs.append(elem->getArgValue("href"));

@@ -345,6 +345,20 @@ QSgmlTag::QSgmlTaglist QSgmlTag::getElementsByName(const QString name) {
     return list;
 }
 
+QSgmlTag* QSgmlTag::find(const QString name) {
+    QSgmlTag* elem = nullptr;
+
+    if (Name == name)
+        return this;
+
+    for (QSgmlTag* child : Children) {
+        elem = child->find(name);
+        if (elem != nullptr)
+            break;
+    }
+    return elem;
+}
+
 QSgmlTag* QSgmlTag::find(const QString name, const QString attrName, const QString attrValue) {
     QSgmlTag* elem = nullptr;
 

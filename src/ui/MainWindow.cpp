@@ -101,7 +101,7 @@ void MainWindow::initializeDownloaders() {
     DatabaseConnection *db = new DatabaseConnection(this);
     m_scanDownloaders.clear();
     m_scanDownloaders << new ScantradDownloader(db, this);
-//    m_scanDownloaders << new LelscanDownloader(db, this);
+    m_scanDownloaders << new LelscanDownloader(db, this);
 
     // TODO: refresh library after downloading
     for (int i=0; i<m_scanDownloaders.size(); ++i) {

@@ -30,6 +30,7 @@ public:
     bool chapterAlreadyRegistered(const uint manga, const uint number);
 
     uint getMangaId(const QUrl &mangaUrl) const;
+    uint getChapterId(const uint mangaId, const uint number) const;
     QString getMangaName(const uint &mangaId) const;
     uint getAuthorId(const QString &author);
     bool isComplete(const uint chapterId) const;

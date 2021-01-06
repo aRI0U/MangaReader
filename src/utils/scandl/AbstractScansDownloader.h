@@ -17,6 +17,7 @@ enum FileType {
     ListHTML,
     MangaHTML,
     ChapterHTML,
+    PageHTML,
     Image
 };
 

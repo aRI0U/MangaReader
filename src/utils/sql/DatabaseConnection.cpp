@@ -137,6 +137,17 @@ uint DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
     return query.value("Manga").toInt();
 }
 
+uint DatabaseConnection::getChapterId(const uint mangaId, const uint number) const {
+    QSqlQuery query(db);
+    query.prepare("SELECT ID FROM Chapters "
+                  "WHERE Manga = :manga AND No = :number");
+    query.bindValue(":manga", mangaId);
+    query.bindValue(":number", number);
+    query.exec();
+    query.next();
+    return query.value("ID").toInt();
+}
+
 QString DatabaseConnection::getMangaName(const uint &mangaId) const {
     QSqlQuery query(db);
     query.prepare("SELECT Name FROM Mangas "
