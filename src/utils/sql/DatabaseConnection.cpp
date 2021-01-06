@@ -56,8 +56,6 @@ QSqlQuery *DatabaseConnection::chaptersToDownload() const {
 
 
 bool DatabaseConnection::insertManga(const int website, const QString &url, const QString &name, const QString &author, const QString &synopsis) {
-    uint authorId = getAuthorId(author);
-
     QSqlQuery query(db);
     query.prepare("INSERT OR IGNORE INTO Mangas (Name) "
                   "VALUES (:name)");
@@ -74,12 +72,28 @@ bool DatabaseConnection::insertManga(const int website, const QString &url, cons
     query.next();
     uint id = query.value("ID").toInt();
 
-    query.prepare("UPDATE Mangas "
-                  "SET Author = :author, Synopsis = :synopsis "
-                  "WHERE ID = :id");
-    query.bindValue(":id", id);
-    query.bindValue(":author", authorId);
-    query.bindValue(":synopsis", synopsis);
+    bool authorDefined = (author.size() > 0);
+    bool synopsisDefined = (synopsis.size() > 0);
+
+    QStringList fieldsToSet;
+    if (authorDefined)
+        fieldsToSet << "Author = :author";
+    if (synopsisDefined)
+        fieldsToSet << "Synopsis = :synopsis";
+
+    if (!fieldsToSet.isEmpty()) {
+        QString queryString = QString("UPDATE Mangas SET %1 WHERE ID = :id").arg(fieldsToSet.join(", "));
+        qDebug() << queryString;
+        query.prepare(queryString);
+        query.bindValue(":id", id);
+        if (authorDefined) {
+            uint authorId = getAuthorId(author);
+            query.bindValue(":author", authorId);
+        }
+        if (synopsisDefined)
+            query.bindValue(":synopsis", synopsis);
+        query.exec();
+    }
 
     query.prepare("INSERT OR IGNORE INTO Sources (Manga, Website, Url, Name) "
                   "VALUES (:id, :website, :url, :name)");
