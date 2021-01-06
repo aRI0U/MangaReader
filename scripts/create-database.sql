@@ -1,0 +1,62 @@
+CREATE TABLE IF NOT EXISTS Websites (
+	ID		INTEGER		NOT NULL,
+	Name		VARCHAR(32)	NOT NULL,
+	BaseUrl		VARCHAR(64)	NOT NULL,
+	AllMangasUrl	VARCHAR(64)	NOT NULL,
+	LastDownload	DATETIME,
+	PRIMARY KEY 	(ID),
+	UNIQUE		(Name),
+	UNIQUE		(BaseUrl),
+	UNIQUE		(AllMangasUrl)
+);
+
+CREATE TABLE IF NOT EXISTS Authors (
+	ID		INTEGER		NOT NULL,
+	RomajiName	VARCHAR(32)	NOT NULL,
+	KanjiName	VARCHAR(32),
+	WebpageFR	VARCHAR(64),
+	WebpageEN	VARCHAR(64)
+	PRIMARY KEY	(ID),
+	UNIQUE		(RomajiName)
+);
+
+CREATE TABLE IF NOT EXISTS Mangas (
+	ID		INTEGER		NOT NULL,
+	Name		VARCHAR(32)	NOT NULL,
+	Author		INTEGER,
+	WebpageFR	VARCHAR(64),
+	WebpageEN	VARCHAR(64),
+	Follow		BOOL		DEFAULT false,
+	LastDownload	DATETIME,
+	Synopsis	TEXT,
+	PRIMARY KEY	(ID),
+	FOREIGN KEY	(Author)	REFERENCES Authors(ID),
+	UNIQUE		(Name)
+);
+
+CREATE TABLE IF NOT EXISTS Sources (
+	Manga		INTEGER		NOT NULL,
+	Website		INTEGER		NOT NULL,
+	Url		VARCHAR(64)	NOT NULL,
+	Name		VARCHAR(32)	NOT NULL,
+	FOREIGN KEY	(Manga)		REFERENCES Mangas(ID),
+	FOREIGN KEY	(Website)	REFERENCES Websites(ID),
+	UNIQUE		(Url)
+);
+
+CREATE TABLE IF NOT EXISTS Chapters (
+	ID		INTEGER		NOT NULL,
+	Manga		INTEGER		NOT NULL,
+	No		INTEGER		NOT NULL,
+	Title		VARCHAR(64),
+	Volume		INTEGER,
+	Language	VARCHAR(2),
+	Complete	BOOL		DEFAULT false,
+	Read		BOOL		DEFAULT false,
+	ReleaseDate	DATETIME	DEFAULT CURRENT_TIMESTAMP,
+	DownloadDate	DATETIME,
+	PRIMARY KEY	(ID),
+	FOREIGN KEY	(Manga)		REFERENCES Mangas(ID),
+	UNIQUE		(Manga, No, Title, Language)
+);
+

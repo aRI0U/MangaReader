@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="5.12.8">
+<qresource>
+    <file>images/icons/en-flag.png</file>
+    <file>images/icons/fr-flag.png</file>
+    <file>scripts/create-database.sql</file>
+    <file>translations/MangaReader_en.qm</file>
+    <file>translations/MangaReader_fr.qm</file>
+</qresource>
+</RCC>

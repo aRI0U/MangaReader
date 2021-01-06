@@ -25,7 +25,6 @@ void VersionChecker::parseVersion(QDownload *dl) {
     if (elements.size() == 0)
         return;
     QString lastVersion = elements.at(0).firstChild().nodeValue();
-    qDebug() << lastVersion;
 
     if (compareVersions(constants::currentVersion, lastVersion))
         emit existsNewVersion(lastVersion);

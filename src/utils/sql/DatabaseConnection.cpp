@@ -83,7 +83,6 @@ bool DatabaseConnection::insertManga(const int website, const QString &url, cons
 
     if (!fieldsToSet.isEmpty()) {
         QString queryString = QString("UPDATE Mangas SET %1 WHERE ID = :id").arg(fieldsToSet.join(", "));
-        qDebug() << queryString;
         query.prepare(queryString);
         query.bindValue(":id", id);
         if (authorDefined) {
@@ -215,6 +214,14 @@ bool DatabaseConnection::updateLastDownloadDatetime(const uint mangaId) {
 
 
 bool DatabaseConnection::createDatabase() {
+    QFile f(":/scripts/create-database.sql");
+    if (!f.open(QIODevice::ReadOnly)) {
+        qDebug() << "Unable to open" << f.fileName();
+        return false;
+    }
+    qDebug() << f.readAll();
+
+    qDebug() << "TODO: use sql script";
     qDebug() << "Creating database at" << db.databaseName();
 
     if (!db.open()) {
