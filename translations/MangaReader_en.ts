@@ -32,22 +32,22 @@
         <translation>&amp;Quit</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="120"/>
+        <location filename="../src/ui/MainWindow.cpp" line="122"/>
         <source>: New chapter</source>
         <translation>: New chapter</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="129"/>
+        <location filename="../src/ui/MainWindow.cpp" line="131"/>
         <source>New version available</source>
         <translation>New version available</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="130"/>
+        <location filename="../src/ui/MainWindow.cpp" line="132"/>
         <source>You are currently using MangaReader version %1 but version %2 is available. Use the maintenance tool to download it.</source>
         <translation>You are currently using MangaReader version %1 but version %2 is available. Use the maintenance tool to download it.</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainWindow.cpp" line="138"/>
+        <location filename="../src/ui/MainWindow.cpp" line="140"/>
         <source>Open Library</source>
         <translation>Open Library</translation>
     </message>
@@ -102,9 +102,17 @@
         <translation>Connection error: </translation>
     </message>
     <message>
-        <location filename="../src/libs/QDownload/QDownload.cpp" line="95"/>
+        <location filename="../src/libs/QDownload/QDownload.cpp" line="85"/>
         <source>I/O error: </source>
         <translation>I/O error: </translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../src/constants.h" line="29"/>
+        <source>Chapter %1: %2</source>
+        <translation>Chapter %1: %2</translation>
     </message>
 </context>
 <context>
@@ -133,7 +141,7 @@
     </message>
     <message>
         <location filename="../src/ui/settings/SettingsWindow.cpp" line="26"/>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="128"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="129"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
@@ -153,22 +161,22 @@
         <translation>Apply changes</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="94"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="95"/>
         <source>Automatically check for new chapters</source>
         <translation>Automatically check for new chapters</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="100"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="101"/>
         <source>Automatically download new chapters</source>
         <translation>Automatically download new chapters</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="132"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="133"/>
         <source>Application language:</source>
         <translation>Application language:</translation>
     </message>
     <message>
-        <location filename="../src/ui/settings/SettingsWindow.cpp" line="172"/>
+        <location filename="../src/ui/settings/SettingsWindow.cpp" line="173"/>
         <source>Language settings have been modified. Changes will be effective next time you open the app.</source>
         <translation>Language settings have been modified. Changes will be effective next time you open the app.</translation>
     </message>

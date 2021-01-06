@@ -26,7 +26,7 @@ namespace constants {
 
     /* SCAN STORING */
     // folder name template
-    const QString chapterFolderTemplate = QObject::tr("Chapter %1: %2");
+    const QString chapterFolderTemplate = QObject::tr("Chapitre %1 : %2");
 
     // database
     const QString dbFilename = "database.db";
