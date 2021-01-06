@@ -35,7 +35,7 @@ namespace constants {
 
     /* SCAN DOWNLOADING */
 
-    const int refreshPeriod = 10; //12*3600;  // 12 hours
+    const int refreshPeriod = 12*3600;  // 12 hours
 
     // Scantrad constants
     const QString scantradName = "scantrad";

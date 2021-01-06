@@ -85,16 +85,10 @@ void LelscanDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htm
         if (m_database->chapterAlreadyRegistered(mangaId, chapter.number))
             continue;
 
-        int chapterId = addChapterToDatabase(mangaUrl, chapter);  // TODO: solve this
-        if (m_database->isComplete(chapterId))
-            continue;
-
-        QSettings settings;
-        if (settings.value("Download/autoDownload", false).toBool()) {
-            m_chaptersList.insert(chapterId, chapter);
-            downloadChapter(mangaId, chapterId, chapter);
-        }
+        if (!addChapterToDatabase(mangaId, chapter))
+            qDebug() << "Could not add chapter" << chapter.number << ":" << chapter.name << "to the database";
     }
+    newChaptersAddedToDatabase(mangaId);
 }
 
 

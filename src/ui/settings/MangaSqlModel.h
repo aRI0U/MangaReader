@@ -22,10 +22,8 @@ public:
 
     static QSqlDatabase mangaDatabase();
 
-public slots:
-
-private:
-    const int followColumn = 3;
+    const int nameColumn = 1;
+    const int followColumn = 5;
 };
 
 #endif // MANGASQLMODEL_H

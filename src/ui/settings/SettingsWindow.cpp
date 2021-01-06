@@ -84,8 +84,9 @@ void SettingsWindow::openDownloadSettings() {
 
     view->setModel(model);
     view->setMinimumWidth(settingsWidget->width());
-    for (int column : {0, 1, 4, 5, 6, 7, 8, 9})
-        view->hideColumn(column);
+    for (int c=0; c<8; ++c)
+        if (c != model->nameColumn && c != model->followColumn)
+            view->hideColumn(c);
     view->horizontalHeader()->setStretchLastSection(true);
     view->resizeColumnsToContents();
     view->sortByColumn(2, Qt::AscendingOrder);

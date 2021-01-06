@@ -104,9 +104,15 @@ void MainWindow::initializeDownloaders() {
 //    m_scanDownloaders << new LelscanDownloader(db, this);
 
     // TODO: refresh library after downloading
-    for (int i=0; i<m_scanDownloaders.size(); ++i) {
-        connect(m_scanDownloaders.at(i), &AbstractScansDownloader::chapterDownloaded,
+    QSettings settings;
+    bool autoDownload = settings.value("Download/autoDownload", false).toBool();
+
+    for (AbstractScansDownloader *downloader : m_scanDownloaders) {
+        connect(downloader, &AbstractScansDownloader::chapterDownloaded,
                 this, &MainWindow::refreshLibrary);
+        if (autoDownload)
+            connect(downloader, &AbstractScansDownloader::databaseUpdated,
+                    downloader, &AbstractScansDownloader::downloadNewChapters);
     }
 }
 
@@ -163,23 +169,12 @@ void MainWindow::showFullScreenOrMaximized(bool checked) {
 void MainWindow::updateLibrary() {
     QSettings settings;
 
-    settings.beginGroup("Download");
-
-    if (!settings.value("autoCheck", false).toBool())
+    if (!settings.value("Download/autoCheck", false).toBool())
         return;
 
     for (AbstractScansDownloader *downloader : m_scanDownloaders) {
         downloader->lookForNewChapters();
     };
-
-    if (!settings.value("autoDownload", false).toBool())
-        return;
-
-//    for (AbstractScansDownloader *downloader : m_scanDownloaders) {
-//        downloader->downloadNewChapters();
-//    }
-
-    settings.endGroup();
 }
 
 void MainWindow::readSettings() {

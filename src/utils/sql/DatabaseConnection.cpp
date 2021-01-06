@@ -105,7 +105,7 @@ bool DatabaseConnection::insertManga(const int website, const QString &url, cons
     return (db.transaction() && db.commit());
 }
 
-int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url) {
+bool DatabaseConnection::addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url) {
     QSqlQuery query(db);
     query.prepare("INSERT OR IGNORE INTO Chapters (Manga, No, Title, Url) "
                   "VALUES (:manga, :number, :name, :url)");
@@ -115,18 +115,7 @@ int DatabaseConnection::addChapterToDatabase(const uint manga, const uint number
     query.bindValue(":url", url.url());
     query.exec();
 
-    if (!(db.transaction() && db.commit()))
-        qDebug() << "Failed to add chapter" << number << ":" << name << "to database:" << db.lastError();
-
-    query.prepare("SELECT ID FROM Chapters "
-                  "WHERE Manga = :manga AND No = :number AND Title = :name AND Url = :url");
-    query.bindValue(":manga", manga);
-    query.bindValue(":number", number);
-    query.bindValue(":name", name);
-    query.bindValue(":url", url.url());
-    query.exec();
-    query.next();
-    return query.value(0).toInt();
+    return (db.transaction() && db.commit());
 }
 
 bool DatabaseConnection::chapterAlreadyRegistered(const uint manga, const uint number) {
@@ -139,16 +128,6 @@ bool DatabaseConnection::chapterAlreadyRegistered(const uint manga, const uint n
     return query.next();
 }
 
-
-uint DatabaseConnection::getMangaId(const QUrl &mangaUrl) const {
-    QSqlQuery query(db);
-    query.prepare("SELECT Manga FROM Sources "
-                  "WHERE Url = :url");
-    query.bindValue(":url", mangaUrl.url());
-    query.exec();
-    query.next();
-    return query.value("Manga").toInt();
-}
 
 QString DatabaseConnection::getMangaName(const uint &mangaId) const {
     QSqlQuery query(db);
@@ -214,14 +193,14 @@ bool DatabaseConnection::updateLastDownloadDatetime(const uint mangaId) {
 
 
 bool DatabaseConnection::createDatabase() {
-    QFile f(":/scripts/create-database.sql");
-    if (!f.open(QIODevice::ReadOnly)) {
-        qDebug() << "Unable to open" << f.fileName();
+    QFile scriptFile(":/scripts/create-database.sql");
+    if (!scriptFile.open(QIODevice::ReadOnly)) {
+        qDebug() << "Unable to open" << scriptFile.fileName();
         return false;
     }
-    qDebug() << f.readAll();
+    QString script(scriptFile.readAll());
+    scriptFile.close();
 
-    qDebug() << "TODO: use sql script";
     qDebug() << "Creating database at" << db.databaseName();
 
     if (!db.open()) {
@@ -230,64 +209,9 @@ bool DatabaseConnection::createDatabase() {
     }
 
     QSqlQuery query;
-    query.exec(
-"                CREATE TABLE IF NOT EXISTS Websites (                          "
-"                    ID             INTEGER     	NOT NULL,                   "
-"                    Name           VARCHAR(32)     NOT NULL,                   "
-"                    BaseUrl		VARCHAR(256)	NOT NULL,                   "
-"                    AllMangasUrl	VARCHAR(256)	NOT NULL,                   "
-"                    PRIMARY KEY (ID)                                           "
-"                    UNIQUE(Name)                                               "
-"                );                                                             "
-    );
-    query.exec(
-"                CREATE TABLE IF NOT EXISTS Authors (                           "
-"                    ID             INTEGER     	NOT NULL,                   "
-"                    RomajiName     VARCHAR(32)     NOT NULL,                   "
-"                    KanjiName      VARCHAR(32),                                "
-"                    PRIMARY KEY (ID)                                           "
-"                    UNIQUE(RomajiName)                                         "
-"                );                                                             "
-    );
-    query.exec(
-"                CREATE TABLE IF NOT EXISTS Mangas (                            "
-"                    ID             INTEGER         NOT NULL,                   "
-"                    Author         UNSIGNED INT,                               "
-"                    Name           VARCHAR(32)     NOT NULL,                   "
-"                    Follow         BOOL            DEFAULT false,              "
-"                    Synopsis       TEXT,                                       "
-"                    LastDownload	DATETIME,                                   "
-"                    PRIMARY KEY(ID)                                            "
-"                    FOREIGN KEY (Author)  REFERENCES Authors(ID)               "
-"                    UNIQUE(Name)                                               "
-"                );                                                             "
-    );
-    query.exec(
-"                CREATE TABLE IF NOT EXISTS Sources (                           "
-"                    Manga          INTEGER          NOT NULL,                  "
-"                    Website        INTEGER          NOT NULL,                  "
-"                    Url    		VARCHAR(32)      NOT NULL,                  "
-"                    Name           VARCHAR(32)      NOT NULL,                  "
-"                    FOREIGN KEY (Manga)     REFERENCES Mangas(ID)              "
-"                    FOREIGN KEY (Website)   REFERENCES Websites(ID)            "
-"                    UNIQUE (Url)                                               "
-"                );                                                             "
-    );
-    query.exec(
-"                CREATE TABLE IF NOT EXISTS Chapters (                          "
-"                    ID             INTEGER     	NOT NULL,                   "
-"                    Manga          UNSIGNED INT	NOT NULL,                   "
-"                    No             UNSIGNED INT	NOT NULL,                   "
-"                    Title          VARCHAR(256),                               "
-"                    Url            VARCHAR(256),                               "
-"                    Complete       BOOL            DEFAULT false,              "
-"                    Read           BOOL            DEFAULT false,              "
-"                    ReleaseDate	DATETIME        DEFAULT CURRENT_TIMESTAMP,  "
-"                    DownloadDate   DATETIME,                                   "
-"                    PRIMARY KEY (ID),                                          "
-"                    FOREIGN KEY (Manga) REFERENCES Mangas(ID)                  "
-"                    UNIQUE (Manga, No, Title, Url)                             "
-"                );                                                             "
-    );
+
+    for (QString queryString : script.split(';'))
+        query.exec(queryString.simplified());
+
     return (db.transaction() && db.commit());
 }

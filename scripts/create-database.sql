@@ -30,8 +30,7 @@ CREATE TABLE IF NOT EXISTS Mangas (
 	LastDownload	DATETIME,
 	Synopsis	TEXT,
 	PRIMARY KEY	(ID),
-	FOREIGN KEY	(Author)	REFERENCES Authors(ID),
-	UNIQUE		(Name)
+	FOREIGN KEY	(Author)	REFERENCES Authors(ID)
 );
 
 CREATE TABLE IF NOT EXISTS Sources (
@@ -49,6 +48,7 @@ CREATE TABLE IF NOT EXISTS Chapters (
 	Manga		INTEGER		NOT NULL,
 	No		INTEGER		NOT NULL,
 	Title		VARCHAR(64),
+	Url		VARCHAR(64),
 	Volume		INTEGER,
 	Language	VARCHAR(2),
 	Complete	BOOL		DEFAULT false,
@@ -57,6 +57,6 @@ CREATE TABLE IF NOT EXISTS Chapters (
 	DownloadDate	DATETIME,
 	PRIMARY KEY	(ID),
 	FOREIGN KEY	(Manga)		REFERENCES Mangas(ID),
-	UNIQUE		(Manga, No, Title, Language)
-);
+	UNIQUE		(Manga, No, Title)
+)
 
