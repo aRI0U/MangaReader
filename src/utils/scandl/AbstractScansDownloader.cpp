@@ -29,7 +29,7 @@ void AbstractScansDownloader::lookForNewChapters() {
         QString mangaName(query->value("Name").toString());
         QUrl mangaUrl(query->value("Url").toString());
 
-        qDebug() << "Looking for new chapters of " << mangaName;
+        qDebug() << "Looking for new chapters of" << mangaName;
 
         // look for html file
         QPath mangaAuxDir = m_htmlDir / mangaId;
@@ -52,6 +52,7 @@ void AbstractScansDownloader::downloadNewChapters() {
     while (query->next()) {
         uint mangaId = query->value("Manga").toUInt();
         uint chapterId = query->value("ID").toUInt();
+
         // get chapter metadata
         Chapter chapter;
         chapter.number = query->value("No").toInt();
