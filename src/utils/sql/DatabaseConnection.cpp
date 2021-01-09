@@ -13,6 +13,10 @@ DatabaseConnection::~DatabaseConnection() {
     db.close();
 }
 
+QString DatabaseConnection::lastError() const {
+    return m_lastError;
+}
+
 
 bool DatabaseConnection::addWebsiteToDatabase(const int id,
                                               const QString &name,
@@ -49,9 +53,51 @@ QSqlQuery *DatabaseConnection::chaptersToDownload() const {
     QSqlQuery *query = new QSqlQuery(db);
     query->prepare("SELECT Chapters.ID, Chapters.Manga, Mangas.Name, No, Title, Chapters.Url FROM Chapters "
                    "JOIN Mangas ON Mangas.ID = Chapters.Manga "
-                   "WHERE NOT Complete");
+                   "WHERE NOT Complete AND Url IS NOT NULL");
     query->exec();
     return query;
+}
+
+bool DatabaseConnection::restoreChaptersList() {
+    QSettings settings;
+    QPath libraryPath(settings.value("Library/scansPath").toString());
+
+    QStringList mangaPattern;
+    mangaPattern << "*";
+
+    QList<QPath> mangas = libraryPath.iter(mangaPattern, QPath::Dirs | QPath::NoDotAndDotDot);
+    QRegularExpression numberRegex("\\d+");
+
+    for (QString manga : mangas) {
+        const uint mangaId = getMangaId(manga);
+        const QPath mangaPath = libraryPath / manga;
+        if (mangaId == 0)
+            continue;
+        qDebug() << mangaId << mangaPath;
+
+        QStringList volumePattern;
+
+        volumePattern << "Volume *";
+        for (QString volume : mangaPath.iter(volumePattern, QPath::Dirs | QPath::NoDotAndDotDot)) {
+             qDebug() << volume;
+             QRegularExpressionMatch reMatch = numberRegex.match(volume);
+             const uint volumeNumber = reMatch.captured(0).toInt();
+             QStringList chapterPattern;
+             chapterPattern << "Chapitre *";
+             for (QString chapter : (mangaPath / volume).iter(chapterPattern, QPath::Dirs | QPath::NoDotAndDotDot)) {
+                 qDebug() << chapter;
+                 QRegularExpressionMatch reMatch = numberRegex.match(chapter);
+                 const uint chapterNumber = reMatch.captured(0).toInt();
+                 QStringList split = chapter.split(": ");
+                 const QString chapterTitle = (split.size() == 2)
+                         ? split.at(1)
+                         : "";
+                 qDebug() << mangaId << chapterNumber << chapterTitle;
+                 addExistingChapter(mangaId, chapterNumber, chapterTitle, volumeNumber);
+             }
+        }
+    }
+    return false;
 }
 
 
@@ -105,6 +151,8 @@ bool DatabaseConnection::insertManga(const int website, const QString &url, cons
     return (db.transaction() && db.commit());
 }
 
+
+
 bool DatabaseConnection::addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url) {
     QSqlQuery query(db);
     query.prepare("INSERT OR IGNORE INTO Chapters (Manga, No, Title, Url) "
@@ -118,6 +166,17 @@ bool DatabaseConnection::addChapterToDatabase(const uint manga, const uint numbe
     return (db.transaction() && db.commit());
 }
 
+bool DatabaseConnection::addExistingChapter(const uint mangaId, const uint number, const QString &title, const uint volume) {
+    return exec("INSERT OR IGNORE INTO Chapters (Manga, No, Title, Volume) "
+         "VALUES (:manga, :number, :title, :volume)",
+         {
+             {":manga", mangaId},
+             {":number", number},
+             {":title", title},
+             {":volume", volume}
+         });
+}
+
 bool DatabaseConnection::chapterAlreadyRegistered(const uint manga, const uint number) {
     QSqlQuery query(db);
     query.prepare("SELECT * FROM Chapters "
@@ -128,6 +187,16 @@ bool DatabaseConnection::chapterAlreadyRegistered(const uint manga, const uint n
     return query.next();
 }
 
+
+uint DatabaseConnection::getMangaId(const QString &mangaName) const {
+    QSqlQuery query(db);
+    query.prepare("SELECT ID FROM Mangas "
+                  "WHERE Name = :name");
+    query.bindValue(":name", mangaName);
+    query.exec();
+    query.next();
+    return query.value("ID").toInt();
+}
 
 QString DatabaseConnection::getMangaName(const uint &mangaId) const {
     QSqlQuery query(db);
@@ -214,4 +283,17 @@ bool DatabaseConnection::createDatabase() {
         query.exec(queryString.simplified());
 
     return (db.transaction() && db.commit());
+}
+
+
+bool DatabaseConnection::exec(QString queryString, QHash<QString, QVariant> metadata) {
+    QSqlQuery query;
+    query.prepare(queryString);
+
+    QHashIterator<QString, QVariant> it(metadata);
+    while (it.hasNext()) {
+        it.next();
+        query.bindValue(it.key(), it.value());
+    }
+    return (query.exec() && db.transaction() && db.commit());
 }

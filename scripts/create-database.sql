@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS Mangas (
 	LastDownload	DATETIME,
 	Synopsis	TEXT,
 	PRIMARY KEY	(ID),
-	FOREIGN KEY	(Author)	REFERENCES Authors(ID)
+	FOREIGN KEY	(Author)	REFERENCES Authors(ID),
+	UNIQUE		(Name)
 );
 
 CREATE TABLE IF NOT EXISTS Sources (

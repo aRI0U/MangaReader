@@ -103,6 +103,8 @@ void MainWindow::initializeDownloaders() {
     m_scanDownloaders << new ScantradDownloader(db, this);
 //    m_scanDownloaders << new LelscanDownloader(db, this);
 
+    db->restoreChaptersList();
+
     // TODO: refresh library after downloading
     QSettings settings;
     bool autoDownload = settings.value("Download/autoDownload", false).toBool();
