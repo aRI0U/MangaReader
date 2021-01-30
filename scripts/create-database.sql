@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Authors (
 	RomajiName	VARCHAR(32)	NOT NULL,
 	KanjiName	VARCHAR(32),
 	WebpageFR	VARCHAR(64),
-	WebpageEN	VARCHAR(64)
+	WebpageEN	VARCHAR(64),
 	PRIMARY KEY	(ID),
 	UNIQUE		(RomajiName)
 );

@@ -32,6 +32,7 @@ public:
     bool insertManga(const int website, const QString &url, const QString &name, const QString &author = "", const QString &synopsis = "");
     bool addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
     bool addExistingChapter(const uint mangaId, const uint number, const QString &title, const uint volume);
+    bool addExistingChapter(const QVariantList &mangaId, const QVariantList &number, const QVariantList &title, const QVariantList &volume);
     bool chapterAlreadyRegistered(const uint manga, const uint number);
 
     uint getMangaId(const QString &mangaName) const;
@@ -48,6 +49,8 @@ private:
     bool createDatabase();
 
     bool exec(QString query, QHash<QString, QVariant> metadata);
+    bool execBatch(QString query, QHash<QString, QVariantList> metadata);
+    bool execFile(QFile &file);
 
     QSqlDatabase db;
     QString m_lastError;

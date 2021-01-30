@@ -174,7 +174,20 @@ bool DatabaseConnection::addExistingChapter(const uint mangaId, const uint numbe
              {":number", number},
              {":title", title},
              {":volume", volume}
-         });
+         }
+    );
+}
+
+bool DatabaseConnection::addExistingChapter(const QVariantList &mangaId, const QVariantList &number, const QVariantList &title, const QVariantList &volume) {
+    return execBatch("INSERT OR IGNORE INTO Chapters (Manga, No, Title, Volume) "
+         "VALUES (:manga, :number, :title, :volume)",
+         {
+             {":manga", mangaId},
+             {":number", number},
+             {":title", title},
+             {":volume", volume}
+         }
+    );
 }
 
 bool DatabaseConnection::chapterAlreadyRegistered(const uint manga, const uint number) {
@@ -262,27 +275,14 @@ bool DatabaseConnection::updateLastDownloadDatetime(const uint mangaId) {
 
 
 bool DatabaseConnection::createDatabase() {
-    QFile scriptFile(":/scripts/create-database.sql");
-    if (!scriptFile.open(QIODevice::ReadOnly)) {
-        qDebug() << "Unable to open" << scriptFile.fileName();
-        return false;
-    }
-    QString script(scriptFile.readAll());
-    scriptFile.close();
-
     qDebug() << "Creating database at" << db.databaseName();
 
-    if (!db.open()) {
-        qDebug() << db.lastError();
+    if (!db.open())
         return false;
-    }
 
-    QSqlQuery query;
+    QFile scriptFile(":/scripts/create-database.sql");
 
-    for (QString queryString : script.split(';'))
-        query.exec(queryString.simplified());
-
-    return (db.transaction() && db.commit());
+    return execFile(scriptFile);
 }
 
 
@@ -295,5 +295,53 @@ bool DatabaseConnection::exec(QString queryString, QHash<QString, QVariant> meta
         it.next();
         query.bindValue(it.key(), it.value());
     }
-    return (query.exec() && db.transaction() && db.commit());
+    if (!query.exec()) {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    if (db.transaction() && db.commit())
+        return true;
+    m_lastError = db.lastError().text();
+    return false;
+}
+
+bool DatabaseConnection::execBatch(QString queryString, QHash<QString, QVariantList> metadata) {
+    QSqlQuery query;
+    query.prepare(queryString);
+
+    QHashIterator<QString, QVariantList> it(metadata);
+    while (it.hasNext()) {
+        it.next();
+        query.bindValue(it.key(), it.value());
+    }
+    if (!query.execBatch()) {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    if (db.transaction() && db.commit())
+        return true;
+    m_lastError = db.lastError().text();
+    return false;
+}
+
+bool DatabaseConnection::execFile(QFile &file) {
+    if (!file.open(QIODevice::ReadOnly)) {
+        m_lastError = file.errorString();
+        return false;
+    }
+    QString script(file.readAll());
+    file.close();
+
+    QSqlQuery query;
+
+    for (QString queryString : script.split(';'))
+        if (!query.exec(queryString.simplified())) {
+            m_lastError = query.lastError().text();
+            return false;
+        }
+
+    if (db.transaction() && db.commit())
+        return true;
+    m_lastError = db.lastError().text();
+    return false;
 }
