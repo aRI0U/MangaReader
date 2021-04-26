@@ -32,7 +32,6 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
                              download->targetUrl().url() + download->error());
         return;
     }
-
     QPath targetFile(download->targetFile());
     uint id = download->metadata("id", 0).toUInt();
 
@@ -82,15 +81,15 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
         }
 
         QSgmlTag* nameElement = elem->find("span", "class", "chl-titre");
-        if (nameElement == nullptr)
+        if (nameElement == nullptr) {
             qDebug() << "This chapter does not have a name element";
+            chapter.name = "";
+        }
         else
             chapter.name = nameElement->getText();
 
-        QSgmlTag* urlElement = elem->find("a", "class", "chr-button");
-        if (urlElement == nullptr
-                || urlElement->getText() != "Lire"
-                || !urlElement->hasAttribute("href"))
+        QSgmlTag* urlElement = elem->find("a", "class", "ch-left");
+        if (urlElement == nullptr || !urlElement->hasAttribute("href"))
             qDebug() << "This chapter does not have a URL element:" << elem->toString();
 
         else {
