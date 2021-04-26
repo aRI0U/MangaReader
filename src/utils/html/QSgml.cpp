@@ -364,7 +364,7 @@ void QSgml::getElementsByName(QString Name,QString AtrName,QList<QSgmlTag*> *Ele
    Elements->clear();
    while( Tag->Type!=QSgmlTag::eVirtualEndTag )
    {
-      if( (Tag->Name==Name)&&(Tag->hasAttribute(AtrName)==true) )
+      if( (Tag->Name==Name)&&(Tag->hasAttribute(AtrName)) )
       {
          Elements->append(Tag);
       }
@@ -405,19 +405,15 @@ void QSgml::getElementsByAttribute(QString AtrName, QList<QSgmlTag*> *Elements)
 }
 
 // find an element with a defined attribute-name and attribute-value
-void QSgml::getElementsByAttribute(QString AtrName,QString AtrValue,QList<QSgmlTag*> *Elements)
-{
-   QSgmlTag *Tag = DocTag;
+void QSgml::getElementsByAttribute(QString AtrName,QString AtrValue,QList<QSgmlTag*> *Elements) {
+    QSgmlTag *Tag = DocTag;
 
-   Elements->clear();
-   while( Tag->Type!=QSgmlTag::eVirtualEndTag )
-   {
-      if( Tag->Attributes.find(AtrName)!=Tag->Attributes.end() )
-      {
-         if( Tag->Attributes.value(AtrName).split(' ').contains(AtrValue) )
-         {
-            Elements->append( Tag );
-         }
+    Elements->clear();
+    while( Tag->Type!=QSgmlTag::eVirtualEndTag ) {
+        if( Tag->Attributes.find(AtrName)!=Tag->Attributes.end() ) {
+            if( Tag->Attributes.value(AtrName).split(' ').contains(AtrValue) ) {
+                Elements->append( Tag );
+            }
       }
       Tag = &Tag->getNextElement();
    }
