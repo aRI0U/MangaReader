@@ -2,6 +2,7 @@
 #define DATABASECONNECTION_H
 
 #include <QDebug>
+#include <QSettings>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -17,6 +18,8 @@ public:
     explicit DatabaseConnection(QObject *parent = nullptr);
     ~DatabaseConnection();
 
+    QString lastError() const;
+
     bool addWebsiteToDatabase(const int id,
                               const QString &name,
                               const QString &baseUrl,
@@ -24,12 +27,15 @@ public:
 
     QSqlQuery *followedMangas(const uint website, const uint delay = 0) const;
     QSqlQuery *chaptersToDownload() const;
+    bool restoreChaptersList();
 
     bool insertManga(const int website, const QString &url, const QString &name, const QString &author = "", const QString &synopsis = "");
-    int addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
+    bool addChapterToDatabase(const uint manga, const uint number, const QString &name, const QUrl &url);
+    bool addExistingChapter(const uint mangaId, const uint number, const QString &title, const uint volume);
+    bool addExistingChapter(const QVariantList &mangaId, const QVariantList &number, const QVariantList &title, const QVariantList &volume);
     bool chapterAlreadyRegistered(const uint manga, const uint number);
 
-    uint getMangaId(const QUrl &mangaUrl) const;
+    uint getMangaId(const QString &mangaName) const;
     QString getMangaName(const uint &mangaId) const;
     uint getAuthorId(const QString &author);
     bool isComplete(const uint chapterId) const;
@@ -42,7 +48,12 @@ signals:
 private:
     bool createDatabase();
 
+    bool exec(QString query, QHash<QString, QVariant> metadata);
+    bool execBatch(QString query, QHash<QString, QVariantList> metadata);
+    bool execFile(QFile &file);
+
     QSqlDatabase db;
+    QString m_lastError;
 };
 
 #endif // DATABASECONNECTION_H

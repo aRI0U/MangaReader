@@ -43,6 +43,7 @@ public:
     void downloadNewChapters();
 
 signals:
+    void databaseUpdated();
     void chapterDownloaded(Chapter &chapter);
 
 protected slots:
@@ -51,11 +52,12 @@ protected slots:
     virtual void extractImagesFromChapter(QPath&, uint) { }
     void downloadChapter(const uint mangaId, const uint chapterId, const Chapter &chapter);
     void imageDownloaded(uint chapterId);
+    void newChaptersAddedToDatabase(uint mangaId);
 
 protected:
     void downloadMangaList();
 
-    int addChapterToDatabase(const QUrl &mangaUrl, const Chapter &chapter);
+    bool addChapterToDatabase(const uint mangaId, const Chapter &chapter);
 
     virtual bool addWebsiteToDatabase() { return false; }
 
@@ -74,6 +76,7 @@ protected:
     QDownloader *m_downloader;
 
     // mappings
+    QList<uint> m_followedMangas;
     QHash<uint, uint> m_nbImagesToDownload;
     QHash<uint, Chapter> m_chaptersList;
 };

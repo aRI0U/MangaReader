@@ -84,8 +84,9 @@ void SettingsWindow::openDownloadSettings() {
 
     view->setModel(model);
     view->setMinimumWidth(settingsWidget->width());
-    for (int column : {0, 1, 4, 5, 6, 7, 8, 9})
-        view->hideColumn(column);
+    for (int c=0; c<8; ++c)
+        if (c != model->nameColumn && c != model->followColumn)
+            view->hideColumn(c);
     view->horizontalHeader()->setStretchLastSection(true);
     view->resizeColumnsToContents();
     view->sortByColumn(2, Qt::AscendingOrder);
@@ -138,7 +139,8 @@ void SettingsWindow::openLanguageSettings() {
     for (const QString &translationFile : translationsDir.iter(QStringList() << translationRegex.pattern(), QPath::Files | QPath::NoDotAndDotDot)) {
         QString languageString = translationFile.split('_').at(1).split('.').at(0);  // TODO: do this properly with regex or sth...
         QLocale::Language language = QLocale(languageString).language();
-        languageChoices->addItem(QLocale::languageToString(language), languageString);
+        QString iconFileName = QString(":/images/icons/%1-flag.png").arg(languageString);
+        languageChoices->addItem(QIcon(iconFileName), QLocale::languageToString(language), languageString);
     }
     internalLayout->addWidget(languageChoices, 0, 1, Qt::AlignLeft);
     connect(languageChoices, SIGNAL(currentIndexChanged(int)),

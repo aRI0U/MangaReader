@@ -94,17 +94,11 @@ void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &ht
 
         else {
             chapter.url = mangaUrl.resolved(QUrl(urlElement->getArgValue("href")));
-            int chapterId = addChapterToDatabase(mangaUrl, chapter);
-            if (m_database->isComplete(chapterId))
-                continue;
-
-            QSettings settings;
-            if (settings.value("Download/autoDownload", false).toBool()) {
-                m_chaptersList.insert(chapterId, chapter);
-                downloadChapter(mangaId, chapterId, chapter);
-            }
+            if (!addChapterToDatabase(mangaId, chapter))
+                qDebug() << "Could not add chapter" << chapter.number << ":" << chapter.name << "to the database";
         }
     }
+    newChaptersAddedToDatabase(mangaId);
 }
 
 void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapterId) {

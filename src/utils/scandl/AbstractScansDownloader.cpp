@@ -15,8 +15,8 @@ QDebug operator<<(QDebug debug, const Chapter &chapter) {
 
 AbstractScansDownloader::AbstractScansDownloader(DatabaseConnection *database, QObject *parent)
     : QObject(parent),
-      m_downloader(new QDownloader(this)),
-      m_database(database)
+      m_database(database),
+      m_downloader(new QDownloader(this))
 {
     m_downloader->setDefaultPolicy(QOverwritePolicy::NoOverwrite);
 }
@@ -29,7 +29,7 @@ void AbstractScansDownloader::lookForNewChapters() {
         QString mangaName(query->value("Name").toString());
         QUrl mangaUrl(query->value("Url").toString());
 
-        qDebug() << "Looking for new chapters of " << mangaName;
+        qDebug() << "Looking for new chapters of" << mangaName;
 
         // look for html file
         QPath mangaAuxDir = m_htmlDir / mangaId;
@@ -38,8 +38,11 @@ void AbstractScansDownloader::lookForNewChapters() {
         if (!mangaAuxDir.mkdir())
             qDebug() << "Failed to create dir" << mangaAuxDir;
 
+        m_followedMangas << mangaId.toUInt();
         m_downloader->download(mangaUrl, htmlFile, FileType::MangaHTML, {{"id", mangaId}}, QOverwritePolicy::Overwrite);
     }
+    if (m_followedMangas.isEmpty())
+        emit databaseUpdated();
 }
 
 void AbstractScansDownloader::downloadNewChapters() {
@@ -48,6 +51,7 @@ void AbstractScansDownloader::downloadNewChapters() {
     while (query->next()) {
         uint mangaId = query->value("Manga").toUInt();
         uint chapterId = query->value("ID").toUInt();
+
         // get chapter metadata
         Chapter chapter;
         chapter.number = query->value("No").toInt();
@@ -76,6 +80,12 @@ void AbstractScansDownloader::imageDownloaded(uint chapterId) {
     }
 }
 
+void AbstractScansDownloader::newChaptersAddedToDatabase(uint mangaId) {
+    m_followedMangas.removeOne(mangaId);
+    if (m_followedMangas.isEmpty())
+        emit databaseUpdated();
+}
+
 
 void AbstractScansDownloader::downloadMangaList() {
     QString htmlFile = m_htmlDir / "list.html";
@@ -86,7 +96,6 @@ void AbstractScansDownloader::downloadMangaList() {
         m_downloader->download(m_listUrl, htmlFile, FileType::ListHTML);
 }
 
-int AbstractScansDownloader::addChapterToDatabase(const QUrl &mangaUrl, const Chapter &chapter) {
-    int mangaId = m_database->getMangaId(mangaUrl);
+bool AbstractScansDownloader::addChapterToDatabase(const uint mangaId, const Chapter &chapter) {
     return m_database->addChapterToDatabase(mangaId, chapter.number, chapter.name, chapter.url);
 }

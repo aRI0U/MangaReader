@@ -9,7 +9,7 @@ MangaSqlModel::MangaSqlModel(QObject *parent, QSqlDatabase db)
     setTable("Mangas");
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 
-    setSort(3, Qt::AscendingOrder);
+    setSort(nameColumn, Qt::AscendingOrder);
 
     select();
 }
