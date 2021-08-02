@@ -4,3 +4,6 @@
 [submodule "src/libs/QPath"]
 	path = src/libs/QPath
 	url = https://github.com/aRI0U/QPath.git
+[submodule "src/libs/QHtml"]
+	path = src/libs/QHtml
+	url = https://github.com/aRI0U/QHtml.git
