@@ -55,45 +55,44 @@ void ScantradDownloader::downloadFinished(QDownload *download) {
 }
 
 void ScantradDownloader::extractChaptersFromHtml(const QUrl &mangaUrl, QPath &htmlFile, uint mangaId) {
-    QFile f(htmlFile);
-    QSgml *html = new QSgml(f);
+    QHtml html(htmlFile);
+    html.parse();
 
-    QList<QSgmlTag*> elements;
     QRegularExpression numberRegex("\\d+");
     QRegularExpressionMatch reMatch;
 
-    html->getElementsByAttribute("class", "chapitre", &elements);
+    QList<QHtmlTag *> *elements = html.findAll(nullptr, "div", {{"class", "chapitre"}});
 
-    for (QSgmlTag *elem : elements) {
+    for (QHtmlTag *elem : *elements) {
         Chapter chapter;
 
         chapter.manga = m_database->getMangaName(mangaId);
 
-        QSgmlTag *numberElement = elem->find("span", "class", "chl-num");
+        QHtmlTag *numberElement = html.find(elem, "span", {{"class", "chl-num"}});
         if (numberElement == nullptr)
-            qDebug() << "This chapter does not have a number element:" << elem->toString();
+            qDebug() << "This chapter does not have a number element:";
         else {
-            reMatch = numberRegex.match(numberElement->getText());
+            reMatch = numberRegex.match(numberElement->text);
             if (reMatch.hasMatch())
                 chapter.number = reMatch.captured(0).toInt();
             else
-                qDebug() << "Could not extract chapter number from this string:" << numberElement->getText();
+                qDebug() << "Could not extract chapter number from this string:" << numberElement->text;
         }
 
-        QSgmlTag* nameElement = elem->find("span", "class", "chl-titre");
+        QHtmlTag *nameElement = html.find(elem, "span", {{"class", "chl-titre"}});
         if (nameElement == nullptr) {
             qDebug() << "This chapter does not have a name element";
             chapter.name = "";
         }
         else
-            chapter.name = nameElement->getText();
+            chapter.name = nameElement->text;
 
-        QSgmlTag* urlElement = elem->find("a", "class", "ch-left");
-        if (urlElement == nullptr || !urlElement->hasAttribute("href"))
-            qDebug() << "This chapter does not have a URL element:" << elem->toString();
+        QHtmlTag *urlElement = html.find(elem, "a", {{"class", "ch-left"}});
+        if (urlElement == nullptr || !urlElement->attributes.contains("href"))
+            qDebug() << "This chapter does not have a URL element";
 
         else {
-            chapter.url = mangaUrl.resolved(QUrl(urlElement->getArgValue("href")));
+            chapter.url = mangaUrl.resolved(QUrl(urlElement->attributes.value("href").at(0)));
             if (!addChapterToDatabase(mangaId, chapter))
                 qDebug() << "Could not add chapter" << chapter.number << ":" << chapter.name << "to the database";
         }
@@ -113,22 +112,20 @@ void ScantradDownloader::extractImagesFromChapter(QPath &chapterFile, uint chapt
     if (!chapterDir.mkdir())
         qDebug() << "Failed to create folder" << chapterDir;
 
-    QFile f(chapterFile);
-    QSgml html(f);
+    QHtml html(chapterFile);
+    html.parse();
 
-    QList<QSgmlTag*> elements;
-
-    html.getElementsByAttribute("class", "sc-lel", &elements);
+    QList<QHtmlTag*> *elements = html.findAll(nullptr, "div", {{"class", "sc-lel"}});
     QList<QUrl> imageUrlList;
 
-    for (QSgmlTag *elem : elements) {
-        QList<QSgmlTag*> images = elem->getElementsByName("img");
+    for (QHtmlTag *elem : *elements) {
+        QList<QHtmlTag*> *images = html.findAll(elem, "img");
 
-        for (QSgmlTag *image : images) {
-            if (!image->hasAttribute("data-src"))
+        for (QHtmlTag *image : *images) {
+            if (!image->attributes.contains("data-src"))
                 continue;
 
-            QString imageUrl(image->getArgValue("data-src"));
+            QString imageUrl(image->attributes.value("data-src").at(0));
             if (imageUrl.startsWith("lel"))
                 imageUrlList.append(QUrl(imageUrl));
         }
@@ -153,23 +150,20 @@ bool ScantradDownloader::addWebsiteToDatabase() {
 }
 
 void ScantradDownloader::generateMangaList(const QString &htmlFile) {
-    QFile f(htmlFile);
-    QSgml html(f);
+    QHtml html(htmlFile);
+    html.parse();
 
     QStringList names;
     QStringList hrefs;
 
-    QList<QSgmlTag *> elements;
+    QList<QHtmlTag *> *elements = html.findAll(nullptr, "a", {{"class", "home-manga"}});
 
-    html.getElementsByAttribute("class", "home-manga", &elements);
-
-    QSgmlTag *titleElement;
-    for (QSgmlTag *elem : elements) {
-        titleElement = elem->find("div", "class", "hmi-titre");
+    for (QHtmlTag *elem : *elements) {
+        QHtmlTag *titleElement = html.find(elem, "div", {{"class", "hmi-titre"}});
         if (titleElement == nullptr)
             continue;
-        names.append(elem->find("div", "class", "hmi-titre")->getText());
-        hrefs.append(elem->getArgValue("href"));
+        names.append(html.find(elem, "div", {{"class", "hmi-titre"}})->text);
+        hrefs.append(elem->attributes.value("href"));
     }
 
     for (int i=0; i<names.count(); ++i) {

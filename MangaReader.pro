@@ -18,6 +18,8 @@ INCLUDEPATH += $$PWD/src
 SOURCES += \
     src/libs/QDownload/QDownload.cpp \
     src/libs/QDownload/QDownloader.cpp \
+    src/libs/QHtml/QHtml.cpp \
+    src/libs/QHtml/QHtmlTree.cpp \
     src/libs/QPath/QPath.cpp \
     src/main.cpp \
     src/ui/MainWindow.cpp \
@@ -34,8 +36,6 @@ SOURCES += \
     src/utils/scandl/AbstractScansDownloader.cpp \
     src/utils/scandl/lelscan/LelscanDownloader.cpp \
     src/utils/scandl/scantrad/ScantradDownloader.cpp \
-    src/utils/html/QSgml.cpp \
-    src/utils/html/QSgmlTag.cpp \
     src/utils/notifications/NotificationLayout.cpp \
     src/utils/notifications/NotificationManager.cpp \
     src/utils/notifications/NotificationWidget.cpp \
@@ -47,6 +47,8 @@ HEADERS += \
     src/constants.h \
     src/libs/QDownload/QDownload.h \
     src/libs/QDownload/QDownloader.h \
+    src/libs/QHtml/QHtml.h \
+    src/libs/QHtml/QHtmlTree.h \
     src/libs/QPath/QPath.h \
     src/ui/MainWindow.h \
     src/ui/settings/MangaSqlModel.h \
@@ -63,8 +65,6 @@ HEADERS += \
     src/utils/scandl/lelscan/LelscanDownloader.h \
     src/utils/scandl/scansDownloaders.h \
     src/utils/scandl/scantrad/ScantradDownloader.h \
-    src/utils/html/QSgml.h \
-    src/utils/html/QSgmlTag.h \
     src/utils/notifications/NotificationLayout.h \
     src/utils/notifications/NotificationManager.h \
     src/utils/notifications/NotificationWidget.h \
@@ -82,3 +82,6 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    src/libs/QHtml/.git

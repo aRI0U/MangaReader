@@ -5,7 +5,7 @@
 
 #include "../AbstractScansDownloader.h"
 
-#include "utils/html/QSgml.h"
+#include "libs/QHtml/QHtml.h"
 
 class LelscanDownloader : public AbstractScansDownloader
 {

@@ -7,7 +7,7 @@
 
 #include "../AbstractScansDownloader.h"
 
-#include "utils/html/QSgml.h"
+#include "libs/QHtml/QHtml.h"
 
 class ScantradDownloader : public AbstractScansDownloader
 {
